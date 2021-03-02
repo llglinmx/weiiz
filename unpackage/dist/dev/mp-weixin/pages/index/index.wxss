@@ -50,6 +50,10 @@
   padding: 26rpx 40rpx;
   box-sizing: border-box;
   background-color: #FF967D;
+  font-size: 28rpx;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  color: #FFFFFF;
 }
 .index-box .index-head .index-head-wrap .index-head-address.data-v-57280228 {
   height: 50rpx;
@@ -68,15 +72,7 @@
   height: 26rpx;
 }
 .index-box .index-head .index-head-wrap .index-head-address text.data-v-57280228 {
-  width: 56rpx;
-  height: 28rpx;
   margin-left: 15rpx;
-  font-size: 28rpx;
-  font-family: Source Han Sans CN;
-  font-weight: 400;
-  line-height: 20rpx;
-  color: #FFFFFF;
-  opacity: 1;
 }
 .index-box .index-head .index-head-wrap .index-head-logo.data-v-57280228 {
   width: 135rpx;
@@ -85,6 +81,13 @@
 .index-box .index-head .index-head-wrap .index-head-logo image.data-v-57280228 {
   width: 100%;
   height: 100%;
+}
+.index-box .index-head .index-head-wrap .index-head-language image.data-v-57280228 {
+  width: 27rpx;
+  height: 27rpx;
+}
+.index-box .index-head .index-head-wrap .index-head-language text.data-v-57280228 {
+  margin-left: 10rpx;
 }
 .index-box .index-content.data-v-57280228 {
   height: 100%;

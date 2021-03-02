@@ -17,4 +17,10 @@
 	page{
 		height: 100%;
 	}
+	
+	.flex-center{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 </style>

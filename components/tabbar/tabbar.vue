@@ -111,6 +111,7 @@
 		justify-content: space-evenly;
 		height: 102rpx;
 		box-shadow: 0px -1px 10px rgba(0, 0, 0, 0.1);
+		background: #fff;
 
 		.tabbar-li {
 			display: flex;
@@ -165,7 +166,7 @@
 					}
 
 					.cover-box-title {
-						padding-bottom: 10rpx;
+						padding-bottom: 14rpx;
 						height: 100%;
 						display: flex;
 						box-sizing: border-box;

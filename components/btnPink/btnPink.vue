@@ -1,5 +1,5 @@
 <template>
-	<view class="btn-box">{{btnName}}</view>
+	<view class="btn-box" @click="btnClick">{{btnName}}</view>
 </template>
 
 <script>
@@ -13,6 +13,11 @@
 			btnName:{
 				type:String,
 				default:"按钮"
+			}
+		},
+		methods:{
+			btnClick(){
+				this.$emit("btnClick")
 			}
 		}
 	}

@@ -1,11 +1,6 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app"
-			}
-		}, {
 			"path": "pages/mine/mine",
 			"style": {
 				"navigationBarTitleText": "",
@@ -13,14 +8,19 @@
 			}
 
 		}, {
-			"path": "pages/subscribe/subscribe",
+			"path": "pages/mall/mall",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
 
 		}, {
-			"path": "pages/mall/mall",
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		}, {
+			"path": "pages/subscribe/subscribe",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
@@ -36,9 +36,40 @@
 		}
 	],
 	"subPackages": [{
-		"root": "pagesA",
-		"pages": []
-	}],
+			"root": "pagesIndex",
+			"pages": [{
+				"path": "collection-center/collection-center",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+			}]
+		},
+		{
+			"root": "pagesMine",
+			"pages": [{
+				"path": "set/set",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+			}]
+		},
+		{
+			"root": "pagesMineTwo",
+			"pages": [
+            {
+                    "path" : "personalInfo/personalInfo",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
+		}
+	],
 	"preloadRule": { //加载规则 当渲染pages/home/home时加载子包
 		// "pages/index/index": {
 		// 	"network": "all",

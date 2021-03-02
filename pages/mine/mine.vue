@@ -1,11 +1,129 @@
 <template>
 	<view class="mine-box">
-		个人
-		<view class="mine-head">
-			
+		<view class="mine-head" :style="{paddingTop:barHeight+'px'}">
+			<!-- 顶部设置 与消息 -->
+			<view class="mine-head-top">
+				<view class="head-top-msg">
+					<image src="../../static/images/msg.png" mode=""></image>
+				</view>
+				<view class="head-top-set" @click="setClick">
+					<image src="../../static/images/set-icon.png" mode=""></image>
+				</view>
+			</view>
+			<!-- 个人信息 -->
+			<view class="mine-head-info">
+				<view class="mine-head-info-left">
+					<view class="head-info-left-box">
+						<view class="head-info-box-image flex-center">
+							<image src="../../static/images/userImage.png" mode=""></image>
+						</view>
+						<view class="head-info-right">
+							<!-- 昵称 -->
+							<view class="head-info-nickname">
+								SKB露娜可可
+							</view>
+							<!-- 进度条 -->
+							<view class="head-info-seep">
+								<view class="head-info-progress-bar"></view>
+							</view>
+							<!-- 会员等级 -->
+							<view class="head-info-member">
+								<view class="head-info-member-ico">
+
+								</view>
+								<view class="head-info-member-text">
+									钻石会员
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+				<view class="mine-head-info-right flex-center">
+					<view class="head-info-right-scan flex-center">
+						<image src="../../static/images/scan-code.png" mode="aspectFill"></image>
+					</view>
+					<view class="head-info-scan-text">
+						扫一扫
+					</view>
+				</view>
+			</view>
+			<!-- 列表 -->
+			<view class="mine-head-list">
+				<view class="mine-head-list-li flex-center" v-for="(item,index) in list" :key="index">
+					<view class="head-list-li-text">
+						{{item.number}}
+					</view>
+					<view class="head-list-li-txt-name">
+						{{item.text}}
+					</view>
+				</view>
+			</view>
 		</view>
 		<view class="mine-content">
-			
+			<view class="mine-content-state-list">
+				<state-list :list="stateList"></state-list>
+			</view>
+			<view class="mine-content-integral-box">
+				<view class="mine-content-integral-box-top">
+					<view class="mine-integral-title-list">
+						<view class="integral-title-list-icon flex-center">
+							<image src="../../static/images/userImage.png" mode=""></image>
+						</view>
+						<view class="integral-title-list-text">
+							积分商城
+						</view>
+					</view>
+					<view class="mine-integral-title-more">
+						<image src="../../static/images/more.png" mode="widthFix"></image>
+					</view>
+				</view>
+				<view class="mine-content-goods-list">
+					<view class="mine-content-goods-list-box">
+						<view class="mine-content-goods-list-li" v-for="(item,index) in goodsList" :key="index">
+							<view class="content-goods-list-image">
+								<image :src="item.image" mode=""></image>
+							</view>
+							<view class="content-goods-list-title">
+								{{item.title}}
+							</view>
+							<view class="content-goods-list-number">
+								{{item.integralNumber}}积分
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view class="mine-content-commonly">
+				<view class="mine-content-commonly-top">
+					<view class="mine-content-commonly-top-box">
+						<view class="content-commonly-top-icon flex-center">
+							<image src="../../static/images/tool.jpg" mode=""></image>
+						</view>
+						<view class="content-commonly-title">
+							常用工具
+						</view>
+					</view>
+				</view>
+				<view class="mine-content-commonly-list">
+					<swiper class="swiper" :current="idx" @change="swiperChange">
+						<swiper-item v-for="(item,index) in toolAllList" class="swiper-item">
+							<view class="content-commonly-list-li" v-for="(j,idx) in item.toolList">
+								<view class="content-commonly-list-li-ico">
+									<image :src="j.image" mode=""></image>
+								</view>
+								<view class="content-commonly-list-li-title">
+									{{j.title}}
+								</view>
+							</view>
+						</swiper-item>
+
+					</swiper>
+
+				</view>
+				<view class="content-commonly-bar barWidth">
+					<view class="content-commonly-bar-active" :style="{width:toolBarWidth+'px'}"></view>
+				</view>
+			</view>
 		</view>
 		<!-- tabbar导航栏 -->
 		<view class="mine-footer">
@@ -16,28 +134,562 @@
 
 <script>
 	import Tabbar from "../../components/tabbar/tabbar.vue"
+	import StateList from "../../components/state-list/state-list.vue"
 	export default {
 		data() {
 			return {
-				
+				barHeight: 0, //顶部电量导航栏高度
+				idx: 0,
+				toolBarWidth: 0,
+				parWidth: 0,
+				list: [{
+						number: "20",
+						text: "余额/元",
+					},
+					{
+						number: "0",
+						text: "积分",
+					},
+
+					{
+						number: "0",
+						text: "卡券",
+					}, {
+						number: "0",
+						text: "关注",
+					}
+				],
+				stateList: [{
+						image: "../../static/images/icon-1.jpg",
+						title: "待付款"
+					},
+					{
+						image: "../../static/images/icon-2.jpg",
+						title: "待核销"
+					},
+					{
+						image: "../../static/images/icon-3.jpg",
+						title: "已核销"
+					},
+					{
+						image: "../../static/images/icon-4.jpg",
+						title: "退款/售后"
+					},
+					{
+						image: "../../static/images/icon-5.jpg",
+						title: "全部订单"
+					}
+				],
+				goodsList: [{
+						image: "../../static/images/1.png",
+						title: "燕麦奶茶",
+						integralNumber: 20
+					},
+					{
+						image: "../../static/images/3.png",
+						title: "燕麦奶茶",
+						integralNumber: 30
+					},
+					{
+						image: "../../static/images/1.png",
+						title: "燕麦奶茶",
+						integralNumber: 20
+					},
+					{
+						image: "../../static/images/2.png",
+						title: "燕麦奶茶",
+						integralNumber: 80
+					},
+					{
+						image: "../../static/images/1.png",
+						title: "燕麦奶茶",
+						integralNumber: 20
+					},
+					{
+						image: "../../static/images/2.png",
+						title: "燕麦奶茶",
+						integralNumber: 60
+					},
+					{
+						image: "../../static/images/3.png",
+						title: "燕麦奶茶",
+						integralNumber: 30
+					}
+				],
+				toolAllList: [{
+						toolList: [{
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}, {
+							image: "../../static/images/gift.jpg",
+							title: "礼物卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}, {
+							image: "../../static/images/gift.jpg",
+							title: "礼物卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}]
+					},
+					{
+						toolList: [{
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}, {
+							image: "../../static/images/gift.jpg",
+							title: "礼物卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}, {
+							image: "../../static/images/gift.jpg",
+							title: "礼物卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}]
+					},
+					{
+						toolList: [{
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}, {
+							image: "../../static/images/gift.jpg",
+							title: "礼物卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}, {
+							image: "../../static/images/gift.jpg",
+							title: "礼物卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}]
+					},
+					{
+						toolList: [{
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}, {
+							image: "../../static/images/gift.jpg",
+							title: "礼物卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}, {
+							image: "../../static/images/gift.jpg",
+							title: "礼物卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}]
+					}
+				]
 			}
 		},
 		components: {
 			Tabbar,
+			StateList
+		},
+		onLoad() {
+
+		},
+		onReady() {
+			// 获取顶部电量状态栏高度
+			uni.getSystemInfo({
+				success: (res) => {
+					console.log(res)
+					this.barHeight = res.statusBarHeight
+				}
+			});
+
+			// 常用工具tabbar
+			uni.createSelectorQuery().in(this).select(".barWidth").boundingClientRect(data => {
+				this.parWidth = data.width
+				this.toolBarWidth = data.width / this.toolAllList.length
+			}).exec();
 		},
 		methods: {
-			
+
+			// 常用工具滑动
+			swiperChange(e) {
+				this.toolBarWidth = (e.detail.current + 1) * (this.parWidth / this.toolAllList.length)
+			},
+			// 设置按钮点击
+			setClick(){
+				uni.navigateTo({
+					url:"../../pagesMine/set/set"
+				})
+			},
 		}
 	}
 </script>
 
 <style scoped lang="scss">
-.mine-box{
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	.mine-content{
-		flex: 1;
+	.mine-box {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		background: #F7F7F7;
+
+		.mine-head {
+			background: #FF967D;
+
+			.mine-head-top {
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+				padding: 30rpx;
+				box-sizing: border-box;
+
+				.head-top-msg {
+					width: 40rpx;
+					height: 40rpx;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+
+					image {
+						width: 40rpx;
+						height: 40rpx;
+					}
+				}
+
+				.head-top-set {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					margin-left: 22rpx;
+					width: 52rpx;
+					height: 52rpx;
+
+					image {
+						width: 42rpx;
+						height: 42rpx;
+					}
+				}
+			}
+
+			.mine-head-info {
+				display: flex;
+				justify-content: space-between;
+				padding: 20rpx 40rpx;
+				box-sizing: border-box;
+				color: #fff;
+
+				.mine-head-info-left {
+					.head-info-left-box {
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+
+						.head-info-box-image {
+							width: 128rpx;
+							height: 128rpx;
+							background: rgba(255, 255, 255, .2);
+							border-radius: 50%;
+
+							image {
+								width: 112rpx;
+								height: 112rpx;
+							}
+						}
+
+						.head-info-right {
+							margin-left: 20rpx;
+
+
+							.head-info-nickname {
+								font-size: 36rpx;
+								font-family: Source Han Sans CN;
+								font-weight: 400;
+							}
+
+							.head-info-seep {
+								width: 180rpx;
+								height: 6rpx;
+								margin: 20rpx 0 10rpx;
+								border-radius: 3rpx;
+								background: rgba(255, 255, 255, 0.3);
+
+								.head-info-progress-bar {
+									width: 100rpx;
+									height: 100%;
+									border-radius: 3rpx;
+									background: #fff;
+								}
+							}
+
+							.head-info-member {
+								display: flex;
+								align-items: center;
+								justify-content: center;
+								width: 112rpx;
+								height: 32rpx;
+								border-radius: 22rpx;
+								background: rgba(255, 255, 255, .9);
+
+								.head-info-member-ico {
+									width: 23rpx;
+									height: 18rpx;
+									margin-right: 5rpx;
+
+									image {
+										width: 100%;
+									}
+								}
+
+								.head-info-member-text {
+									font-size: 18rpx;
+									font-family: Source Han Sans CN;
+									font-weight: 400;
+									color: #FF967D;
+								}
+							}
+						}
+					}
+				}
+
+				.mine-head-info-right {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+
+					.head-info-right-scan {
+						width: 52rpx;
+						height: 52rpx;
+
+						image {
+							width: 48rpx;
+							height: 48rpx;
+						}
+					}
+
+					.head-info-scan-text {}
+				}
+			}
+
+			.mine-head-list {
+				display: flex;
+				justify-content: space-around;
+				padding: 25rpx 0;
+				color: #FFFFFF;
+
+				.mine-head-list-li {
+					display: flex;
+					flex-direction: column;
+
+					.head-list-li-text {
+						font-size: 34rpx;
+						font-family: Source Han Sans CN;
+						font-weight: bold;
+					}
+
+					.head-list-li-txt-name {
+						font-size: 26rpx;
+						font-family: Source Han Sans CN;
+						font-weight: 400;
+					}
+				}
+			}
+		}
+
+		.mine-content {
+			flex: 1;
+
+			.mine-content-state-list {
+				margin: 20rpx 0;
+			}
+
+			.mine-content-integral-box {
+				background: #fff;
+				padding-bottom: 30rpx;
+
+				.mine-content-integral-box-top {
+					display: flex;
+					justify-content: space-between;
+					padding: 20rpx 40rpx;
+					box-sizing: border-box;
+
+					.mine-integral-title-list {
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+
+						.integral-title-list-icon {
+							width: 48rpx;
+							height: 48rpx;
+							background: #FFEBE6;
+							border-radius: 50%;
+
+							image {
+								width: 28rpx;
+								height: 28rpx;
+							}
+						}
+
+						.integral-title-list-text {
+							margin-left: 12rpx;
+							font-size: 32rpx;
+							font-family: Source Han Sans CN;
+							font-weight: 400;
+							color: #333333;
+						}
+					}
+
+					.mine-integral-title-more {
+						width: 30rpx;
+						height: 20rpx;
+
+						image {
+							// width: 12rpx;
+							// height: 20rpx;
+							width: 30rpx;
+							height: 20rpx;
+						}
+					}
+				}
+
+				.mine-content-goods-list {
+
+					// padding-left: 20rpx;
+					.mine-content-goods-list-box {
+						display: flex;
+						padding-left: 40rpx;
+						overflow-x: scroll;
+
+						.mine-content-goods-list-li {
+							display: flex;
+							flex-direction: column;
+							justify-content: center;
+							align-items: center;
+							margin-right: 20rpx;
+
+							.content-goods-list-image {
+								width: 144rpx;
+								height: 144rpx;
+
+								image {
+									width: 144rpx;
+									height: 144rpx;
+								}
+							}
+
+							.content-goods-list-title {
+								font-size: 24rpx;
+								font-family: Source Han Sans CN;
+								font-weight: 400;
+								color: #333333;
+								line-height: 50rpx;
+							}
+
+							.content-goods-list-number {
+								font-size: 24rpx;
+								font-family: Source Han Sans CN;
+								font-weight: 400;
+								color: #FF8366;
+							}
+						}
+					}
+				}
+			}
+
+			.mine-content-commonly {
+				position: relative;
+				padding: 20rpx 40rpx 40rpx;
+				background: #fff;
+				margin-top: 20rpx;
+
+				.mine-content-commonly-top {
+
+					.mine-content-commonly-top-box {
+						display: flex;
+						align-items: center;
+
+						.content-commonly-top-icon {
+							width: 48rpx;
+							height: 48rpx;
+							border-radius: 50%;
+							background: #FFEBE6;
+
+							image {
+								width: 26rpx;
+								height: 24rpx;
+							}
+						}
+
+						.content-commonly-title {
+							margin-left: 12rpx;
+							font-size: 32rpx;
+							font-family: Source Han Sans CN;
+							font-weight: 400;
+							color: #333333;
+						}
+					}
+
+				}
+
+				.mine-content-commonly-list {
+					margin-top: 30rpx;
+
+					swiper {
+						height: 120rpx;
+
+						.swiper-item {
+							display: flex;
+							justify-content: space-around;
+
+							.content-commonly-list-li {
+								display: flex;
+								justify-content: space-around;
+								flex-direction: column;
+
+								.content-commonly-list-li-ico {
+									width: 76rpx;
+									height: 76rpx;
+
+									image {
+										width: 76rpx;
+										height: 76rpx;
+									}
+								}
+
+								.content-commonly-list-li-title {
+									margin-top: 16rpx;
+									font-size: 24rpx;
+									font-family: Source Han Sans CN;
+									font-weight: 400;
+									color: #666666;
+								}
+							}
+						}
+					}
+				}
+
+				.content-commonly-bar {
+					position: absolute;
+					left: 0;
+					right: 0;
+					bottom: 20rpx;
+					margin: auto;
+					width: 90rpx;
+					height: 6rpx;
+					border-radius: 3rpx;
+					background: #EDEDED;
+
+					.content-commonly-bar-active {
+						width: 0;
+						height: 100%;
+						background: #FF967D;
+						border-radius: 3rpx;
+					}
+				}
+			}
+		}
+
 	}
-}
 </style>

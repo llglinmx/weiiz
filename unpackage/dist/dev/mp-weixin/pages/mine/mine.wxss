@@ -33,10 +33,376 @@
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
           flex-direction: column;
+  background: #F7F7F7;
+}
+.mine-box .mine-head.data-v-dcbcfe34 {
+  background: #FF967D;
+}
+.mine-box .mine-head .mine-head-top.data-v-dcbcfe34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+          justify-content: flex-end;
+  padding: 30rpx;
+  box-sizing: border-box;
+}
+.mine-box .mine-head .mine-head-top .head-top-msg.data-v-dcbcfe34 {
+  width: 40rpx;
+  height: 40rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+}
+.mine-box .mine-head .mine-head-top .head-top-msg image.data-v-dcbcfe34 {
+  width: 40rpx;
+  height: 40rpx;
+}
+.mine-box .mine-head .mine-head-top .head-top-set.data-v-dcbcfe34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+  margin-left: 22rpx;
+  width: 52rpx;
+  height: 52rpx;
+}
+.mine-box .mine-head .mine-head-top .head-top-set image.data-v-dcbcfe34 {
+  width: 42rpx;
+  height: 42rpx;
+}
+.mine-box .mine-head .mine-head-info.data-v-dcbcfe34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  padding: 20rpx 40rpx;
+  box-sizing: border-box;
+  color: #fff;
+}
+.mine-box .mine-head .mine-head-info .mine-head-info-left .head-info-left-box.data-v-dcbcfe34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+}
+.mine-box .mine-head .mine-head-info .mine-head-info-left .head-info-left-box .head-info-box-image.data-v-dcbcfe34 {
+  width: 128rpx;
+  height: 128rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}
+.mine-box .mine-head .mine-head-info .mine-head-info-left .head-info-left-box .head-info-box-image image.data-v-dcbcfe34 {
+  width: 112rpx;
+  height: 112rpx;
+}
+.mine-box .mine-head .mine-head-info .mine-head-info-left .head-info-left-box .head-info-right.data-v-dcbcfe34 {
+  margin-left: 20rpx;
+}
+.mine-box .mine-head .mine-head-info .mine-head-info-left .head-info-left-box .head-info-right .head-info-nickname.data-v-dcbcfe34 {
+  font-size: 36rpx;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+}
+.mine-box .mine-head .mine-head-info .mine-head-info-left .head-info-left-box .head-info-right .head-info-seep.data-v-dcbcfe34 {
+  width: 180rpx;
+  height: 6rpx;
+  margin: 20rpx 0 10rpx;
+  border-radius: 3rpx;
+  background: rgba(255, 255, 255, 0.3);
+}
+.mine-box .mine-head .mine-head-info .mine-head-info-left .head-info-left-box .head-info-right .head-info-seep .head-info-progress-bar.data-v-dcbcfe34 {
+  width: 100rpx;
+  height: 100%;
+  border-radius: 3rpx;
+  background: #fff;
+}
+.mine-box .mine-head .mine-head-info .mine-head-info-left .head-info-left-box .head-info-right .head-info-member.data-v-dcbcfe34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+  width: 112rpx;
+  height: 32rpx;
+  border-radius: 22rpx;
+  background: rgba(255, 255, 255, 0.9);
+}
+.mine-box .mine-head .mine-head-info .mine-head-info-left .head-info-left-box .head-info-right .head-info-member .head-info-member-ico.data-v-dcbcfe34 {
+  width: 23rpx;
+  height: 18rpx;
+  margin-right: 5rpx;
+}
+.mine-box .mine-head .mine-head-info .mine-head-info-left .head-info-left-box .head-info-right .head-info-member .head-info-member-ico image.data-v-dcbcfe34 {
+  width: 100%;
+}
+.mine-box .mine-head .mine-head-info .mine-head-info-left .head-info-left-box .head-info-right .head-info-member .head-info-member-text.data-v-dcbcfe34 {
+  font-size: 18rpx;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  color: #FF967D;
+}
+.mine-box .mine-head .mine-head-info .mine-head-info-right.data-v-dcbcfe34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+}
+.mine-box .mine-head .mine-head-info .mine-head-info-right .head-info-right-scan.data-v-dcbcfe34 {
+  width: 52rpx;
+  height: 52rpx;
+}
+.mine-box .mine-head .mine-head-info .mine-head-info-right .head-info-right-scan image.data-v-dcbcfe34 {
+  width: 48rpx;
+  height: 48rpx;
+}
+.mine-box .mine-head .mine-head-list.data-v-dcbcfe34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-around;
+          justify-content: space-around;
+  padding: 25rpx 0;
+  color: #FFFFFF;
+}
+.mine-box .mine-head .mine-head-list .mine-head-list-li.data-v-dcbcfe34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+}
+.mine-box .mine-head .mine-head-list .mine-head-list-li .head-list-li-text.data-v-dcbcfe34 {
+  font-size: 34rpx;
+  font-family: Source Han Sans CN;
+  font-weight: bold;
+}
+.mine-box .mine-head .mine-head-list .mine-head-list-li .head-list-li-txt-name.data-v-dcbcfe34 {
+  font-size: 26rpx;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
 }
 .mine-box .mine-content.data-v-dcbcfe34 {
   -webkit-box-flex: 1;
   -webkit-flex: 1;
           flex: 1;
+}
+.mine-box .mine-content .mine-content-state-list.data-v-dcbcfe34 {
+  margin: 20rpx 0;
+}
+.mine-box .mine-content .mine-content-integral-box.data-v-dcbcfe34 {
+  background: #fff;
+  padding-bottom: 30rpx;
+}
+.mine-box .mine-content .mine-content-integral-box .mine-content-integral-box-top.data-v-dcbcfe34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  padding: 20rpx 40rpx;
+  box-sizing: border-box;
+}
+.mine-box .mine-content .mine-content-integral-box .mine-content-integral-box-top .mine-integral-title-list.data-v-dcbcfe34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+}
+.mine-box .mine-content .mine-content-integral-box .mine-content-integral-box-top .mine-integral-title-list .integral-title-list-icon.data-v-dcbcfe34 {
+  width: 48rpx;
+  height: 48rpx;
+  background: #FFEBE6;
+  border-radius: 50%;
+}
+.mine-box .mine-content .mine-content-integral-box .mine-content-integral-box-top .mine-integral-title-list .integral-title-list-icon image.data-v-dcbcfe34 {
+  width: 28rpx;
+  height: 28rpx;
+}
+.mine-box .mine-content .mine-content-integral-box .mine-content-integral-box-top .mine-integral-title-list .integral-title-list-text.data-v-dcbcfe34 {
+  margin-left: 12rpx;
+  font-size: 32rpx;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  color: #333333;
+}
+.mine-box .mine-content .mine-content-integral-box .mine-content-integral-box-top .mine-integral-title-more.data-v-dcbcfe34 {
+  width: 30rpx;
+  height: 20rpx;
+}
+.mine-box .mine-content .mine-content-integral-box .mine-content-integral-box-top .mine-integral-title-more image.data-v-dcbcfe34 {
+  width: 30rpx;
+  height: 20rpx;
+}
+.mine-box .mine-content .mine-content-integral-box .mine-content-goods-list .mine-content-goods-list-box.data-v-dcbcfe34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  padding-left: 40rpx;
+  overflow-x: scroll;
+}
+.mine-box .mine-content .mine-content-integral-box .mine-content-goods-list .mine-content-goods-list-box .mine-content-goods-list-li.data-v-dcbcfe34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  margin-right: 20rpx;
+}
+.mine-box .mine-content .mine-content-integral-box .mine-content-goods-list .mine-content-goods-list-box .mine-content-goods-list-li .content-goods-list-image.data-v-dcbcfe34 {
+  width: 144rpx;
+  height: 144rpx;
+}
+.mine-box .mine-content .mine-content-integral-box .mine-content-goods-list .mine-content-goods-list-box .mine-content-goods-list-li .content-goods-list-image image.data-v-dcbcfe34 {
+  width: 144rpx;
+  height: 144rpx;
+}
+.mine-box .mine-content .mine-content-integral-box .mine-content-goods-list .mine-content-goods-list-box .mine-content-goods-list-li .content-goods-list-title.data-v-dcbcfe34 {
+  font-size: 24rpx;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  color: #333333;
+  line-height: 50rpx;
+}
+.mine-box .mine-content .mine-content-integral-box .mine-content-goods-list .mine-content-goods-list-box .mine-content-goods-list-li .content-goods-list-number.data-v-dcbcfe34 {
+  font-size: 24rpx;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  color: #FF8366;
+}
+.mine-box .mine-content .mine-content-commonly.data-v-dcbcfe34 {
+  position: relative;
+  padding: 20rpx 40rpx 40rpx;
+  background: #fff;
+  margin-top: 20rpx;
+}
+.mine-box .mine-content .mine-content-commonly .mine-content-commonly-top .mine-content-commonly-top-box.data-v-dcbcfe34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+}
+.mine-box .mine-content .mine-content-commonly .mine-content-commonly-top .mine-content-commonly-top-box .content-commonly-top-icon.data-v-dcbcfe34 {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: #FFEBE6;
+}
+.mine-box .mine-content .mine-content-commonly .mine-content-commonly-top .mine-content-commonly-top-box .content-commonly-top-icon image.data-v-dcbcfe34 {
+  width: 26rpx;
+  height: 24rpx;
+}
+.mine-box .mine-content .mine-content-commonly .mine-content-commonly-top .mine-content-commonly-top-box .content-commonly-title.data-v-dcbcfe34 {
+  margin-left: 12rpx;
+  font-size: 32rpx;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  color: #333333;
+}
+.mine-box .mine-content .mine-content-commonly .mine-content-commonly-list.data-v-dcbcfe34 {
+  margin-top: 30rpx;
+}
+.mine-box .mine-content .mine-content-commonly .mine-content-commonly-list swiper.data-v-dcbcfe34 {
+  height: 120rpx;
+}
+.mine-box .mine-content .mine-content-commonly .mine-content-commonly-list swiper .swiper-item.data-v-dcbcfe34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-around;
+          justify-content: space-around;
+}
+.mine-box .mine-content .mine-content-commonly .mine-content-commonly-list swiper .swiper-item .content-commonly-list-li.data-v-dcbcfe34 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-around;
+          justify-content: space-around;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+}
+.mine-box .mine-content .mine-content-commonly .mine-content-commonly-list swiper .swiper-item .content-commonly-list-li .content-commonly-list-li-ico.data-v-dcbcfe34 {
+  width: 76rpx;
+  height: 76rpx;
+}
+.mine-box .mine-content .mine-content-commonly .mine-content-commonly-list swiper .swiper-item .content-commonly-list-li .content-commonly-list-li-ico image.data-v-dcbcfe34 {
+  width: 76rpx;
+  height: 76rpx;
+}
+.mine-box .mine-content .mine-content-commonly .mine-content-commonly-list swiper .swiper-item .content-commonly-list-li .content-commonly-list-li-title.data-v-dcbcfe34 {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  color: #666666;
+}
+.mine-box .mine-content .mine-content-commonly .content-commonly-bar.data-v-dcbcfe34 {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 20rpx;
+  margin: auto;
+  width: 90rpx;
+  height: 6rpx;
+  border-radius: 3rpx;
+  background: #EDEDED;
+}
+.mine-box .mine-content .mine-content-commonly .content-commonly-bar .content-commonly-bar-active.data-v-dcbcfe34 {
+  width: 0;
+  height: 100%;
+  background: #FF967D;
+  border-radius: 3rpx;
 }
 

@@ -1,12 +1,31 @@
 {
   "pages": [
-    "pages/index/index",
     "pages/mine/mine",
-    "pages/subscribe/subscribe",
     "pages/mall/mall",
+    "pages/index/index",
+    "pages/subscribe/subscribe",
     "pages/map/map"
   ],
-  "subPackages": [],
+  "subPackages": [
+    {
+      "root": "pagesIndex",
+      "pages": [
+        "collection-center/collection-center"
+      ]
+    },
+    {
+      "root": "pagesMine",
+      "pages": [
+        "set/set"
+      ]
+    },
+    {
+      "root": "pagesMineTwo",
+      "pages": [
+        "personalInfo/personalInfo"
+      ]
+    }
+  ],
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "uni-app",
@@ -14,6 +33,7 @@
     "backgroundColor": "#F8F8F8",
     "navigationStyle": "custom"
   },
+  "preloadRule": {},
   "usingComponents": {},
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap74.json"
 }

@@ -24,6 +24,9 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.mescroll-uni.data-v-2e142186 {
+  height: 100% !important;
+}
 .mall-box.data-v-2e142186 {
   height: 100%;
   display: -webkit-box;
@@ -34,9 +37,202 @@
   -webkit-flex-direction: column;
           flex-direction: column;
 }
+.mall-box .mall-head.data-v-2e142186 {
+  background: -webkit-linear-gradient(45deg, #FFA18A 0%, #FF977E 100%);
+  background: linear-gradient(45deg, #FFA18A 0%, #FF977E 100%);
+}
+.mall-box .mall-head .mall-head-top.data-v-2e142186 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  padding: 24rpx 32rpx;
+  box-sizing: border-box;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+}
+.mall-box .mall-head .mall-head-top .mall-head-top-search.data-v-2e142186 {
+  width: 52rpx;
+  height: 52rpx;
+  margin-left: 10rpx;
+}
+.mall-box .mall-head .mall-head-top .mall-head-top-search image.data-v-2e142186 {
+  width: 38rpx;
+  height: 39rpx;
+}
+.mall-box .mall-head .mall-head-top .mall-head-top-title.data-v-2e142186 {
+  font-size: 34rpx;
+  font-family: Source Han Sans CN;
+  font-weight: 500;
+  color: #FFFFFF;
+}
+.mall-box .mall-head .mall-head-top .mall-head-top-shopping.data-v-2e142186 {
+  position: relative;
+  width: 52rpx;
+  height: 52rpx;
+}
+.mall-box .mall-head .mall-head-top .mall-head-top-shopping .head-top-shopping-icon.data-v-2e142186 {
+  width: 52rpx;
+  height: 52rpx;
+}
+.mall-box .mall-head .mall-head-top .mall-head-top-shopping .head-top-shopping-icon image.data-v-2e142186 {
+  width: 45rpx;
+  height: 45rpx;
+}
+.mall-box .mall-head .mall-head-top .mall-head-top-shopping .head-top-shooping-msg.data-v-2e142186 {
+  position: absolute;
+  top: -14rpx;
+  right: -14rpx;
+  width: 28rpx;
+  height: 28rpx;
+  font-size: 20rpx;
+  font-family: Source Han Sans CN;
+  font-weight: bold;
+  color: #FF987F;
+  border-radius: 50%;
+  background: #fff;
+}
+.mall-box .mall-head .mall-head-list.data-v-2e142186 {
+  width: 100%;
+}
+.mall-box .mall-head .mall-head-list .mall-head-box-wrap.data-v-2e142186 {
+  display: -webkit-box;
+  padding-top: 30rpx;
+  padding-bottom: 30rpx;
+  padding-left: 40rpx;
+  box-sizing: border-box;
+  overflow-x: scroll;
+}
+.mall-box .mall-head .mall-head-list .mall-head-box-wrap .mall-head-list-li.data-v-2e142186 {
+  width: 128rpx;
+  height: 128rpx;
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  margin-right: 32rpx;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+}
+.mall-box .mall-head .mall-head-list .mall-head-box-wrap .mall-head-list-li .head-list-li-icon image.data-v-2e142186 {
+  width: 56rpx;
+  height: 56rpx;
+}
+.mall-box .mall-head .mall-head-list .mall-head-box-wrap .mall-head-list-li .head-list-li-title.data-v-2e142186 {
+  font-size: 26rpx;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  color: #333333;
+}
 .mall-box .mall-content.data-v-2e142186 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+          flex-direction: column;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
           flex: 1;
+  overflow-y: scroll;
+}
+.mall-box .mall-content .mall-content-recommend.data-v-2e142186 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  padding: 32rpx 40rpx;
+  box-sizing: border-box;
+}
+.mall-box .mall-content .mall-content-recommend .mall-content-recommend-text.data-v-2e142186 {
+  font-size: 36rpx;
+  font-family: Source Han Sans CN;
+  font-weight: 500;
+  color: #000000;
+}
+.mall-box .mall-content .mall-content-recommend .mall-content-recommend-more.data-v-2e142186 {
+  width: 30rpx;
+  height: 30rpx;
+}
+.mall-box .mall-content .mall-content-recommend .mall-content-recommend-more image.data-v-2e142186 {
+  width: 30rpx;
+  height: 30rpx;
+}
+.mall-box .mall-content .mall-content-box.data-v-2e142186 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+  overflow-y: scroll;
+}
+.mall-box .mall-content .mall-content-box .mall-content-box-list.data-v-2e142186 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+          flex-wrap: wrap;
+  padding-left: 40rpx;
+  padding-right: 40rpx;
+  box-sizing: border-box;
+}
+.mall-box .mall-content .mall-content-box .mall-content-box-list .mall-list-li.data-v-2e142186 {
+  margin-bottom: 30rpx;
+}
+.mall-box .mall-content .mall-content-box .mall-content-box-list .mall-list-li .mall-list-li-item.data-v-2e142186 {
+  position: relative;
+  width: 315rpx;
+  height: 320rpx;
+  margin-bottom: 20rpx;
+}
+.mall-box .mall-content .mall-content-box .mall-content-box-list .mall-list-li .mall-list-li-item .mall-list-li-image.data-v-2e142186 {
+  width: 315rpx;
+  height: 320rpx;
+}
+.mall-box .mall-content .mall-content-box .mall-content-box-list .mall-list-li .mall-list-li-item .mall-list-li-image image.data-v-2e142186 {
+  width: 315rpx;
+  height: 320rpx;
+}
+.mall-box .mall-content .mall-content-box .mall-content-box-list .mall-list-li .mall-list-li-item .mall-list-li-collect.data-v-2e142186 {
+  position: absolute;
+  bottom: 20rpx;
+  right: 20rpx;
+  width: 52rpx;
+  height: 52rpx;
+}
+.mall-box .mall-content .mall-content-box .mall-content-box-list .mall-list-li .mall-list-li-item .mall-list-li-collect image.data-v-2e142186 {
+  width: 42rpx;
+  height: 38rpx;
+}
+.mall-box .mall-content .mall-content-box .mall-content-box-list .mall-list-li .mall-list-li-goods-name.data-v-2e142186 {
+  font-size: 28rpx;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  line-height: 20px;
+  color: #000000;
+}
+.mall-box .mall-content .mall-content-box .mall-content-box-list .mall-list-li .mall-list-li-price.data-v-2e142186 {
+  font-size: 28rpx;
+  font-family: Source Han Sans CN;
+  font-weight: 500;
+  color: #FF4D4D;
+  line-height: 20px;
+}
+.mall-box .mall-content .mall-content-box .mall-content-box-list .mall-list-li.data-v-2e142186:nth-child(2n+1) {
+  margin-right: 40rpx;
 }
 

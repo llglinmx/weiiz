@@ -10,7 +10,7 @@
 				<view class="index-head-logo">
 					<image src="../../static/images/logo.png" mode="widthFix"></image>
 				</view>
-				<view class="index-head-language" @click="clickLanguage">
+				<view class="index-head-language flex-center" @click="clickLanguage">
 					<image src="../../static/images/code.png" mode="aspectFill"></image>
 					<text>EN</text>
 				</view>
@@ -56,11 +56,11 @@
 			</view>
 			<!-- 列表 -->
 			<view class="index-content-list">
-				<view class="index-content-list-li" v-for="item in arrList">
+				<view class="index-content-list-li" v-for="item in arrList" @click="moreClick(item)">
 					<view class="content-list-li-ico">
 						<image src="../../static/images/code.png" mode=""></image>
 					</view>
-					<view class="content-list-li-text">商品</view>
+					<view class="content-list-li-text">{{item}}</view>
 				</view>
 			</view>
 			<!-- 更多服务列表 -->
@@ -115,13 +115,12 @@
 	export default {
 		data() {
 			return {
-				background: ['color1', 'color2', 'color3'],
 				indicatorDots: true,
 				autoplay: true,
 				interval: 2000,
 				duration: 500,
 				circular: true,
-				arrList: ['中文', "英语", "俄语", "法语", "德语"],
+				arrList: ['商城', "社区", "教程", "技师", "活动",'快速预约', "礼品卡", "买单", "领券中心", "拼团"],
 				textList: ['中文', "英语", "俄语", "法语", "德语"],
 				imageList: [{
 						url: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.pconline.com.cn%2Fimages%2Fupload%2Fupc%2Ftx%2Fwallpaper%2F1212%2F10%2Fc1%2F16491670_1355126816487.jpg&refer=http%3A%2F%2Fimg.pconline.com.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1617169230&t=15c6d87792f9fe60a66efcc066e816d5",
@@ -136,7 +135,7 @@
 						link: ""
 					}
 				],
-				barHeight: 0,
+				barHeight: 0,//顶部电量导航栏高度
 				isLangShow: false,
 				isPopup: false,
 				selectIndex: 0,
@@ -175,6 +174,18 @@
 			confirmBtn() {
 				this.$refs.popup.close()
 			},
+			// 列表点击
+			moreClick(item){
+				switch (item){
+					case "领券中心":
+					uni.navigateTo({
+						url:"../../pagesIndex/collection-center/collection-center"
+					})
+						break;
+					default:
+						break;
+				}
+			}
 
 		}
 	}

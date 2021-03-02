@@ -1,0 +1,1 @@
+<view class="box-list data-v-c4cb90f8"><block wx:for="{{list}}" wx:for-item="item" wx:for-index="index"><view class="box-list-li data-v-c4cb90f8"><view class="list-li-image data-v-c4cb90f8"><image src="{{item.image}}" mode="aspectFill" class="data-v-c4cb90f8"></image></view><view class="list-li-title data-v-c4cb90f8">{{item.title}}</view></view></block></view>

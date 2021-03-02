@@ -31,7 +31,6 @@
 			// 获取顶部电量状态栏高度
 			uni.getSystemInfo({
 				success: (res) => {
-					console.log(res)
 					this.barHeight = res.statusBarHeight
 				}
 			});
@@ -53,7 +52,7 @@
 			display: flex;
 			align-items: center;
 			height: 88rpx;
-
+background: #fff;
 			.nav-back {
 				display: flex;
 				align-items: center;

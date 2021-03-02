@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "nav-title": "/components/navTitle/navTitle",
+    "btn-pink": "/components/btnPink/btnPink"
+  }
+}
