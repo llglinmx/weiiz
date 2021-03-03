@@ -1,6 +1,6 @@
 <template>
 	<view class="box-list">
-		<view class="box-list-li" v-for="(item,index) in list">
+		<view class="box-list-li" v-for="(item,index) in list" @click="listClick(index)">
 			<view class="list-li-image">
 				<image :src="item.image" mode="aspectFill"></image>
 			</view>
@@ -16,16 +16,18 @@
 
 			};
 		},
-		
+
 		props: {
-			list:{
-				type:Object,
-				default:[]
+			list: {
+				type: Object,
+				default: []
 			}
 		},
 
 		methods: {
-
+			listClick(index) {
+				this.$emit("listState", index)
+			},
 		},
 	}
 </script>
@@ -37,6 +39,7 @@
 		justify-content: space-around;
 		height: 164rpx;
 		background: #fff;
+
 		.box-list-li {
 			display: flex;
 			align-items: center;

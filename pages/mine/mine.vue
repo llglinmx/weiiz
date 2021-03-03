@@ -61,7 +61,7 @@
 		</view>
 		<view class="mine-content">
 			<view class="mine-content-state-list">
-				<state-list :list="stateList"></state-list>
+				<state-list :list="stateList" @listState="listClick"></state-list>
 			</view>
 			<view class="mine-content-integral-box">
 				<view class="mine-content-integral-box-top">
@@ -140,8 +140,8 @@
 			return {
 				barHeight: 0, //顶部电量导航栏高度
 				idx: 0,
-				toolBarWidth: 0,
-				parWidth: 0,
+				toolBarWidth: 0, //进度条长度
+				parWidth: 0, // 进度条父级长度度
 				list: [{
 						number: "20",
 						text: "余额/元",
@@ -320,10 +320,44 @@
 				this.toolBarWidth = (e.detail.current + 1) * (this.parWidth / this.toolAllList.length)
 			},
 			// 设置按钮点击
-			setClick(){
+			setClick() {
 				uni.navigateTo({
-					url:"../../pagesMine/set/set"
+					url: "../../pagesMine/set/set"
 				})
+			},
+
+			// 订单状态点击
+			listClick(index) {
+				// 0全部订单 4退款/售后  3已核销 2待核销  1待付款
+				switch (index) {
+					
+					case 0:
+						uni.navigateTo({
+							url: "../../pagesMineTwo/allOrder/allOrder?listIndex=1"
+						})
+						break;
+					case 1:
+						uni.navigateTo({
+							url: "../../pagesMineTwo/allOrder/allOrder?listIndex=2"
+						})
+						break;
+					case 2:
+						uni.navigateTo({
+							url: "../../pagesMineTwo/allOrder/allOrder?listIndex=3"
+						})
+						break;
+					case 3:
+						uni.navigateTo({
+							url: "../../pagesMineTwo/allOrder/allOrder?listIndex=4"
+						})
+						break;
+					case 4:
+						uni.navigateTo({
+							url: "../../pagesMineTwo/allOrder/allOrder?listIndex=0"
+						})
+						break;
+				}
+				
 			},
 		}
 	}

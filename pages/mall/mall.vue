@@ -201,7 +201,9 @@
 			clickList(e) {
 				switch (e.title) {
 					case "美容":
-
+						uni.navigateTo({
+							url:"../../pagesMall/beautyMall/beautyMall"
+						})
 						break;
 				}
 			},

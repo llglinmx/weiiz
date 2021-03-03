@@ -37,13 +37,7 @@
 	],
 	"subPackages": [{
 			"root": "pagesIndex",
-			"pages": [{
-				"path": "collection-center/collection-center",
-				"style": {
-					"navigationBarTitleText": "",
-					"enablePullDownRefresh": false
-				}
-			}]
+			"pages": []
 		},
 		{
 			"root": "pagesMine",
@@ -124,6 +118,15 @@
                 }
                 
                 }
+                ,{
+                    "path" : "allOrder/allOrder",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
             ]
 		},
 		{
@@ -139,6 +142,29 @@
                 }
                 ,{
                     "path" : "exemptionClause/exemptionClause",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
+		},
+		{
+			"root": "pagesCommon",
+			"pages": [{
+				"path": "collection-center/collection-center",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+			}]
+		},
+		{
+			"root": "pagesMall",
+			"pages": [{
+                    "path" : "beautyMall/beautyMall",
                     "style" :                                                                                    
                 {
                     "navigationBarTitleText": "",
