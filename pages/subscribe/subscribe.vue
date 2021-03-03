@@ -1,6 +1,6 @@
 <template>
 	<view class="sub-box">
-		<view class="sub-head">
+		<view class="sub-head" :style="{paddingTop:barHeight+'px'}">
 			<view class="sub-head-tabs">
 				<Tabs :TabsList='TabsList' :IndexIdx='idx' @TabClick="TabBtn"></Tabs>
 			</view>
@@ -95,12 +95,21 @@
 		data() {
 			return {
 				TabsList: ["全部订单", "待付款", "待核销", "已核销", "退款/售后"],
-				idx: 0
+				idx: 0,
+				barHeight: 0, //顶部电量导航栏高度
 			}
 		},
 		components: {
 			Tabbar,
 			Tabs
+		},
+		onReady() {
+			// 获取顶部电量状态栏高度
+			uni.getSystemInfo({
+				success: (res) => {
+					this.barHeight = res.statusBarHeight
+				}
+			});
 		},
 		methods: {
 			// tab点击
@@ -109,6 +118,7 @@
 			},
 			// 滑动切换列表
 			tabChange(e) {
+			
 				this.idx = e.detail.current
 			},
 		}
@@ -122,10 +132,14 @@
 		flex-direction: column;
 		background: #F7F7F7;
 
+		.sub-head {
+			background: #fff;
+		}
+
 		.sub-content {
 			display: flex;
 			overflow-y: scroll;
-			padding-bottom: 40rpx;
+			// padding-bottom: 40rpx;
 			flex: 1;
 
 			.sub-content-wrap {
@@ -137,9 +151,9 @@
 
 					.swiper-box-item-list {
 						overflow-y: scroll;
-						
+
 						.sub-content-list {
-							
+
 							.sub-content-list-li {
 								display: flex;
 								flex-direction: column;

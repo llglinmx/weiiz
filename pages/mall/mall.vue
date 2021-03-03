@@ -175,7 +175,7 @@
 						goodsName: "玻尿酸深层补水面膜",
 						price: "356.00",
 						isStore: false
-					},
+					},	
 				]
 			}
 		},

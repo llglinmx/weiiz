@@ -5,68 +5,68 @@
 		</view>
 		<view class="box-content">
 			<view class="content-list">
-				<view class="content-list-li">
+				<view class="content-list-li" @click="listAllClick('info')">
 					<view class="content-list-li-title">个人信息</view>
-					<view class="content-list-li-more flex-center" @click="listAllClick('info')">
+					<view class="content-list-li-more flex-center">
 						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
 					</view>
 				</view>
-				<view class="content-list-li">
+				<view class="content-list-li" @click="listAllClick('bodyState')">
 					<view class="content-list-li-title">身体状态</view>
-					<view class="content-list-li-more flex-center" @click="listAllClick('bodyState')">
+					<view class="content-list-li-more flex-center">
 						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
 					</view>
 				</view>
-				<view class="content-list-li">
+				<view class="content-list-li" @click="listAllClick('contacts')">
 					<view class="content-list-li-title">紧急联系人</view>
-					<view class="content-list-li-more flex-center" @click="listAllClick('contacts')">
+					<view class="content-list-li-more flex-center">
 						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
 					</view>
 				</view>
-				<view class="content-list-li">
+				<view class="content-list-li" @click="listAllClick('security')">
 					<view class="content-list-li-title">账号安全</view>
-					<view class="content-list-li-more flex-center" @click="listAllClick('security')">
+					<view class="content-list-li-more flex-center">
 						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
 					</view>
 				</view>
 			</view>
 			<view class="content-list">
-				<view class="content-list-li">
+				<view class="content-list-li" @click="listAllClick('pushSet')">
 					<view class="content-list-li-title">推送设置</view>
-					<view class="content-list-li-more flex-center" @click="listAllClick('pushSet')">
+					<view class="content-list-li-more flex-center">
 						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
 					</view>
 				</view>
-				<view class="content-list-li">
-					<view class="content-list-li-title"">合作授权</view>
-					<view class=" content-list-li-more flex-center" @click="listAllClick('empower')">
+				<view class="content-list-li" @click="listAllClick('empower')">
+					<view class="content-list-li-title">合作授权</view>
+					<view class=" content-list-li-more flex-center">
 						<image src="../../static/images/more-gray.png" mode="aspectFill">
 						</image>
 					</view>
 				</view>
 			</view>
 			<view class="content-list">
-				<view class="content-list-li">
+				<view class="content-list-li" @click="listAllClick('aboutUs')">
 					<view class="content-list-li-title">关于我们</view>
-					<view class="content-list-li-more flex-center" @click="listAllClick('aboutUs')">
+					<view class="content-list-li-more flex-center">
 						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
 					</view>
 				</view>
-				<view class="content-list-li">
+				<view class="content-list-li" @click="()=>{listAllClick('problem')}">
 					<view class="content-list-li-title">常见问题</view>
-					<view class="content-list-li-more flex-center" @click="listAllClick('problem')">
+					<view class="content-list-li-more flex-center">
 						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
 					</view>
 				</view>
-				<view class="content-list-li">
+				<view class="content-list-li" @click="listAllClick('feedback')">
 					<view class="content-list-li-title">反馈</view>
-					<view class="content-list-li-more flex-center" @click="listAllClick('feedback')">
+					<view class="content-list-li-more flex-center">
 						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
 					</view>
 				</view>
-				<view class="content-list-li">
+				<view class="content-list-li" @click="listAllClick('report')">
 					<view class="content-list-li-title">举报</view>
-					<view class="content-list-li-more flex-center" @click="listAllClick('report')">
+					<view class="content-list-li-more flex-center">
 						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
 					</view>
 				</view>
@@ -102,7 +102,6 @@
 		methods: {
 			// 所有点击事件
 			listAllClick(type) {
-				console.log(type)
 				switch (type) {
 					// 个人信息
 					case "info":
@@ -112,30 +111,57 @@
 						break;
 						// 身体状态
 					case "bodyState":
+						uni.navigateTo({
+							url: "../../pagesMineTwo/physicalCondition/physicalCondition"
+						})
 						break;
 						// 紧急联系人
 					case "contacts":
 						break;
 						// 账号安全
 					case "security":
+						uni.navigateTo({
+							url: "../../pagesMineTwo/accountSecurity/accountSecurity"
+						})
 						break;
 						// 推送设置
 					case "pushSet":
+						uni.navigateTo({
+							url: "../../pagesMineTwo/pushSet/pushSet"
+						})
 						break;
 						// 合作授权
 					case "empower":
+						uni.navigateTo({
+							url: "../../pagesMineTwo/empower/empower"
+						})
 						break;
 						// 关于我们
 					case "aboutUs":
+						uni.navigateTo({
+							url: "../../pagesMineTwo/aboutUs/aboutUs"
+						})
+
 						break;
+
 						// 常见问题
 					case "problem":
+						uni.navigateTo({
+							url: "../../pagesMineTwo/commonProblem/commonProblem"
+						})
 						break;
+
 						// 反馈
 					case "feedback":
+						uni.navigateTo({
+							url: "../../pagesMineTwo/feedback/feedback"
+						})
 						break;
 						// 举报
 					case "report":
+						uni.navigateTo({
+							url: "../../pagesMineTwo/report/report"
+						})
 						break;
 				}
 			},

@@ -1,60 +1,48 @@
 <template>
 	<view class="box">
 		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
-			<navTitle navTitle="个人信息"></navTitle>
+			<navTitle navTitle="账号安全"></navTitle>
 		</view>
 		<view class="box-content">
 			<view class="content-list">
-				<view class="content-list-li" style="height: 171rpx;">
-					<view class="content-list-li-title">头像</view>
-					<view class="content-list-li-wrap">
-
-						<view class="content-list-li-wrap-image">
-							<image src="../../static/images/userImage.png" mode=""></image>
-						</view>
-						<view class="content-list-li-more flex-center" @click="listAllClick('info')">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
-						</view>
-					</view>
-				</view>
-				<view class="content-list-li" @click="listAllClick('security')">
-					<view class="content-list-li-title">昵称</view>
+				<view class="content-list-li" @click="listAllClick('email')">
+					<view class="content-list-li-title">邮箱</view>
 					<view class="content-list-li-wrap">
 						<view class="content-list-li-wrap-text">
-							安稳也随性
+							1527892466@qq.com
 						</view>
 						<view class="content-list-li-more flex-center">
 							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
 						</view>
 					</view>
 				</view>
-				<view class="content-list-li" @click="listAllClick('security')">
-					<view class="content-list-li-title">性别</view>
+				<view class="content-list-li" @click="listAllClick('phone')">
+					<view class="content-list-li-title">手机</view>
 					<view class="content-list-li-wrap">
 						<view class="content-list-li-wrap-text">
-							男
+							183****7210
 						</view>
 						<view class="content-list-li-more flex-center">
 							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
 						</view>
 					</view>
 				</view>
-				<view class="content-list-li" @click="birthday">
-					<view class="content-list-li-title">生日</view>
+				<view class="content-list-li" @click="listAllClick('password')">
+					<view class="content-list-li-title">登录密码</view>
 					<view class="content-list-li-wrap">
-						<view class="content-list-li-wrap-text">
-							1996-10-04
+						<view class="content-list-li-wrap-text" style="color: #FF8366;">
+							修改
 						</view>
 						<view class="content-list-li-more flex-center">
 							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
 						</view>
 					</view>
 				</view>
-				<view class="content-list-li" @click="addressShow = true">
-					<view class="content-list-li-title">居住地</view>
+				<view class="content-list-li" @click="listAllClick('logOut')">
+					<view class="content-list-li-title">注销账号</view>
 					<view class="content-list-li-wrap">
 						<view class="content-list-li-wrap-text">
-							{{address}}
+							注销后无法恢复，请谨慎操作
 						</view>
 						<view class="content-list-li-more flex-center">
 							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
@@ -66,35 +54,21 @@
 		<view class="box-footer">
 			<btnPink btnName="保存" @btnClick="preserve"></btnPink>
 		</view>
-		<pickerAddress v-model="addressShow" @confirm="addresspick" />
-	
 	</view>
 </template>
 
 <script>
 	import navTitle from "../../components/navTitle/navTitle.vue"
 	import btnPink from "../../components/btnPink/btnPink.vue"
-	import pickerAddress from '@/components/liudx-pickerAddress/index.vue'
-
 	export default {
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
-				addressShow: false, //控制地址栏是否显示
-				show: false, //控制日期显示
-				form: {
-					province: '',
-					city: '',
-					area: '',
-				},
-				address: '请选择地址',
-
 			};
 		},
 		components: {
-			navTitle,
 			btnPink,
-			pickerAddress
+			navTitle
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -105,27 +79,25 @@
 			});
 		},
 		methods: {
-			// 点击打开选择生日
-			birthday() {
-				this.show = true
-			},
-			// 出生日期确认
-			confirm(date) {
-				this.show = false;
-				this.birth = date;
-			},
-			// 选择地址
-			addresspick(obj) {
-				let arr = ['province', 'city', 'area'];
-				let place = '';
-				arr.map(key => {
-					this.form[key] = obj[key].AreaId
-					place += obj[key].AreaName
+			listAllClick(type) {
+
+				switch (type) {
+					case "email":
+						break;
+					case "phone":
+						break;
+					case "password":
+						break;
+					case "logOut":
+						break;
+
+				}
+				uni.showToast({
+					title: type,
+					icon: "none"
 				})
-				this.address = place
-				console.log(this.address)
 			},
-			
+
 			// 保存按钮
 			preserve() {
 				uni.showToast({
@@ -137,7 +109,7 @@
 	}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	.box {
 		display: flex;
 		flex-direction: column;
@@ -145,7 +117,7 @@
 		background: #F7F7F7;
 
 		.box-head {
-			background: #fff;
+			background-color: #fff;
 		}
 
 		.box-content {
@@ -177,7 +149,7 @@
 						align-items: center;
 
 						.content-list-li-wrap-text {
-							font-size: 29rpx;
+							font-size: 28rpx;
 							font-family: Source Han Sans CN;
 							font-weight: 400;
 							color: #999999;
@@ -214,8 +186,9 @@
 		}
 
 		.box-footer {
-			margin-bottom: 30rpx;
 			padding: 0 40rpx;
+			box-sizing: border-box;
+			margin-bottom: 30rpx;
 		}
 	}
 </style>
