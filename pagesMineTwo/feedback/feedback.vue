@@ -76,7 +76,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="box-footer" v-if="defaultIndex==0">
+		<view class="box-footer" :class="defaultIndex!=0?'hidden-btn':''">
 			<btnPink btnName="保存" @btnClick="preserve"></btnPink>
 		</view>
 	</view>
@@ -306,6 +306,14 @@
 			padding: 0 40rpx;
 			box-sizing: border-box;
 			margin-bottom: 30rpx;
+			transition: 0.5s;
+			opacity: 1;
+		}
+		.hidden-btn{
+			position: absolute;
+			transform: scale(0.1);
+			opacity: 0;
+			z-index: -1;
 		}
 	}
 </style>

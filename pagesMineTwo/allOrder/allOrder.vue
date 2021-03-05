@@ -3,7 +3,7 @@
 		<view class="sub-head" :style="{paddingTop:barHeight+'px'}">
 			<navTitle navTitle="订单列表"></navTitle>
 			<view class="sub-head-tabs">
-				<Tabs :TabsList='TabsList' :IndexIdx='idx' @TabClick="TabBtn"></Tabs>
+				<liuyuno-tabs ref="boxTabs" :tabData="TabsList" :activeIndex="idx" @tabClick='tabClick' />
 			</view>
 		</view>
 		<view class="sub-content">
@@ -306,8 +306,8 @@
 
 <script>
 	import Tabbar from "../../components/tabbar/tabbar.vue"
-	import Tabs from "../../components/tabs/tabs.vue"
 	import navTitle from "../../components/navTitle/navTitle.vue"
+	import liuyunoTabs from "@/components/liuyuno-tabs/liuyuno-tabs.vue";
 	export default {
 		data() {
 			return {
@@ -318,7 +318,7 @@
 		},
 		components: {
 			Tabbar,
-			Tabs,
+			liuyunoTabs,
 			navTitle
 		},
 		onReady() {
@@ -332,14 +332,14 @@
 		onLoad(options) {
 			this.idx = options.listIndex * 1 // *1 是为了把字符串转为数字
 		},
-		methods: {
-			// tab点击
-			TabBtn(e) {
+		methods: {			
+			// tabs 点击
+			tabClick(e) {
 				this.idx = e
 			},
 			// 滑动切换列表
 			tabChange(e) {
-
+				this.$refs.boxTabs.tabToIndex(e.detail.current)
 				this.idx = e.detail.current
 			},
 		}

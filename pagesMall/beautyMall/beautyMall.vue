@@ -14,7 +14,7 @@
 							<view class="mall-content-box">
 								<!-- <mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption" :height="mesHeight"> -->
 									<view class="mall-content-box-list">
-										<view class="mall-list-li" v-for="(item,index) in goodsList" :key="index">
+										<view class="mall-list-li" v-for="(item,index) in goodsList" :key="index" @click="clickGoodsDtails(item)">
 											<view class="mall-list-li-item">
 												<view class="mall-list-li-image">
 													<image :src="item.image" mode=""></image>
@@ -39,7 +39,7 @@
 							<view class="mall-content-box">
 								<!-- <mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption" :height="mesHeight"> -->
 									<view class="mall-content-box-list">
-										<view class="mall-list-li" v-for="(item,index) in goodsList" :key="index">
+										<view class="mall-list-li" v-for="(item,index) in goodsList" :key="index" @click="clickGoodsDtails(item)">
 											<view class="mall-list-li-item">
 												<view class="mall-list-li-image">
 													<image :src="item.image" mode=""></image>
@@ -64,7 +64,7 @@
 							<view class="mall-content-box">
 								<!-- <mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption" :height="mesHeight"> -->
 									<view class="mall-content-box-list">
-										<view class="mall-list-li" v-for="(item,index) in goodsList" :key="index">
+										<view class="mall-list-li" v-for="(item,index) in goodsList" :key="index" @click="clickGoodsDtails(item)">
 											<view class="mall-list-li-item">
 												<view class="mall-list-li-image">
 													<image :src="item.image" mode=""></image>
@@ -89,7 +89,7 @@
 							<view class="mall-content-box">
 								<!-- <mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption" :height="mesHeight"> -->
 									<view class="mall-content-box-list">
-										<view class="mall-list-li" v-for="(item,index) in goodsList" :key="index">
+										<view class="mall-list-li" v-for="(item,index) in goodsList" :key="index" @click="clickGoodsDtails(item)">
 											<view class="mall-list-li-item">
 												<view class="mall-list-li-image">
 													<image :src="item.image" mode=""></image>
@@ -114,7 +114,7 @@
 							<view class="mall-content-box">
 								<!-- <mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption" :height="mesHeight"> -->
 									<view class="mall-content-box-list">
-										<view class="mall-list-li" v-for="(item,index) in goodsList" :key="index">
+										<view class="mall-list-li" v-for="(item,index) in goodsList" :key="index" @click="clickGoodsDtails(item)">
 											<view class="mall-list-li-item">
 												<view class="mall-list-li-image">
 													<image :src="item.image" mode=""></image>
@@ -223,6 +223,12 @@
 			});
 		},
 		methods: {
+			// 点击进入详情
+			clickGoodsDtails(item){
+				uni.navigateTo({
+					url:"../../pagesMallTwo/goodsDetails/goodsDetails"
+				})
+			},
 			// tabs 点击
 			tabClick(e) {
 				this.defaultIndex = e

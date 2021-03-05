@@ -37,7 +37,38 @@
 	],
 	"subPackages": [{
 			"root": "pagesIndex",
-			"pages": []
+			"pages": [{
+				"path": "massageBusiness/massageBusiness",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}]
+		},
+		{
+			"root": "pagesIndexTwo",
+			"pages": [{
+				"path": "merchantDetails/merchantDetails",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}]
+		},
+		{
+			"root": "pagesIndexThree",
+			"pages": [{
+                    "path" : "projectDetails/projectDetails",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		},
 		{
 			"root": "pagesMine",
@@ -100,56 +131,46 @@
 					"enablePullDownRefresh": false
 				}
 
-			}    ,{
-                    "path" : "feedback/feedback",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "report/report",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "allOrder/allOrder",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+			}, {
+				"path": "feedback/feedback",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "report/report",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "allOrder/allOrder",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}]
 		},
 		{
 			"root": "pagesMineThree",
 			"pages": [{
-                    "path" : "problemDetails/problemDetails",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "exemptionClause/exemptionClause",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+				"path": "problemDetails/problemDetails",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "exemptionClause/exemptionClause",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}]
 		},
 		{
 			"root": "pagesCommon",
@@ -164,15 +185,23 @@
 		{
 			"root": "pagesMall",
 			"pages": [{
-                    "path" : "beautyMall/beautyMall",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+				"path": "beautyMall/beautyMall",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}]
+		}, {
+			"root": "pagesMallTwo",
+			"pages": [{
+				"path": "goodsDetails/goodsDetails",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}]
 		}
 	],
 	"preloadRule": { //加载规则 当渲染pages/home/home时加载子包
