@@ -8,7 +8,7 @@
 				<view class="mall-head-top-title">
 					商城
 				</view>
-				<view class="mall-head-top-shopping">
+				<view class="mall-head-top-shopping" @click="shoppingList">
 					<view class="head-top-shopping-icon flex-center">
 						<image src="../../static/images/shopping.png" mode=""></image>
 					</view>
@@ -42,7 +42,7 @@
 			<view class="mall-content-box">
 				<mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption" :height="mesHeight">
 					<view class="mall-content-box-list">
-						<view class="mall-list-li" v-for="(item,index) in goodsList" :key="index">
+						<view class="mall-list-li" v-for="(item,index) in goodsList" :key="index" @click="clickGoodsDtails(item)">
 							<view class="mall-list-li-item">
 								<view class="mall-list-li-image">
 									<image :src="item.image" mode=""></image>
@@ -127,7 +127,7 @@
 						price: "356.00",
 						isStore: false
 					},
-					
+
 					{
 						image: "../../static/images/004.png",
 						goodsName: "玻尿酸深层补水面膜",
@@ -175,7 +175,7 @@
 						goodsName: "玻尿酸深层补水面膜",
 						price: "356.00",
 						isStore: false
-					},	
+					},
 				]
 			}
 		},
@@ -202,10 +202,23 @@
 				switch (e.title) {
 					case "美容":
 						uni.navigateTo({
-							url:"../../pagesMall/beautyMall/beautyMall"
+							url: "../../pagesMall/beautyMall/beautyMall"
 						})
 						break;
 				}
+			},
+			// 点击进入购物车列表
+			shoppingList() {
+				uni.navigateTo({
+					url: "../../pagesMall/shoppingCart/shoppingCart"
+				})
+			},
+
+			// 点击进入详情
+			clickGoodsDtails(item) {
+				uni.navigateTo({
+					url: "../../pagesMallTwo/goodsDetails/goodsDetails"
+				})
 			},
 			/*下拉刷新的回调*/
 			downCallback() {
@@ -235,9 +248,10 @@
 </script>
 
 <style scoped lang="scss">
-	.mescroll-uni{
+	.mescroll-uni {
 		height: 100% !important;
 	}
+
 	.mall-box {
 		height: 100%;
 		display: flex;

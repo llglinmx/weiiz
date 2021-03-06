@@ -1,6 +1,19 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+		    "path" : "pages/signUp/signUp/signUp",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		},{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		}, {
 			"path": "pages/mine/mine",
 			"style": {
 				"navigationBarTitleText": "",
@@ -14,11 +27,6 @@
 				"enablePullDownRefresh": false
 			}
 
-		}, {
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app"
-			}
 		}, {
 			"path": "pages/subscribe/subscribe",
 			"style": {
@@ -34,7 +42,8 @@
 			}
 
 		}
-	],
+	    
+    ],
 	"subPackages": [{
 			"root": "pagesIndex",
 			"pages": [{
@@ -44,7 +53,25 @@
 					"enablePullDownRefresh": false
 				}
 
-			}]
+			}    ,{
+                    "path" : "login/login",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "register/register",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		},
 		{
 			"root": "pagesIndexTwo",
@@ -55,12 +82,8 @@
 					"enablePullDownRefresh": false
 				}
 
-			}]
-		},
-		{
-			"root": "pagesIndexThree",
-			"pages": [{
-                    "path" : "projectDetails/projectDetails",
+			}    ,{
+                    "path" : "binDingPhone/binDingPhone",
                     "style" :                                                                                    
                 {
                     "navigationBarTitleText": "",
@@ -69,6 +92,41 @@
                 
                 }
             ]
+		},
+		{
+			"root": "pagesIndexThree",
+			"pages": [{
+				"path": "projectDetails/projectDetails",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "technicianDetails/technicianDetails",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "orderByAppointment/orderByAppointment",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}]
+		}, {
+			"root": "pagesIndexFour",
+			"pages": [{
+				"path": "selectMassageTechnician/selectMassageTechnician",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}]
 		},
 		{
 			"root": "pagesMine",
@@ -172,6 +230,7 @@
 
 			}]
 		},
+
 		{
 			"root": "pagesCommon",
 			"pages": [{
@@ -180,7 +239,16 @@
 					"navigationBarTitleText": "",
 					"enablePullDownRefresh": false
 				}
-			}]
+			}    ,{
+                    "path" : "selectCoupons/selectCoupons",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		},
 		{
 			"root": "pagesMall",
@@ -191,7 +259,16 @@
 					"enablePullDownRefresh": false
 				}
 
-			}]
+			}    ,{
+                    "path" : "shoppingCart/shoppingCart",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		}, {
 			"root": "pagesMallTwo",
 			"pages": [{

@@ -147,7 +147,7 @@
 						客服
 					</view>
 				</view>
-				<view class="box-footer-wrap">
+				<view class="box-footer-wrap" @click="shoppingList">
 					<view class="box-footer-icon">
 						<image src="../../static/images/shopping-icon.png" mode=""></image>
 						<text class="flex-center">20</text>
@@ -219,6 +219,12 @@
 			// 评论类型
 			commentTypeClick(index) {
 				this.commentIndex = index
+			},
+			// 点击进入购物车列表
+			shoppingList() {
+				uni.navigateTo({
+					url: "../../pagesMall/shoppingCart/shoppingCart"
+				})
 			},
 		}
 	}

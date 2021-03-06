@@ -105,7 +105,7 @@
 												<view class="list-li-info-bottom-present-price">200.00</view>
 												<view class="list-li-info-bottom-original-price">800.00</view>
 											</view>
-											<view class="project-list-li-info-bottom-btn flex-center">预约</view>
+											<view class="project-list-li-info-bottom-btn flex-center" @click.stop="reservationService">预约</view>
 										</view>
 									</view>
 								</view>
@@ -123,7 +123,7 @@
 							</view>
 							<view class="box-content-item-technician-wrap">
 								<view class="content-item-technician-wrap-list">
-									<view class="content-item-technician-wrap-list-li" v-for="(item,index) in 5" :key="index">
+									<view class="content-item-technician-wrap-list-li" v-for="(item,index) in 5" :key="index" @click="technicianDetails(item)">
 										<view class="technician-wrap-list-li-image">
 											<image src="../../static/images/shop-ico.png" mode="aspectFill"></image>
 										</view>
@@ -279,7 +279,23 @@
 					url: "../../pagesIndexThree/projectDetails/projectDetails"
 				})
 			},
+			// 商家详情里的项目列表点击进入技师详情
+			technicianDetails() {
+				uni.navigateTo({
+					url: "../../pagesIndexThree/technicianDetails/technicianDetails"
+				})
+			},
 
+			// 商家项目预约服务
+			reservationService() {
+				uni.navigateTo({
+					url: "../../pagesIndexThree/orderByAppointment/orderByAppointment"
+				})
+				// uni.showToast({
+				// 	title: "弹出",
+				// 	icon: "none"
+				// })
+			},
 
 			// 滑动切换列表
 			tabChange(e) {
