@@ -5,14 +5,13 @@
 			"style": {
 				"navigationBarTitleText": "uni-app"
 			}
-		},{
-		    "path" : "pages/signUp/signUp/signUp",
-		    "style" :                                                                                    
-		    {
-		        "navigationBarTitleText": "",
-		        "enablePullDownRefresh": false
-		    }
-		    
+		}, {
+			"path": "pages/signUp/signUp/signUp",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
 		}, {
 			"path": "pages/mine/mine",
 			"style": {
@@ -42,8 +41,8 @@
 			}
 
 		}
-	    
-    ],
+
+	],
 	"subPackages": [{
 			"root": "pagesIndex",
 			"pages": [{
@@ -53,17 +52,22 @@
 					"enablePullDownRefresh": false
 				}
 
+			}, {
+				"path": "login/login",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "register/register",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
 			}    ,{
-                    "path" : "login/login",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "register/register",
+                    "path" : "packageCardList/packageCardList",
                     "style" :                                                                                    
                 {
                     "navigationBarTitleText": "",
@@ -82,8 +86,15 @@
 					"enablePullDownRefresh": false
 				}
 
+			}, {
+				"path": "binDingPhone/binDingPhone",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
 			}    ,{
-                    "path" : "binDingPhone/binDingPhone",
+                    "path" : "shoppingCardDetails/shoppingCardDetails",
                     "style" :                                                                                    
                 {
                     "navigationBarTitleText": "",
@@ -116,7 +127,16 @@
 					"enablePullDownRefresh": false
 				}
 
-			}]
+			}    ,{
+                    "path" : "confirmOrder/confirmOrder",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		}, {
 			"root": "pagesIndexFour",
 			"pages": [{
@@ -126,25 +146,21 @@
 					"enablePullDownRefresh": false
 				}
 
-			}    ,{
-                    "path" : "paymentOrder/paymentOrder",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "paymentSuccessful/paymentSuccessful",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+			}, {
+				"path": "paymentOrder/paymentOrder",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "paymentSuccessful/paymentSuccessful",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}]
 		},
 		{
 			"root": "pagesMine",
@@ -154,43 +170,49 @@
 					"navigationBarTitleText": "",
 					"enablePullDownRefresh": false
 				}
-			}    ,{
-                    "path" : "receivingAddress/receivingAddress",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "followList/followList",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "pointsMall/pointsMall",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "myBalance/myBalance",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+			}, {
+				"path": "receivingAddress/receivingAddress",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "followList/followList",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "pointsMall/pointsMall",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "myBalance/myBalance",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "settleIn/settleIn",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "packageCard/packageCard",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}]
 		},
 		{
 			"root": "pagesMineTwo",
@@ -264,34 +286,42 @@
 					"enablePullDownRefresh": false
 				}
 
-			}    ,{
-                    "path" : "addShippingAddress/addShippingAddress",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "pointsDetails/pointsDetails",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "exchangeRecord/exchangeRecord",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+			}, {
+				"path": "addShippingAddress/addShippingAddress",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "pointsDetails/pointsDetails",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "exchangeRecord/exchangeRecord",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "balanceDetails/balanceDetails",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "packageCardOrderDetails/packageCardOrderDetails",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}]
 		},
 		{
 			"root": "pagesMineThree",
@@ -309,25 +339,21 @@
 					"enablePullDownRefresh": false
 				}
 
-			}    ,{
-                    "path" : "evaluate/evaluate",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "waitingForWriteOff/waitingForWriteOff",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+			}, {
+				"path": "evaluate/evaluate",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "waitingForWriteOff/waitingForWriteOff",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}]
 		},
 
 		{
@@ -338,16 +364,21 @@
 					"navigationBarTitleText": "",
 					"enablePullDownRefresh": false
 				}
-			}    ,{
-                    "path" : "selectCoupons/selectCoupons",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+			}, {
+				"path": "selectCoupons/selectCoupons",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "allCoupon/allCoupon",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}]
 		},
 		{
 			"root": "pagesMall",
@@ -358,16 +389,14 @@
 					"enablePullDownRefresh": false
 				}
 
-			}    ,{
-                    "path" : "shoppingCart/shoppingCart",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+			}, {
+				"path": "shoppingCart/shoppingCart",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}]
 		}, {
 			"root": "pagesMallTwo",
 			"pages": [{

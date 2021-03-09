@@ -1,7 +1,7 @@
 <template>
 	<view class="box">
 		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
-			<navTitle navTitle="积分明细"></navTitle>
+			<navTitle navTitle="余额明细"></navTitle>
 		</view>
 		<view class="box-content">
 			<mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption" :height="mesHeight">
@@ -9,7 +9,7 @@
 					<view class="box-content-list-li" v-for="(item,index) in 100" :Key="index">
 						<view class="box-content-list-list-wrap">
 							<view class="box-content-list-list-wrap-title">
-								消费项目所得
+								充值
 							</view>
 							<view class="box-content-list-list-wrap-text">
 								2021年1月10日 12:00:23

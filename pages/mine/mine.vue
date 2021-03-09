@@ -228,10 +228,10 @@
 							title: "我的余额"
 						}, {
 							image: "../../static/images/gift.jpg",
-							title: "礼物卡"
+							title: "我要入驻"
 						}, {
 							image: "../../static/images/money.jpg",
-							title: "套餐卡"
+							title: "优惠券"
 						}, {
 							image: "../../static/images/money.jpg",
 							title: "套餐卡"
@@ -447,6 +447,24 @@
 						// 我的余额
 						uni.navigateTo({
 							url: "../../pagesMine/myBalance/myBalance"
+						})
+						break;
+					case "我要入驻":
+						// 我要入驻
+						uni.navigateTo({
+							url: "../../pagesMine/settleIn/settleIn"
+						})
+						break;
+					case "优惠券":
+						// 优惠券
+						uni.navigateTo({
+							url: "../../pagesCommon/allCoupon/allCoupon"
+						})
+						break;
+					case "套餐卡":
+						// 套餐卡
+						uni.navigateTo({
+							url: "../../pagesMine/packageCard/packageCard"
 						})
 						break;
 				}
@@ -827,6 +845,7 @@
 						height: 100%;
 						background: #FF967D;
 						border-radius: 3rpx;
+						transition: 0.2s;
 					}
 				}
 			}

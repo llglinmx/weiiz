@@ -46,7 +46,7 @@
 				})
 			},
 			// 导出事件
-			confirm(){
+			confirm() {
 				this.$emit("confirm")
 			},
 		},

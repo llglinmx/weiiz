@@ -15,7 +15,7 @@
 						</view>
 					</view>
 					<view class="box-content-card-right">
-						<text>明细 >></text>
+						<text @click="balanceDetails">明细 >></text>
 					</view>
 				</view>
 			</view>
@@ -69,7 +69,7 @@
 				checkIindex: 0, //当前所选支付方式
 				idx: 0, //当前所选充值金额下标
 				moneyList: ["50", "100", "200", "500", "800", "1000", "1500"],
-				money:'50',//所选金额
+				money: '50', //所选金额
 			};
 		},
 		components: {
@@ -105,8 +105,8 @@
 		},
 		methods: {
 			// 选择充值金额
-			clickRecharge(item,index) {
-				this.money=item
+			clickRecharge(item, index) {
+				this.money = item
 				this.idx = index
 			},
 			// 选择支付方式
@@ -114,10 +114,16 @@
 				this.checkIindex = index
 			},
 			// 立即支付按钮
-			payBtn(){
+			payBtn() {
 				uni.showToast({
-					title:"当前选择的充值金额："+this.money,
-					icon:"none"
+					title: "当前选择的充值金额：" + this.money,
+					icon: "none"
+				})
+			},
+			// 余额明细
+			balanceDetails() {
+				uni.navigateTo({
+					url: "../../pagesMineTwo/balanceDetails/balanceDetails"
 				})
 			},
 		}

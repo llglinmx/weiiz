@@ -67,8 +67,8 @@
 			<view class="more-services-box">
 				<view class="more-services-title">更多服务</view>
 				<view class="more-services-list">
-					<view class="more-services-list-li" v-for="item in arrList">
-						<view class="more-services-list-li-title">积分</view>
+					<view class="more-services-list-li" v-for="(item,index) in serviceList" @click="serviceClick(item)">
+						<view class="more-services-list-li-title">{{item}}</view>
 						<view class="more-services-list-li-text">
 							每天签到领积分
 						</view>
@@ -122,6 +122,7 @@
 				circular: true,
 				arrList: ['商城', "按摩", "教程", "技师", "活动", '快速预约', "礼品卡", "买单", "领券中心", "拼团"],
 				textList: ['中文', "英语", "俄语", "法语", "德语"],
+				serviceList: ['礼品卡', "商城套餐卡", '礼品卡', "商城套餐卡"],
 				imageList: [{
 						url: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.pconline.com.cn%2Fimages%2Fupload%2Fupc%2Ftx%2Fwallpaper%2F1212%2F10%2Fc1%2F16491670_1355126816487.jpg&refer=http%3A%2F%2Fimg.pconline.com.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1617169230&t=15c6d87792f9fe60a66efcc066e816d5",
 						link: ""
@@ -182,15 +183,28 @@
 							url: "../../pagesCommon/collection-center/collection-center"
 						})
 						break;
-						case "按摩":
-							uni.navigateTo({
-								url: "../../pagesIndex/massageBusiness/massageBusiness"
-							})
-							break;
+					case "按摩":
+						uni.navigateTo({
+							url: "../../pagesIndex/massageBusiness/massageBusiness"
+						})
+						break;
 					default:
 						break;
 				}
-			}
+			},
+
+			// 更多服务列表点击
+			serviceClick(item) {
+				switch (item) {
+					case "商城套餐卡":
+						uni.navigateTo({
+							url: "../../pagesIndex/packageCardList/packageCardList"
+						})
+						break;
+					default:
+						break;
+				}
+			},
 
 		}
 	}

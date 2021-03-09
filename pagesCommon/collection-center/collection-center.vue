@@ -208,7 +208,7 @@
 						padding: 0 20rpx;
 						height: 69rpx;
 						box-sizing: border-box;
-						border-bottom: 1rpx #ccc dashed;
+						border-bottom: 1rpx #e6e6e6 dashed;
 
 						.list-li-top-left {
 							display: flex;

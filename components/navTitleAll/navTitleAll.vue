@@ -78,7 +78,7 @@
 				align-items: center;
 				justify-content: center;
 				flex: 1;
-				margin-left: 40rpx;
+				margin-left: 80rpx;
 				font-size: 34rpx;
 				font-family: Source Han Sans CN;
 				font-weight: 500;
