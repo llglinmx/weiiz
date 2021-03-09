@@ -1,6 +1,11 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		},{
 		    "path" : "pages/signUp/signUp/signUp",
 		    "style" :                                                                                    
 		    {
@@ -8,11 +13,6 @@
 		        "enablePullDownRefresh": false
 		    }
 		    
-		},{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app"
-			}
 		}, {
 			"path": "pages/mine/mine",
 			"style": {
@@ -126,7 +126,25 @@
 					"enablePullDownRefresh": false
 				}
 
-			}]
+			}    ,{
+                    "path" : "paymentOrder/paymentOrder",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "paymentSuccessful/paymentSuccessful",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		},
 		{
 			"root": "pagesMine",
@@ -136,7 +154,43 @@
 					"navigationBarTitleText": "",
 					"enablePullDownRefresh": false
 				}
-			}]
+			}    ,{
+                    "path" : "receivingAddress/receivingAddress",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "followList/followList",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "pointsMall/pointsMall",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "myBalance/myBalance",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		},
 		{
 			"root": "pagesMineTwo",
@@ -210,7 +264,34 @@
 					"enablePullDownRefresh": false
 				}
 
-			}]
+			}    ,{
+                    "path" : "addShippingAddress/addShippingAddress",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "pointsDetails/pointsDetails",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "exchangeRecord/exchangeRecord",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		},
 		{
 			"root": "pagesMineThree",
@@ -228,7 +309,25 @@
 					"enablePullDownRefresh": false
 				}
 
-			}]
+			}    ,{
+                    "path" : "evaluate/evaluate",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "waitingForWriteOff/waitingForWriteOff",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		},
 
 		{

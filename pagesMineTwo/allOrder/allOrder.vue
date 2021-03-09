@@ -174,7 +174,7 @@
 										</view>
 									</view>
 									<view class="content-list-li-all-btns">
-										<view class="more-list-li-btn flex-center more-list-li-btn-border-red">查看券码</view>
+										<view class="more-list-li-btn flex-center more-list-li-btn-border-red" @click="viewCouponCode">查看券码</view>
 									</view>
 								</view>
 							</view>
@@ -230,6 +230,7 @@
 										</view>
 									</view>
 									<view class="content-list-li-all-btns">
+										<view class="more-list-li-btn flex-center more-list-li-btn-border" @click="OrderEval">订单评价</view>
 										<view class="more-list-li-btn flex-center more-list-li-btn-border">删除订单</view>
 									</view>
 								</view>
@@ -332,7 +333,7 @@
 		onLoad(options) {
 			this.idx = options.listIndex * 1 // *1 是为了把字符串转为数字
 		},
-		methods: {			
+		methods: {
 			// tabs 点击
 			tabClick(e) {
 				this.idx = e
@@ -341,6 +342,18 @@
 			tabChange(e) {
 				this.$refs.boxTabs.tabToIndex(e.detail.current)
 				this.idx = e.detail.current
+			},
+			// 查看券码
+			viewCouponCode() {
+				uni.navigateTo({
+					url: "../../pagesMineThree/waitingForWriteOff/waitingForWriteOff"
+				})
+			},
+			// 订单评价
+			OrderEval() {
+				uni.navigateTo({
+					url: "../../pagesMineThree/evaluate/evaluate"
+				})
 			},
 		}
 	}

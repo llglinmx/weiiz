@@ -64,7 +64,7 @@
 				<state-list :list="stateList" @listState="listClick"></state-list>
 			</view>
 			<view class="mine-content-integral-box">
-				<view class="mine-content-integral-box-top">
+				<view class="mine-content-integral-box-top" @click="pointsMall">
 					<view class="mine-integral-title-list">
 						<view class="integral-title-list-icon flex-center">
 							<image src="../../static/images/userImage.png" mode=""></image>
@@ -107,7 +107,7 @@
 				<view class="mine-content-commonly-list">
 					<swiper class="swiper" :current="idx" @change="swiperChange">
 						<swiper-item v-for="(item,index) in toolAllList" class="swiper-item">
-							<view class="content-commonly-list-li" v-for="(j,idx) in item.toolList">
+							<view class="content-commonly-list-li" v-for="(j,idx) in item.toolList" @click="menuList(j)">
 								<view class="content-commonly-list-li-ico">
 									<image :src="j.image" mode=""></image>
 								</view>
@@ -219,6 +219,21 @@
 				toolAllList: [{
 						toolList: [{
 							image: "../../static/images/money.jpg",
+							title: "收货地址"
+						}, {
+							image: "../../static/images/gift.jpg",
+							title: "关注列表"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "我的余额"
+						}, {
+							image: "../../static/images/gift.jpg",
+							title: "礼物卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}, {
+							image: "../../static/images/money.jpg",
 							title: "套餐卡"
 						}, {
 							image: "../../static/images/gift.jpg",
@@ -250,6 +265,21 @@
 						}, {
 							image: "../../static/images/money.jpg",
 							title: "套餐卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}, {
+							image: "../../static/images/gift.jpg",
+							title: "礼物卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}, {
+							image: "../../static/images/gift.jpg",
+							title: "礼物卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
 						}]
 					},
 					{
@@ -268,10 +298,40 @@
 						}, {
 							image: "../../static/images/money.jpg",
 							title: "套餐卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}, {
+							image: "../../static/images/gift.jpg",
+							title: "礼物卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}, {
+							image: "../../static/images/gift.jpg",
+							title: "礼物卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
 						}]
 					},
 					{
 						toolList: [{
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}, {
+							image: "../../static/images/gift.jpg",
+							title: "礼物卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}, {
+							image: "../../static/images/gift.jpg",
+							title: "礼物卡"
+						}, {
+							image: "../../static/images/money.jpg",
+							title: "套餐卡"
+						}, {
 							image: "../../static/images/money.jpg",
 							title: "套餐卡"
 						}, {
@@ -330,7 +390,7 @@
 			listClick(index) {
 				// 0全部订单 4退款/售后  3已核销 2待核销  1待付款
 				switch (index) {
-					
+
 					case 0:
 						uni.navigateTo({
 							url: "../../pagesMineTwo/allOrder/allOrder?listIndex=1"
@@ -357,8 +417,42 @@
 						})
 						break;
 				}
-				
+
 			},
+
+			// 点击进入积分商城
+			pointsMall() {
+				uni.navigateTo({
+					url: "../../pagesMine/pointsMall/pointsMall"
+				})
+			},
+
+			// 常用工具
+			menuList(type) {
+
+				switch (type.title) {
+					case "收货地址":
+						// 收货地址
+						uni.navigateTo({
+							url: "../../pagesMine/receivingAddress/receivingAddress"
+						})
+						break;
+					case "关注列表":
+						// 关注列表
+						uni.navigateTo({
+							url: "../../pagesMine/followList/followList"
+						})
+						break;
+					case "我的余额":
+						// 我的余额
+						uni.navigateTo({
+							url: "../../pagesMine/myBalance/myBalance"
+						})
+						break;
+				}
+
+			},
+
 		}
 	}
 </script>
@@ -671,16 +765,29 @@
 					margin-top: 30rpx;
 
 					swiper {
-						height: 120rpx;
+						height: 300rpx;
 
 						.swiper-item {
 							display: flex;
+							align-items: center;
 							justify-content: space-around;
+							flex-wrap: wrap;
+
+							.content-commonly-list-li:nth-child(5) {
+								margin-right: 0;
+							}
+
+							.content-commonly-list-li:nth-child(10) {
+								margin-right: 0;
+							}
 
 							.content-commonly-list-li {
 								display: flex;
-								justify-content: space-around;
+								justify-content: center;
 								flex-direction: column;
+								align-items: center;
+								margin-right: 40rpx;
+								width: 102rpx;
 
 								.content-commonly-list-li-ico {
 									width: 76rpx;

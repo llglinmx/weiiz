@@ -152,7 +152,7 @@
 			<view class="box-footer-text">
 				合计￥：<text>520.00</text>
 			</view>
-			<view class="box-footer-btn flex-center">
+			<view class="box-footer-btn flex-center" @click="appointment">
 				立即预约
 			</view>
 		</view>
@@ -231,6 +231,12 @@
 				this.defaultIndex = e
 			},
 
+			// 立即预约按钮
+			appointment() {
+				uni.navigateTo({
+					url: "../../pagesIndexFour/paymentOrder/paymentOrder"
+				})
+			},
 		}
 	}
 </script>
