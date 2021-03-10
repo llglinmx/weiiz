@@ -19,7 +19,7 @@
 					<view class="box-content-list-li-info" style="justify-content: space-between;">
 						<view class="box-content-list-li-info-title" style="color: #000;">请选择</view>
 						<view class="box-content-list-li-info-more">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #999;font-size:28rpx;"></text>
 						</view>
 					</view>
 				</view>
@@ -28,7 +28,7 @@
 					<view class="box-content-list-li-info" style="justify-content: space-between;">
 						<view class="box-content-list-li-info-title" style="color: #000;">请选择</view>
 						<view class="box-content-list-li-info-more">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #999;font-size:28rpx;"></text>
 						</view>
 					</view>
 				</view>

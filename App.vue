@@ -16,6 +16,7 @@
 <style>
 	
 	@import url("./static/css/iconfont/iconfont.css");
+	/* import "./static/css/iconfont/iconfont.css" */
 	/*每个页面公共css */
 	page{
 		height: 100%;
@@ -25,5 +26,10 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+	.icon-font{
+		display: flex;
+		align-items: center;
+		font-weight: 500;
 	}
 </style>

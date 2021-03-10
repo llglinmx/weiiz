@@ -40,14 +40,14 @@
 					支付方式
 				</view>
 				<view class="box-content-payment-method-list">
-					<view class="payment-method-list-li" v-for="(item,index) in 3" :key="index" @click="paymentType(index)">
+					<view class="payment-method-list-li" v-for="(item,index) in dataList" :key="index" @click="paymentType(index)">
 						<view class="payment-method-list-li-wrap">
 							<image src="../../static/images/zfb.png" mode="aspectFill"></image>
-							<text class="payment-method-list-li-title">支付宝</text>
+							<text class="payment-method-list-li-title">{{item.title}}</text>
 						</view>
 						<view class="payment-method-list-li-check">
-							<image src="../../static/images/check-coupons.png" mode="aspectFill" v-if="index==checkIindex"></image>
-							<image src="../../static/images/no-check-coupons.png" mode="aspectFill" v-else></image>
+							<text class="iconfont iconxuanzhong icon-font" style="color: #26BF82;font-size: 36rpx;" v-if="index==checkIindex"></text>
+							<text class="iconfont iconweixuanzhong1 icon-font" style="color: #ccc;font-size: 36rpx;" v-else></text>
 						</view>
 					</view>
 				</view>
@@ -70,6 +70,11 @@
 				idx: 0, //当前所选充值金额下标
 				moneyList: ["50", "100", "200", "500", "800", "1000", "1500"],
 				money: '50', //所选金额
+				dataList:[
+					{title:"支付宝",style:"iconzhifubao"},
+					{title:"微信",style:"iconweixin"},
+					{title:"银行卡",style:"iconwangyin"},
+				],
 			};
 		},
 		components: {

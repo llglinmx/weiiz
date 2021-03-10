@@ -11,7 +11,7 @@
 						<view class="content-list-li-wrap">
 							<view class="content-list-li-wrap-text">女</view>
 							<view class="content-list-li-more flex-center">
-								<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+								<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 28rpx;font-weight: 500;"></text>
 							</view>
 						</view>
 					</view>
@@ -52,7 +52,7 @@
 						<view class="content-list-li-wrap">
 							<view class="content-list-li-wrap-text">否</view>
 							<view class="content-list-li-more flex-center">
-								<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+								<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 28rpx;font-weight: 500;"></text>
 							</view>
 						</view>
 					</view>
@@ -157,12 +157,8 @@
 						}
 
 						.content-list-li-more {
-							width: 32rpx;
-							height: 32rpx;
-
-							image {
-								width: 18rpx;
-								height: 30rpx;
+							.icon-font{
+								margin-top: 4rpx;
 							}
 						}
 						

@@ -16,14 +16,14 @@
 					</view>
 					<view class="box-content-list-li-address">
 						<text>中国 福建省 厦门市 集美区 银江路137号121212</text>
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 					</view>
 					<view class="box-content-list-li-postcode">
 						36000000
 					</view>
 					<view class="box-content-list-li-default" @click.top="setDefault(index)">
-						<image src="../../static/images/no-check-coupons.png" mode="aspectFill" v-if="index!=idx"></image>
-						<image src="../../static/images/check-coupons.png" mode="aspectFill" v-else></image>
+						<text class="iconfont iconxuanzhong icon-font" style="color: #26BF82;font-size: 36rpx;margin-top: 4rpx;" v-if="index==idx"></text>
+						<text class="iconfont iconweixuanzhong1 icon-font" style="color: #ccc;font-size: 36rpx;margin-top: 4rpx;" v-else></text>
 						<text>设为默认地址</text>
 					</view>
 				</view>

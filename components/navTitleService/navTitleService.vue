@@ -2,7 +2,7 @@
 	<view class="nav-wrap" :style="{paddingTop:barHeight+'px'}">
 		<view class="nav-box">
 			<view class="nav-back" @click="Gback">
-				<image src="../../static/images/back-white.png" mode="aspectFill"></image>
+				<text class="iconfont iconfanhui" style="color: #fff;font-size: 34rpx;"></text>
 			</view>
 			<view class="nav-title">{{navTitle}}</view>
 			<view class="nav-right">
@@ -78,16 +78,19 @@
 				font-weight: 500;
 				color: #fff;
 			}
-			.nav-right{
+
+			.nav-right {
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
 				margin-right: 40rpx;
-				image:nth-child(1){
+
+				image:nth-child(1) {
 					width: 52rpx;
 					height: 48rpx;
 				}
-				image:nth-child(2){
+
+				image:nth-child(2) {
 					margin-left: 30rpx;
 					width: 42rpx;
 					height: 42rpx;

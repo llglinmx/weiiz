@@ -23,7 +23,7 @@
 								<view class="box-content-list-li-center-info-title">人工智能音箱</view>
 								<view class="box-content-list-li-center-info-points">
 									<view class="box-content-list-li-center-info-points-left">
-										<image src="../../static/images/points-ico.png" mode="aspectFill"></image>
+										<text class="iconfont iconjifen icon-font" style="font-size: 28rpx;"></text>
 										<text>7500</text>
 									</view>
 									<view class="box-content-list-li-center-info-points-right">
@@ -214,9 +214,8 @@
 									display: flex;
 									align-items: center;
 
-									image {
-										width: 28rpx;
-										height: 28rpx;
+									.icon-font {
+										color: #FF967D;
 									}
 
 									text {

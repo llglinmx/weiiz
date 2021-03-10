@@ -22,7 +22,7 @@
 					<view class="box-content-list-li-info">
 						<view class="box-content-list-li-info-area-code flex-center">
 							<text>+86</text>
-							<image src="../../static/images/more.png" mode="aspectFill"></image>
+							<text class="iconfont iconxiangxiajiantou icon-font" style="color: #000;font-size: 28rpx"></text>
 						</view>
 						<input class="box-content-list-li-info-input" type="number" placeholder="请输入手机号码" />
 					</view>
@@ -32,7 +32,7 @@
 					<view class="box-content-list-li-info" style="justify-content: space-between;">
 						<view class="box-content-list-li-info-title">请选择</view>
 						<view class="box-content-list-li-info-more">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 						</view>
 					</view>
 				</view>
@@ -41,7 +41,7 @@
 					<view class="box-content-list-li-info" style="justify-content: space-between;">
 						<view class="box-content-list-li-info-title">请选择</view>
 						<view class="box-content-list-li-info-more">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 						</view>
 					</view>
 				</view>
@@ -50,7 +50,7 @@
 					<view class="box-content-list-li-info" style="justify-content: space-between;">
 						<view class="box-content-list-li-info-title">请选择</view>
 						<view class="box-content-list-li-info-more">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 						</view>
 					</view>
 				</view>
@@ -59,7 +59,7 @@
 					<view class="box-content-list-li-info" style="justify-content: space-between;">
 						<view class="box-content-list-li-info-title">请选择</view>
 						<view class="box-content-list-li-info-more">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 						</view>
 					</view>
 				</view>
@@ -68,7 +68,7 @@
 					<view class="box-content-list-li-info" style="justify-content: space-between;">
 						<view class="box-content-list-li-info-title">请选择</view>
 						<view class="box-content-list-li-info-more">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 						</view>
 					</view>
 				</view>

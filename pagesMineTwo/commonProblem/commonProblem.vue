@@ -15,7 +15,7 @@
 								<view class="content-list-item-li" v-for="(item,index) in arrList" @click="allProblem(item,index)">
 									<view class="content-list-item-li-title">{{item}}</view>
 									<view class="content-list-item-li-more flex-center">
-										<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+										<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 									</view>
 
 								</view>
@@ -26,7 +26,7 @@
 								<view class="content-list-item-li" v-for="(item,index) in arrList">
 									<view class="content-list-item-li-title">{{item}}</view>
 									<view class="content-list-item-li-more flex-center">
-										<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+										<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 									</view>
 
 								</view>
@@ -37,7 +37,7 @@
 								<view class="content-list-item-li" v-for="(item,index) in arrList">
 									<view class="content-list-item-li-title">{{item}}</view>
 									<view class="content-list-item-li-more flex-center">
-										<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+										<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 									</view>
 
 								</view>
@@ -48,7 +48,7 @@
 								<view class="content-list-item-li" v-for="(item,index) in arrList">
 									<view class="content-list-item-li-title">{{item}}</view>
 									<view class="content-list-item-li-more flex-center">
-										<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+										<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 									</view>
 
 								</view>
@@ -59,7 +59,7 @@
 								<view class="content-list-item-li" v-for="(item,index) in arrList">
 									<view class="content-list-item-li-title">{{item}}</view>
 									<view class="content-list-item-li-more flex-center">
-										<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+										<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 									</view>
 
 								</view>
@@ -184,12 +184,8 @@
 									}
 
 									.content-list-item-li-more {
-										width: 32rpx;
-										height: 32rpx;
-
-										image {
-											width: 18rpx;
-											height: 30rpx;
+										.icon-more {
+											margin-top: 4rpx;
 										}
 									}
 								}

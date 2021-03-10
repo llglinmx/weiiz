@@ -43,7 +43,7 @@
 									</view>
 								</view>
 								<view class="item-wrap-info-right">
-									<image src="../../static/images/tel-icon.png" mode="aspectFill"></image>
+									<text class="iconfont icondianhua icon-font" style="color:#FF8366;font-size: 44rpx;"></text>
 									<text>电话</text>
 								</view>
 							</view>
@@ -53,15 +53,14 @@
 							<view class="box-content-item-wrap-address">
 								<view class="box-content-item-wrap-address-left">
 									<view class="box-content-item-wrap-left-address-icon">
-										<image src="../../static/images/address-icon-green.png" mode="aspectFill"></image>
-
+										<text class="iconfont icondingwei1 icon-font" style="color: #26BF82;font-size: 34rpx;"></text>
 									</view>
 									<view class="box-content-item-wrap-address-left-text">中国 福建省 厦门市 集美区 杏滨路罗约酒店负一楼</view>
 								</view>
 								<view class="box-content-item-wrap-address-right">
 									<view class="box-content-item-wrap-address-right-text">距离6.1KM</view>
 									<view class="box-content-item-wrap-right-address-icon">
-										<image src="../../static/images/more-green.png" mode="aspectFill"></image>
+										<text class="iconfont icongengduo icon-font" style="color: #26BF82;font-size: 40rpx;margin-top: 4rpx;"></text>
 									</view>
 								</view>
 							</view>
@@ -70,7 +69,7 @@
 									其他门店 （3家）
 								</view>
 								<view class="more-icon">
-									<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+									<text class="iconfont icongengduo icon-font" style="color: #26BF82;font-size: 40rpx;margin-top: 4rpx;"></text>
 								</view>
 							</view>
 							<view class="box-content-item-wrap-business-introduce">
@@ -138,7 +137,7 @@
 												</view>
 											</view>
 											<view class="technician-wrap-list-li-info-score">
-												<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="item in 5"></image>
+												<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 												<text>5分</text>
 											</view>
 											<view class="technician-wrap-list-li-info-introduce">
@@ -176,7 +175,7 @@
 									<view class="comment-list-item-info">
 										<view class="comment-list-item-info-nickname">SKB露娜可可</view>
 										<view class="comment-list-item-info-score">
-											<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="item in 5"></image>
+											<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 											<text>5分</text>
 										</view>
 										<view class="comment-list-item-info-content">
@@ -220,7 +219,7 @@
 			return {
 				barHeight: 0, //顶部电量导航栏高度
 				tabs: ["介绍", "项目", "技师", "评论"],
-				defaultIndex: 1, //当前 滑动的下标
+				defaultIndex: 0, //当前 滑动的下标
 				imageList: [{
 						url: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.pconline.com.cn%2Fimages%2Fupload%2Fupc%2Ftx%2Fwallpaper%2F1212%2F10%2Fc1%2F16491670_1355126816487.jpg&refer=http%3A%2F%2Fimg.pconline.com.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1617169230&t=15c6d87792f9fe60a66efcc066e816d5",
 						link: ""
@@ -709,13 +708,8 @@
 												display: flex;
 												align-items: center;
 
-												image {
-													width: 30rpx;
-													height: 30rpx;
-												}
-
 												text {
-													margin-left: 10rpx;
+													margin-right: 6rpx;
 													font-size: 24rpx;
 													color: #999;
 												}
@@ -845,13 +839,8 @@
 											display: flex;
 											align-items: center;
 
-											image {
-												width: 30rpx;
-												height: 30rpx;
-											}
-
 											text {
-												margin-left: 8rpx;
+												margin-right: 6rpx;
 												font-size: 24rpx;
 												color: #999;
 											}

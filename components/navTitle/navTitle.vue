@@ -2,17 +2,12 @@
 	<view class="nav-wrap" :style="{paddingTop:barHeight+'px'}">
 		<view class="nav-box">
 			<view class="nav-back" @click="Gback">
-				<image src="../../static/images/back.png" mode="aspectFill"></image>
+				<text class="iconfont iconfanhui" style="color: #333;font-size: 34rpx;"></text>
 			</view>
 			<view class="nav-title">{{navTitle}}</view>
 		</view>
 	</view>
 </template>
-
-<!-- 
-			<NavTitle navTitle="顶部导航栏"></NavTitle>
-			 import NavTitle from "../../components/navTitle/navTitle.vue"
-			 -->
 
 <script>
 	export default {
@@ -58,7 +53,7 @@ background: #fff;
 				align-items: center;
 				justify-content: center;
 				width: 50rpx;
-				height: 34rpx;
+				// height: 34rpx;
 				margin-left: 20rpx;
 				box-sizing: border-box;
 

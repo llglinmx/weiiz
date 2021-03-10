@@ -2,7 +2,8 @@
 	<view class="nav-wrap" :style="{paddingTop:barHeight+'px'}">
 		<view class="nav-box">
 			<view class="nav-back" @click="Gback">
-				<image src="../../static/images/back.png" mode="aspectFill"></image>
+				<!-- <image src="../../static/images/back.png" mode="aspectFill"></image> -->
+				<text class="iconfont iconfanhui" style="color: #333;font-size: 40rpx;"></text>
 			</view>
 			<view class="nav-title">{{navTitle}}</view>
 			<view class="nav-confirm" @click="confirm">

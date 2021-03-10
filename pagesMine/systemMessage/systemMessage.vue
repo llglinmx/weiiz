@@ -16,7 +16,7 @@
 					<view class="box-content-list-main-bottom">
 						<view class="list-main-bottom-title">点击查看</view>
 						<view class="list-main-bottom-more">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;"></text>
 						</view>
 					</view>
 				</view>

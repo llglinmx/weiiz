@@ -7,10 +7,11 @@
 			<view class="box-content-map-wrap box-content-public" :style="{width:mapWidth+'px'}">
 				<view class="box-wrap-tabs">
 					<view class="box-wrap-tabs-li" v-for="(item,index) in tabsList" :key="index" @click="tabsShowList(item,index)">
-						<view class="box-tabs-li-text">{{item.title}}</view>
+						<view class="box-tabs-li-text" :class="idx==index?'box-tabs-li-text-active':''">{{item.title}}</view>
 						<view class="box-tabs-li-icon">
-							<image src="../../static/images/more-gray.png" mode="aspectFill" v-if="idx!=index"></image>
-							<image src="../../static/images/more-icon-FF967D.png" mode="aspectFill" v-else></image>
+							<text class="iconfont iconxiangxiajiantou icon-font" style="color: #ccc;font-size: 28rpx;" v-if="idx!=index"></text>
+							<text class="iconfont iconxiangxiajiantou icon-font" style="color: #FF8366;font-size: 28rpx;" v-else></text>
+
 						</view>
 					</view>
 				</view>
@@ -20,7 +21,7 @@
 					</view>
 					<view class="map-wrap-main-list" :style="{bottom:bottomDistance+'px'}">
 						<view class="map-wrap-list-icon" @click="shrinkHidden">
-							<image src="../../static/images/more.png" mode="aspectFill"></image>
+							<text class="iconfont iconxiangxiajiantou icon-font" style="color: #999;font-size: 44rpx;"></text>
 						</view>
 						<view class="map-wrap-list-content">
 							<view class="list-content-image">
@@ -31,13 +32,13 @@
 									印象诗意·悠然SPA
 								</view>
 								<view class="list-content-info-score">
-									<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="item in 5"></image>
+									<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 									<text>5分</text>
 								</view>
 								<view class="list-content-info-box">
 									<view class="list-content-info-box-text">明发商业广场</view>
 									<view class="list-content-info-address">
-										<image src="../../static/images/address-gray.png" mode="aspectFill"></image>
+										<text class="iconfont icondingwei1 icon-font" style="color: #ccc;font-size: 24rpx;margin-top: 4rpx;"></text>
 										<text>6.1km</text>
 									</view>
 								</view>
@@ -78,13 +79,13 @@
 								印象诗意·悠然SPA
 							</view>
 							<view class="list-content-info-score">
-								<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="item in 5"></image>
+								<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 								<text>5分</text>
 							</view>
 							<view class="list-content-info-box">
 								<view class="list-content-info-box-text">明发商业广场</view>
 								<view class="list-content-info-address">
-									<image src="../../static/images/address-gray.png" mode="aspectFill"></image>
+									<text class="iconfont icondingwei1 icon-font" style="color: #ccc;font-size: 24rpx;margin-top: 4rpx;"></text>
 									<text>6.1km</text>
 								</view>
 							</view>
@@ -167,12 +168,12 @@
 						iconActive: "../../static/images/sx-ico.png"
 					},
 				],
-				idx: 1, //顶部tabar状态栏下标
+				idx: 0, //顶部tabar状态栏下标
 				bottomDistance: -(264 / 2), // 初始位置
 				massageList: ["全部", "脸部按摩", "泰式按摩", "中式按摩", "日式按摩", "韩式按摩", "足疗按摩"], // 按摩下拉种类
 				isTabsShow: false, // 是否有显示下拉
 				isTabsType: "all", // 用于判断 tabs  下拉属于哪个
-				tabsShowIndex:-1,
+				tabsShowIndex: -1,
 			};
 		},
 		components: {
@@ -201,13 +202,13 @@
 			},
 			//顶部tabs 点击显示下拉内容 
 			tabsShowList(item, index) {
-				
+
 				// if(this.tabsShowIndex==index){
 				// 	this.isTabsShow = false
 				// }else{
 				// 	this.isTabsShow = true
 				// }
-				
+
 				this.isTabsType = item.type // 用于判断当前点击哪一个 然后显示对于的界面
 
 				this.isTabsShow = !this.isTabsShow //下拉后 修改到相反的状态
@@ -227,9 +228,9 @@
 				this.bottomDistance = (-(264 / 2)) // 回到初始位置
 			},
 			// 跳转商家详情
-			merchantDetails(item){
+			merchantDetails(item) {
 				uni.navigateTo({
-					url:"../../pagesIndexTwo/merchantDetails/merchantDetails"
+					url: "../../pagesIndexTwo/merchantDetails/merchantDetails"
 				})
 			}
 		}
@@ -267,7 +268,7 @@
 						align-items: center;
 
 						.box-tabs-li-text {
-							margin-right: 20rpx;
+							margin-right: 10rpx;
 							color: #666;
 							font-size: 28rpx;
 						}
@@ -365,13 +366,9 @@
 									display: flex;
 									align-items: center;
 
-									image {
-										width: 30rpx;
-										height: 30rpx;
-									}
 
 									text {
-										margin-left: 10rpx;
+										margin-right: 6rpx;
 										color: #999;
 										font-size: 24rpx;
 									}
@@ -477,13 +474,9 @@
 								display: flex;
 								align-items: center;
 
-								image {
-									width: 30rpx;
-									height: 30rpx;
-								}
-
+								
 								text {
-									margin-left: 10rpx;
+									margin-right: 6rpx;
 									color: #999;
 									font-size: 24rpx;
 								}
@@ -572,11 +565,12 @@
 					color: #666;
 				}
 			}
-			.box-content-tab-btn-state{
+
+			.box-content-tab-btn-state {
 				top: 244rpx;
 				box-shadow: 0px -1rpx 10rpx rgba(0, 0, 0, 0.1);
 			}
-			
+
 
 			.box-content-drop-down {
 				position: absolute;

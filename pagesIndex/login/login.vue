@@ -3,8 +3,8 @@
 		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
 			<view class="box-head-nav">
 				<view class="box-head-nav-back"  @click="Gback">
-					<!-- <text class="iconfont iconfanhui" style="color: #333;font-size: 40rpx;"></text> -->
-					<image src="../../static/images/back.png" mode="aspectFill"></image>
+					<text class="iconfont iconfanhui" style="color: #333;font-size: 40rpx;"></text>
+					<!-- <image src="../../static/images/back.png" mode="aspectFill"></image> -->
 				</view>
 				<view class="box-head-nav-text" @click="register">注册</view>
 			</view>
@@ -18,7 +18,7 @@
 				<view class="box-content-list-li">
 					<input type="text" @input="passwordChange" password="true" v-model.trim="password" placeholder="请输入密码"
 					 confirm-type="done" />
-					<image src="../../static/images/hidden.png" mode="aspectFill"></image>
+					 <text class="iconfont iconxianshimima icon-font" style="color: #ccc;"></text>
 				</view>
 				<view class="box-content-list-msg">忘记密码</view>
 			</view>
@@ -180,23 +180,17 @@
 				}
 
 				.box-content-list-li {
-					padding: 28rpx 0;
 					position: relative;
+					display: flex;
+					justify-content: space-between;
+					padding: 28rpx 0;
 					border-bottom: 1rpx solid #ededed;
 
 					input {
 						font-size: 32rpx;
 					}
-
-					image {
-						position: absolute;
-						right: 10rpx;
-						top: 0rpx;
-						bottom: 0;
-						margin: auto;
-						width: 30rpx;
-						height: 21rpx;
-					}
+					
+					
 				}
 			}
 

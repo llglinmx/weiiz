@@ -49,7 +49,8 @@
 					</view>
 					<view class="box-content-applicable-stores-title-more">
 						<text>共6家可用</text>
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;"></text>
+					<!-- 	<image src="../../static/images/more-gray.png" mode="aspectFill"></image> -->
 					</view>
 				</view>
 				<view class="box-content-applicable-stores-list">
@@ -60,13 +61,13 @@
 						<view class="applicable-stores-list-li-info">
 							<view class="applicable-stores-list-li-info-title">印象诗意·悠然SPA</view>
 							<view class="applicable-stores-list-li-info-score">
-								<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="item in 5"></image>
+								<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 								<text>5分</text>
 							</view>
 							<view class="applicable-stores-list-li-info-address">
 								<view class="applicable-stores-list-li-info-address-name">明发商业广场</view>
 								<view class="applicable-stores-list-li-info-address-text">
-									<image src="../../static/images/address-icon-green.png" mode="aspectFill"></image>
+									<text class="iconfont icondingwei1 icon-font" style="color: #ccc;font-size: 24rpx;"></text>
 									<text>6.1km</text>
 								</view>
 							</view>
@@ -320,9 +321,8 @@
 							color: #999;
 						}
 
-						image {
-							width: 28rpx;
-							height: 28rpx;
+						.icon-font{
+							margin-top: 4rpx;
 						}
 					}
 
@@ -386,11 +386,10 @@
 									align-items: center;
 
 
-									image {
-										width: 24rpx;
-										height: 24rpx;
+									.icon-font{
+										margin-top: 4rpx;
+										margin-right: 8rpx;
 									}
-
 									text {
 										font-size: 24rpx;
 										color: #999;

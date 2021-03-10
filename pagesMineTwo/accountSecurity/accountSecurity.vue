@@ -12,7 +12,7 @@
 							1527892466@qq.com
 						</view>
 						<view class="content-list-li-more flex-center">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 						</view>
 					</view>
 				</view>
@@ -23,7 +23,7 @@
 							183****7210
 						</view>
 						<view class="content-list-li-more flex-center">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 						</view>
 					</view>
 				</view>
@@ -34,7 +34,7 @@
 							修改
 						</view>
 						<view class="content-list-li-more flex-center">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 						</view>
 					</view>
 				</view>
@@ -45,7 +45,7 @@
 							注销后无法恢复，请谨慎操作
 						</view>
 						<view class="content-list-li-more flex-center">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 						</view>
 					</view>
 				</view>
@@ -157,12 +157,8 @@
 						}
 
 						.content-list-li-more {
-							width: 32rpx;
-							height: 32rpx;
-
-							image {
-								width: 18rpx;
-								height: 30rpx;
+							.icon-font{
+								margin-top: 4rpx;
 							}
 						}
 

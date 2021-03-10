@@ -4,7 +4,7 @@
 		<view class="index-head" :style="{paddingTop:barHeight+'px'}">
 			<view class="index-head-wrap">
 				<view class="index-head-address">
-					<image src="../../static/images/address.png" mode="aspectFill"></image>
+					<text class="iconfont icondingwei1 icon-font" style="color: #fff;"></text>
 					<text>厦门</text>
 				</view>
 				<view class="index-head-logo">
@@ -22,13 +22,14 @@
 			<view class="index-content-search">
 				<view class="content-search-box">
 					<view class="content-search-ico">
-						<image src="../../static/images/search.png" mode=""></image>
+						<text class="iconfont iconsousuo1 icon-font" style="color: #999;font-size: 40rpx;font-weight: 500;"></text>
+						<!-- <image src="../../static/images/search.png" mode=""></image> -->
 					</view>
 					<view class="content-search-text">
 						<input type="text" placeholder="搜索SPA、商家" />
 					</view>
 					<view class="content-search-scan">
-						<image src="../../static/images/code.png" mode=""></image>
+						<text class="iconfont iconsaoyisao icon-font" style="color: #999;font-size: 30rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 			</view>
@@ -50,7 +51,8 @@
 						<text>新时代好商机，你来不来？海量商家入驻</text>
 					</view>
 					<view class="content-notice-more">
-						<image src="../../static/images/more.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #333;font-size: 24rpx;font-weight: 500;"></text>
+						<!-- <image src="../../static/images/more.png" mode="aspectFill"></image> -->
 					</view>
 				</view>
 			</view>
@@ -247,7 +249,9 @@
 
 					text {
 						margin-left: 15rpx;
-
+					}
+					.icon-font{
+						font-size: 28rpx;
 					}
 				}
 
@@ -298,11 +302,6 @@
 						justify-content: center;
 						width: 80rpx;
 						height: 80rpx;
-
-						image {
-							width: 30rpx;
-							height: 30rpx;
-						}
 					}
 
 					.content-search-text {

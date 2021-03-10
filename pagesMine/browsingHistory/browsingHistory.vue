@@ -34,7 +34,7 @@
 												<view class="business-main-list-box-li-info">
 													<view class="business-main-list-box-li-info-title">罗约蓝池·温泉SPA</view>
 													<view class="business-main-list-box-li-info-score">
-														<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="(s,k) in 5"></image>
+														<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 														<text>5分</text>
 													</view>
 													<view class="business-main-list-box-li-info-text">
@@ -42,7 +42,7 @@
 															明发商业广场
 														</view>
 														<view class="business-main-list-box-li-info-text-address">
-															<image src="../../static/images/address-icon-green.png" mode="aspectFill"></image>
+															<text class="iconfont icondingwei1 icon-font" style="color: #ccc;font-size: 24rpx;margin-top: 4rpx;"></text>
 															<text>6.1km</text>
 														</view>
 													</view>
@@ -98,7 +98,7 @@
 												<view class="technician-main-list-li-info-title-msg">【金牌技师】</view>
 											</view>
 											<view class="technician-main-list-li-info-score">
-												<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="(s,k) in 5"></image>
+												<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 												<text>5分</text>
 											</view>
 											<view class="technician-main-list-li-info-text-wrap">

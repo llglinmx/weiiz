@@ -8,25 +8,26 @@
 				<view class="content-list-li" @click="listAllClick('info')">
 					<view class="content-list-li-title">个人信息</view>
 					<view class="content-list-li-more flex-center">
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
+						
 					</view>
 				</view>
 				<view class="content-list-li" @click="listAllClick('bodyState')">
 					<view class="content-list-li-title">身体状态</view>
 					<view class="content-list-li-more flex-center">
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 				<view class="content-list-li" @click="listAllClick('contacts')">
 					<view class="content-list-li-title">紧急联系人</view>
 					<view class="content-list-li-more flex-center">
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 				<view class="content-list-li" @click="listAllClick('security')">
 					<view class="content-list-li-title">账号安全</view>
 					<view class="content-list-li-more flex-center">
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 			</view>
@@ -34,14 +35,13 @@
 				<view class="content-list-li" @click="listAllClick('pushSet')">
 					<view class="content-list-li-title">推送设置</view>
 					<view class="content-list-li-more flex-center">
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 				<view class="content-list-li" @click="listAllClick('empower')">
 					<view class="content-list-li-title">合作授权</view>
 					<view class=" content-list-li-more flex-center">
-						<image src="../../static/images/more-gray.png" mode="aspectFill">
-						</image>
+					<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 			</view>
@@ -49,25 +49,25 @@
 				<view class="content-list-li" @click="listAllClick('aboutUs')">
 					<view class="content-list-li-title">关于我们</view>
 					<view class="content-list-li-more flex-center">
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 				<view class="content-list-li" @click="()=>{listAllClick('problem')}">
 					<view class="content-list-li-title">常见问题</view>
 					<view class="content-list-li-more flex-center">
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 				<view class="content-list-li" @click="listAllClick('feedback')">
 					<view class="content-list-li-title">反馈</view>
 					<view class="content-list-li-more flex-center">
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 				<view class="content-list-li" @click="listAllClick('report')">
 					<view class="content-list-li-title">举报</view>
 					<view class="content-list-li-more flex-center">
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 			</view>

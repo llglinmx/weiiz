@@ -107,7 +107,7 @@
 					<view class="box-content-service-info-list-li">
 						<view class="service-info-list-li-title">门店地址:</view>
 						<view class="service-info-list-li-text" style="color: #4EC494;">
-							<image class="service-info-list-li-text-address" src="../../static/images/address-icon-green.png" mode="aspectFill"></image>
+							<!-- <text class="iconfont icondingwei1 icon-font" style="color: #4EC494;font-size: 24rpx;margin-top: 4rpx;"></text> -->
 							中国 福建省 厦门市 集美区 杏滨路罗约酒店负一楼
 						</view>
 					</view>

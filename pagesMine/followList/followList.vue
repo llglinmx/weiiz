@@ -18,13 +18,13 @@
 								<view class="store-list-li-content-info">
 									<view class="store-list-li-content-info-title">罗约蓝池·温泉SPA</view>
 									<view class="store-list-li-content-info-score">
-										<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="i in 5"></image>
+										<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 										<text>5分</text>
 									</view>
 									<view class="store-list-li-content-info-wrap">
 										<view class="info-wrap-text">明发商业广场</view>
 										<view class="info-wrap-address">
-											<image src="../../static/images/address-icon-green.png" mode="aspectFill"></image>
+											<text class="iconfont icondingwei1 icon-font" style="color: #ccc;font-size: 24rpx;margin-top: 4rpx;"></text>
 											<text>4.3km</text>
 										</view>
 									</view>
@@ -66,7 +66,8 @@
 
 										</view>
 										<view class="technician-wrap-list-li-info-score">
-											<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="item in 5"></image>
+											<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
+
 											<text>5分</text>
 										</view>
 										<view class="technician-wrap-list-li-info-introduce">
@@ -208,7 +209,7 @@
 								}
 
 								text {
-									margin-left: 10rpx;
+									margin-left: 4rpx;
 									color: #999;
 									font-size: 24rpx;
 								}
@@ -230,10 +231,8 @@
 									color: #999;
 									font-size: 24rpx;
 
-									image {
+									.icon-font{
 										margin-right: 8rpx;
-										width: 19rpx;
-										height: 24rpx;
 									}
 								}
 							}
@@ -370,7 +369,7 @@
 											}
 
 											text {
-												margin-left: 10rpx;
+												margin-left: 4rpx;
 												font-size: 24rpx;
 												color: #999;
 											}

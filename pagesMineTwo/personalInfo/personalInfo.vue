@@ -13,7 +13,7 @@
 							<image src="../../static/images/userImage.png" mode=""></image>
 						</view>
 						<view class="content-list-li-more flex-center" @click="listAllClick('info')">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 						</view>
 					</view>
 				</view>
@@ -24,7 +24,7 @@
 							安稳也随性
 						</view>
 						<view class="content-list-li-more flex-center">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 						</view>
 					</view>
 				</view>
@@ -35,7 +35,7 @@
 							男
 						</view>
 						<view class="content-list-li-more flex-center">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 						</view>
 					</view>
 				</view>
@@ -46,7 +46,7 @@
 							1996-10-04
 						</view>
 						<view class="content-list-li-more flex-center">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 						</view>
 					</view>
 				</view>
@@ -57,7 +57,7 @@
 							{{address}}
 						</view>
 						<view class="content-list-li-more flex-center">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 						</view>
 					</view>
 				</view>
@@ -185,12 +185,10 @@
 						}
 
 						.content-list-li-more {
-							width: 32rpx;
-							height: 32rpx;
-
-							image {
-								width: 18rpx;
-								height: 30rpx;
+							display: flex;
+							align-items: center;
+							.icon-font{
+								margin-top: 4rpx;
 							}
 						}
 

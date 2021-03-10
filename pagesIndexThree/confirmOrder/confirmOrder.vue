@@ -36,7 +36,7 @@
 					<view class="box-content-coupon-top-title">优惠券</view>
 					<view class="box-content-coupon-top-more">
 						<text>无可用优惠券</text>
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 32rpx;"></text>
 					</view>
 				</view>
 				<view class="box-content-coupon-bottom">
@@ -244,9 +244,8 @@
 							color: #999;
 						}
 
-						image {
-							width: 28rpx;
-							height: 28rpx;
+						.icon-font{
+							margin-top: 4rpx;
 						}
 					}
 				}

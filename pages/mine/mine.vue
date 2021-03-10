@@ -4,10 +4,12 @@
 			<!-- 顶部设置 与消息 -->
 			<view class="mine-head-top">
 				<view class="head-top-msg" @click="systemMsg">
-					<image src="../../static/images/msg.png" mode=""></image>
+					<text class="iconfont iconqipao icon-font" style="color: #fff;font-size: 52rpx;font-weight: 500;margin-top: 8rpx;"></text>
+					<!-- <image src="../../static/images/msg.png" mode=""></image> -->
 				</view>
 				<view class="head-top-set" @click="setClick">
-					<image src="../../static/images/set-icon.png" mode=""></image>
+					<text class="iconfont iconshezhi icon-font" style="color: #fff;font-size: 42rpx;font-weight: 500;"></text>
+					<!-- <image src="../../static/images/set-icon.png" mode=""></image> -->
 				</view>
 			</view>
 			<!-- 个人信息 -->
@@ -40,7 +42,8 @@
 				</view>
 				<view class="mine-head-info-right flex-center">
 					<view class="head-info-right-scan flex-center">
-						<image src="../../static/images/scan-code.png" mode="aspectFill"></image>
+						<text class="iconfont iconsaoyisao icon-font" style="color: #fff;font-size: 52rpx;font-weight: 500;"></text>
+						<!-- <image src="../../static/images/scan-code.png" mode="aspectFill"></image> -->
 					</view>
 					<view class="head-info-scan-text">
 						扫一扫
@@ -74,7 +77,8 @@
 						</view>
 					</view>
 					<view class="mine-integral-title-more">
-						<image src="../../static/images/more.png" mode="widthFix"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 24rpx;font-weight: 500;"></text>
+						<!-- <image src="../../static/images/more.png" mode="widthFix"></image> -->
 					</view>
 				</view>
 				<view class="mine-content-goods-list">
@@ -593,7 +597,7 @@
 								display: flex;
 								align-items: center;
 								justify-content: center;
-								width: 112rpx;
+								width: 118rpx;
 								height: 32rpx;
 								border-radius: 22rpx;
 								background: rgba(255, 255, 255, .9);
@@ -707,15 +711,8 @@
 					}
 
 					.mine-integral-title-more {
-						width: 30rpx;
-						height: 20rpx;
-
-						image {
-							// width: 12rpx;
-							// height: 20rpx;
-							width: 30rpx;
-							height: 20rpx;
-						}
+						display: flex;
+						align-items: center;
 					}
 				}
 

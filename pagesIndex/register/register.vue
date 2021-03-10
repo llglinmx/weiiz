@@ -17,7 +17,7 @@
 				<view class="box-content-list-li box-content-item">
 					<view class="box-content-list-li-text">
 						<text class="tel-text">+86</text>
-						<image class="icon" src="../../static/images/more.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #333;"></text>
 					</view>
 					<view class="box-content-list-li-input">
 						<input type="number" @input="phoneChange" v-model.trim="phone" placeholder="请输入手机号" confirm-type="done" />
@@ -30,7 +30,7 @@
 				<view class="box-content-list-li">
 					<input type="text" v-model.trim="password" @input="passwordChange" password="true" placeholder="密码长度8-20位"
 					 confirm-type="done" />
-					<image src="../../static/images/hidden-jz.png" mode="aspectFill"></image>
+					 <text class="iconfont iconyincangmima" style="color: #ccc;"></text>
 				</view>
 
 			</view>
@@ -200,12 +200,15 @@
 							color: #333;
 							font-size: 32rpx;
 						}
+						.icon-font{
+							position: static;
+							width: 32rpx;
+							height: 32rpx;
+							transform: rotate(90deg);
+						}
+						
 
 						.icon {
-							position: static;
-							width: 36rpx;
-							height: 36rpx;
-							margin-left: 10rpx;
 							transform: rotate(90deg);
 						}
 					}
@@ -227,15 +230,7 @@
 						font-size: 32rpx;
 					}
 
-					image {
-						position: absolute;
-						right: 10rpx;
-						top: 0rpx;
-						bottom: 0;
-						margin: auto;
-						width: 30rpx;
-						height: 21rpx;
-					}
+					
 
 					text {
 						position: absolute;

@@ -19,8 +19,8 @@
 										<text>0/100</text>
 									</view>
 									<view class="content-list-all-image">
-										<view class="content-list-image-li">
-											<image src="../../static/images/002.png" mode="aspectFill"></image>
+										<view class="content-list-image-li flex-center">
+											<text class="iconfont icontupian icon-font" style="color: #fff;font-size: 50rpx;font-weight: 500;"></text>
 										</view>
 										<view class="content-list-image-li">
 											<image src="../../static/images/002.png" mode="aspectFill"></image>
@@ -206,9 +206,12 @@
 										margin-top: 30rpx;
 										background: #fff;
 										.content-list-image-li{
+											
 											width: 120rpx;
 											height: 120rpx;
+											background: #EDEDED;
 											margin-right: 20rpx;
+											border-radius: 10rpx;
 											image{
 												width: 120rpx;
 												height: 120rpx;
