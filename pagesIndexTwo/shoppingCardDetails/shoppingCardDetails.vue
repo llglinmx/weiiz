@@ -162,7 +162,7 @@
 			font-weight: 400;
 
 			.box-content-main {
-				display: flex;
+				
 				padding: 30rpx 40rpx;
 				box-sizing: border-box;
 				background: #fff;

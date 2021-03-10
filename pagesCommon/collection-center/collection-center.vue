@@ -108,7 +108,7 @@
 			});
 		},
 		methods: {
-
+// 返回
 			Gback() {
 				uni.navigateBack({
 					delta: 1

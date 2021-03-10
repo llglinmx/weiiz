@@ -3,6 +3,7 @@
 		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
 			<view class="box-head-nav">
 				<view class="box-head-nav-back"  @click="Gback">
+					<!-- <text class="iconfont iconfanhui" style="color: #333;font-size: 40rpx;"></text> -->
 					<image src="../../static/images/back.png" mode="aspectFill"></image>
 				</view>
 				<view class="box-head-nav-text" @click="register">注册</view>

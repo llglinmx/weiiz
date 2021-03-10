@@ -3,7 +3,7 @@
 		<view class="mine-head" :style="{paddingTop:barHeight+'px'}">
 			<!-- 顶部设置 与消息 -->
 			<view class="mine-head-top">
-				<view class="head-top-msg">
+				<view class="head-top-msg" @click="systemMsg">
 					<image src="../../static/images/msg.png" mode=""></image>
 				</view>
 				<view class="head-top-set" @click="setClick">
@@ -240,7 +240,7 @@
 							title: "礼物卡"
 						}, {
 							image: "../../static/images/money.jpg",
-							title: "套餐卡"
+							title: "浏览记录"
 						}, {
 							image: "../../static/images/gift.jpg",
 							title: "礼物卡"
@@ -385,6 +385,12 @@
 					url: "../../pagesMine/set/set"
 				})
 			},
+			// 系统消息
+			systemMsg() {
+				uni.navigateTo({
+					url: "../../pagesMine/systemMessage/systemMessage"
+				})
+			},
 
 			// 订单状态点击
 			listClick(index) {
@@ -467,6 +473,19 @@
 							url: "../../pagesMine/packageCard/packageCard"
 						})
 						break;
+					case "礼物卡":
+						// 礼物卡
+						uni.navigateTo({
+							url: "../../pagesMine/giftCard/giftCard"
+						})
+						break;
+					case "浏览记录":
+						// 浏览记录
+						uni.navigateTo({
+							url: "../../pagesMine/browsingHistory/browsingHistory"
+						})
+						break;
+
 				}
 
 			},

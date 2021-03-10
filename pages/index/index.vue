@@ -122,7 +122,7 @@
 				circular: true,
 				arrList: ['商城', "按摩", "教程", "技师", "活动", '快速预约', "礼品卡", "买单", "领券中心", "拼团"],
 				textList: ['中文', "英语", "俄语", "法语", "德语"],
-				serviceList: ['礼品卡', "商城套餐卡", '礼品卡', "商城套餐卡"],
+				serviceList: ['商城礼品卡', "商城套餐卡", '商城礼品卡', "商城套餐卡"],
 				imageList: [{
 						url: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.pconline.com.cn%2Fimages%2Fupload%2Fupc%2Ftx%2Fwallpaper%2F1212%2F10%2Fc1%2F16491670_1355126816487.jpg&refer=http%3A%2F%2Fimg.pconline.com.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1617169230&t=15c6d87792f9fe60a66efcc066e816d5",
 						link: ""
@@ -201,7 +201,10 @@
 							url: "../../pagesIndex/packageCardList/packageCardList"
 						})
 						break;
-					default:
+					case "商城礼品卡":
+						uni.navigateTo({
+							url: "../../pagesIndex/giftCardShopping/giftCardShopping"
+						})
 						break;
 				}
 			},

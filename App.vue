@@ -14,6 +14,7 @@
 </script>
 
 <style>
+	
 	@import url("./static/css/iconfont/iconfont.css");
 	/*每个页面公共css */
 	page{
