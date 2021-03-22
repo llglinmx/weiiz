@@ -4,11 +4,13 @@
 			<!-- 顶部设置 与消息 -->
 			<view class="mine-head-top">
 				<view class="head-top-msg" @click="systemMsg">
-					<text class="iconfont iconqipao icon-font" style="color: #fff;font-size: 52rpx;font-weight: 500;margin-top: 8rpx;"></text>
+					<text class="iconfont iconxiaoxi icon-font"
+						style="color: #fff;font-size: 52rpx;font-weight: 500;"></text>
 					<!-- <image src="../../static/images/msg.png" mode=""></image> -->
 				</view>
 				<view class="head-top-set" @click="setClick">
-					<text class="iconfont iconshezhi icon-font" style="color: #fff;font-size: 42rpx;font-weight: 500;"></text>
+					<text class="iconfont iconshezhi icon-font"
+						style="color: #fff;font-size: 52rpx;font-weight: 500;"></text>
 					<!-- <image src="../../static/images/set-icon.png" mode=""></image> -->
 				</view>
 			</view>
@@ -21,9 +23,7 @@
 						</view>
 						<view class="head-info-right">
 							<!-- 昵称 -->
-							<view class="head-info-nickname">
-								SKB露娜可可
-							</view>
+							<view class="head-info-nickname">{{info.nickname}}</view>
 							<!-- 进度条 -->
 							<view class="head-info-seep">
 								<view class="head-info-progress-bar"></view>
@@ -31,18 +31,17 @@
 							<!-- 会员等级 -->
 							<view class="head-info-member">
 								<view class="head-info-member-ico">
-
+									<image src="../../static/images/grade-yellow.png" mode="aspectFill"></image>
 								</view>
-								<view class="head-info-member-text">
-									钻石会员
-								</view>
+								<view class="head-info-member-text">{{info.level_name}}</view>
 							</view>
 						</view>
 					</view>
 				</view>
 				<view class="mine-head-info-right flex-center">
 					<view class="head-info-right-scan flex-center">
-						<text class="iconfont iconsaoyisao icon-font" style="color: #fff;font-size: 52rpx;font-weight: 500;"></text>
+						<text class="iconfont iconsaoyisao icon-font"
+							style="color: #fff;font-size: 52rpx;font-weight: 500;"></text>
 						<!-- <image src="../../static/images/scan-code.png" mode="aspectFill"></image> -->
 					</view>
 					<view class="head-info-scan-text">
@@ -64,7 +63,7 @@
 		</view>
 		<view class="mine-content">
 			<view class="mine-content-state-list">
-				<state-list :list="stateList" @listState="listClick"></state-list>
+				<state-list :menuList="stateList" @listState="listClick"></state-list>
 			</view>
 			<view class="mine-content-integral-box">
 				<view class="mine-content-integral-box-top" @click="pointsMall">
@@ -77,7 +76,8 @@
 						</view>
 					</view>
 					<view class="mine-integral-title-more">
-						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 24rpx;font-weight: 500;"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #999;font-size: 24rpx;font-weight: 500;"></text>
 						<!-- <image src="../../static/images/more.png" mode="widthFix"></image> -->
 					</view>
 				</view>
@@ -111,7 +111,8 @@
 				<view class="mine-content-commonly-list">
 					<swiper class="swiper" :current="idx" @change="swiperChange">
 						<swiper-item v-for="(item,index) in toolAllList" class="swiper-item">
-							<view class="content-commonly-list-li" v-for="(j,idx) in item.toolList" @click="menuList(j)">
+							<view class="content-commonly-list-li" v-for="(j,idx) in item.toolList"
+								@click="menuList(j)">
 								<view class="content-commonly-list-li-ico">
 									<image :src="j.image" mode=""></image>
 								</view>
@@ -146,12 +147,13 @@
 				idx: 0,
 				toolBarWidth: 0, //进度条长度
 				parWidth: 0, // 进度条父级长度度
+				info: {},
 				list: [{
-						number: "20",
+						number: "0.00",
 						text: "余额/元",
 					},
 					{
-						number: "0",
+						number: '0',
 						text: "积分",
 					},
 
@@ -360,7 +362,7 @@
 			StateList
 		},
 		onLoad() {
-
+			this.getInfo()
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -378,6 +380,20 @@
 			}).exec();
 		},
 		methods: {
+			// 获取个人信息
+			getInfo() {
+				let vuedata = {}
+				this.apiget('api/v1/members/member_info', vuedata).then(res => {
+					if (res.status == 200) {
+						this.info = res.data
+						this.list[0].number = res.data.money //余额
+						this.list[1].number = res.data.score //积分
+						this.list[2].number = res.data.coupon_num //卡券
+						this.list[3].number = res.data.coupon_num //关注
+					}
+				});
+			},
+
 
 			// 常用工具滑动
 			swiperChange(e) {
@@ -603,12 +619,15 @@
 								background: rgba(255, 255, 255, .9);
 
 								.head-info-member-ico {
+									display: flex;
+									align-items: center;
 									width: 23rpx;
 									height: 18rpx;
 									margin-right: 5rpx;
 
 									image {
 										width: 100%;
+										height: 100%;
 									}
 								}
 
@@ -638,7 +657,9 @@
 						}
 					}
 
-					.head-info-scan-text {}
+					.head-info-scan-text {
+						font-size: 24rpx;
+					}
 				}
 			}
 

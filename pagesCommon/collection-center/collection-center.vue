@@ -3,7 +3,7 @@
 		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
 			<view class="box-head-nav">
 				<view class="head-nav-back flex-center" @click="Gback">
-					<image src="../../static/images/back-white.png" mode="aspectFill"></image>
+					<text class="iconfont iconfanhui" style="color: #fff;font-size: 36rpx;"></text>
 				</view>
 				<view class="head-nav-title">领券中心</view>
 			</view>
@@ -108,7 +108,7 @@
 			});
 		},
 		methods: {
-// 返回
+			// 返回
 			Gback() {
 				uni.navigateBack({
 					delta: 1
@@ -154,6 +154,8 @@
 		.box-head {
 
 			background: #FF4040;
+			padding: 0 20rpx;
+			box-sizing: border-box;
 
 			.box-head-nav {
 				display: flex;
@@ -161,9 +163,9 @@
 				height: 88rpx;
 
 				.head-nav-back {
-					width: 65rpx;
+					width: 50rpx;
 					height: 65rpx;
-					margin-left: 10rpx;
+					margin-left: 20rpx;
 
 					image {
 						width: 18rpx;
@@ -175,7 +177,7 @@
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					margin-left: -50rpx;
+					margin-right: 50rpx;
 					flex: 1;
 					font-size: 34rpx;
 					font-family: Source Han Sans CN;

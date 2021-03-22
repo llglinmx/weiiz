@@ -30,8 +30,8 @@
 											</view>
 										</view>
 										<view class="list-li-right-check">
-											<image src="../../static/images/check-coupons.png" mode="aspectFill" v-if="isCheckIco==index"></image>
-											<image src="../../static/images/no-check-coupons.png" mode="aspectFill" v-else></image>
+											<text class="iconfont iconxuanzhong icon-font" style="color:#26BF82;font-size: 40rpx" v-if="isCheckIco==index"></text>
+											<text class="iconfont iconweixuanzhong1 icon-font" style="color: #ccc;font-size: 40rpx" v-else></text>
 										</view>
 									</view>
 								</view>

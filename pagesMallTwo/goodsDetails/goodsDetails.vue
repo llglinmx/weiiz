@@ -51,7 +51,7 @@
 					<view class="content-list-li-wrap">
 						<view class="content-list-li-wrap-text">50ml*1</view>
 						<view class="content-list-li-more flex-center">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;margin-top: 4rpx;"></text>
 						</view>
 					</view>
 				</view>
@@ -60,7 +60,7 @@
 					<view class="content-list-li-wrap">
 						<view class="content-list-li-wrap-text">北京北京市海淀区清河街道</view>
 						<view class="content-list-li-more flex-center">
-							<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;margin-top: 4rpx;"></text>
 						</view>
 					</view>
 				</view>
@@ -71,7 +71,7 @@
 				<view class="box-content-comment-title-wrap">
 					<view class="content-comment-title">精选评论</view>
 					<view class="content-comment-more">
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 					</view>
 				</view>
 				<view class="box-content-comment-type-list">
@@ -89,7 +89,7 @@
 							<view class="comment-list-item-info-name">Crystal</view>
 							<view class="comment-list-item-info-score">
 								<view class="comment-list-item-score-stars">
-									<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="item in 5"></image>
+									<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 								</view>
 								<view class="comment-list-item-score-text">
 									5分
@@ -114,7 +114,7 @@
 					<view class="box-content-shop-info">
 						<view class="box-content-shop-name">印象诗意·悠然SPA</view>
 						<view class="box-content-shop-score">
-							<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="item in 5"></image>
+							<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 							<text>5分</text>
 						</view>
 					</view>
@@ -122,7 +122,7 @@
 				<view class="box-content-shop-right">
 					<view class="box-content-shop-right-wrap">
 						<text>进入店铺</text>
-						<image src="../../static/images/more-icon-FF967D.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color:#FF967D;font-size: 28rpx;margin-top: 4rpx;"></text>
 					</view>
 				</view>
 			</view>
@@ -141,7 +141,9 @@
 			<view class="box-footer-left">
 				<view class="box-footer-wrap">
 					<view class="box-footer-icon">
-						<image src="../../static/images/customer-icon.png" mode="aspectFill"></image>
+
+						<text class="iconfont iconkefu icon-font" style="color: #000;font-size: 52rpx"></text>
+						<!-- <image src="../../static/images/customer-icon.png" mode="aspectFill"></image> -->
 					</view>
 					<view class="box-footer-text">
 						客服
@@ -149,8 +151,8 @@
 				</view>
 				<view class="box-footer-wrap" @click="shoppingList">
 					<view class="box-footer-icon">
-						<image src="../../static/images/shopping-icon.png" mode=""></image>
-						<text class="flex-center">20</text>
+						<text class="iconfont icongouwuche icon-font" style="color: #000;font-size: 52rpx;"></text>
+						<text class="flex-center num">20</text>
 					</view>
 					<view class="box-footer-text">
 						购物车
@@ -457,9 +459,11 @@
 							align-items: center;
 
 							.comment-list-item-score-stars {
-								image {
-									width: 30rpx;
-									height: 30rpx;
+								display: flex;
+								align-items: center;
+
+								.icon-font {
+									margin-right: 6rpx;
 								}
 							}
 
@@ -520,13 +524,12 @@
 							display: flex;
 							align-items: center;
 
-							image {
-								width: 30rpx;
-								height: 30rpx;
+							text:last-child {
+								margin-left: 8rpx;
 							}
 
 							text {
-								margin-left: 10rpx;
+								margin-right: 6rpx;
 								font-size: 24rpx;
 								color: #999;
 							}
@@ -589,21 +592,19 @@
 				width: 200rpx;
 				display: flex;
 				justify-content: space-around;
-				
+
 				.box-footer-wrap {
 					display: flex;
 					flex-direction: column;
 					align-items: center;
 					margin: 0 10rpx;
+
 					.box-footer-icon {
 						position: relative;
 
-						image {
-							width: 40rpx;
-							height: 40rpx;
-						}
+						
 
-						text {
+						.num {
 							position: absolute;
 							right: -14rpx;
 							top: -8rpx;

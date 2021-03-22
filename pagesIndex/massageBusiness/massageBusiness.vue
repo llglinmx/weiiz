@@ -102,7 +102,7 @@
 				</view>
 			</view>
 			<view class="box-content-tab-btn" @click="tabClick" :class="isFlag?'box-content-tab-btn-state':''">
-				<image src="../../static/images/menu.png" mode=""></image>
+				<text class="iconfont iconcaidan icon-font" style="color: #666;font-size: 48rpx;margin-top: 4rpx;"></text>
 				<text>商家列表</text>
 			</view>
 
@@ -125,7 +125,7 @@
 
 <script>
 	import navTitle from "../../components/navTitle/navTitle.vue"
-	import UniPopup from "../../uni_modules/uni-popup/components/uni-popup/uni-popup.vue"
+	import UniPopup from "../../components/uni-popup/uni-popup.vue"
 	export default {
 		data() {
 			return {
@@ -474,7 +474,7 @@
 								display: flex;
 								align-items: center;
 
-								
+
 								text {
 									margin-right: 6rpx;
 									color: #999;
@@ -555,10 +555,6 @@
 				z-index: 3;
 				transition: 0.3s;
 
-				image {
-					width: 42rpx;
-					height: 42rpx;
-				}
 
 				text {
 					font-size: 24rpx;

@@ -3,7 +3,7 @@
 		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
 			<view class="nav-box">
 				<view class="nav-back" @click="Gback">
-					<image src="../../static/images/back.png" mode="aspectFill"></image>
+					<text class="iconfont iconfanhui" style="color: #000;font-size: 36rpx;"></text>
 				</view>
 				<view class="nav-title">浏览记录</view>
 				<view class="nav-confirm" @click="deleteClick">

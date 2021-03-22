@@ -1,6 +1,6 @@
 <template>
 	<view class="box-list">
-		<view class="box-list-li" v-for="(item,index) in list" @click="listClick(index)">
+		<view class="box-list-li" v-for="(item,index) in menuList" :key="index" @click="listClick(index)">
 			<view class="list-li-image">
 				<image :src="item.image" mode="aspectFill"></image>
 			</view>
@@ -18,8 +18,8 @@
 		},
 
 		props: {
-			list: {
-				type: Object,
+			menuList: {
+				type: Array,
 				default: []
 			}
 		},

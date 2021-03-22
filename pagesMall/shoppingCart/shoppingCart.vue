@@ -5,17 +5,19 @@
 		</view>
 		<view class="box-content">
 			<view class="box-content-list">
-				<view class="box-content-list-li"  v-for="(item,index) in 5">
+				<view class="box-content-list-li" v-for="(item,index) in 5">
 					<view class="box-content-list-li-top">
 						<view class="list-li-top-all">
-							<image src="../../static/images/no-check-coupons.png" mode="aspectFill"></image>
+							<text class="iconfont iconweixuanzhong1 icon-font" style="color: #ccc;font-size: 36rpx;"></text>
+							<!-- <text class="iconfont iconxuanzhong icon-font" style="color: #FF967D;font-size: 36rpx;"></text> -->
 						</view>
 						<view class="list-li-top-text">罗约蓝池·温泉SPA</view>
 					</view>
 					<view class="box-content-list-li-main">
 						<view class="box-content-list-li-main-item" v-for="(j,idx) in 3">
 							<view class="list-li-main-item-all">
-								<image src="../../static/images/no-check-coupons.png" mode="aspectFill"></image>
+								<!-- <text class="iconfont iconweixuanzhong1 icon-font" style="color: #ccc;font-size: 36rpx;"></text> -->
+								<text class="iconfont iconxuanzhong icon-font" style="color: #FF967D;font-size: 36rpx;"></text>
 							</view>
 							<view class="list-li-main-item-image">
 								<image src="../../static/images/002.png" mode="aspectFill"></image>
@@ -51,7 +53,8 @@
 		<view class="box-footer">
 			<view class="box-footer-check">
 				<view class="box-footer-check-icon">
-					<image src="../../static/images/no-check-coupons.png" mode="aspectFill"></image>
+					<text class="iconfont iconweixuanzhong1 icon-font" style="color: #ccc;font-size: 36rpx;"></text>
+					<!-- <text class="iconfont iconxuanzhong icon-font" style="color: #FF967D;font-size: 36rpx;"></text> -->
 				</view>
 				<view class="box-footer-select-all">全选</view>
 			</view>

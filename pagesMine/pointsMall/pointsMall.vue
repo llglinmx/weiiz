@@ -3,40 +3,45 @@
 		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
 			<view class="box-head-back" @click="Gback">
 				<view class="box-head-back-image">
-					<image src="../../static/images/back-white.png" mode="aspectFill"></image>
+					<text class="iconfont iconfanhui" style="color: #fff;font-size: 34rpx;"></text>
 				</view>
 			</view>
-			<view class="box-head-number">
-				200
-			</view>
+			<view class="box-head-number">{{points}}</view>
 			<view class="box-head-text">
 				<image src="../../static/images/integral-icon.png" mode="aspectFill"></image>
 				<text>当前积分数量</text>
 			</view>
 			<view class="box-head-list">
-				<view :class="index==0?'box-head-list-li-affter':''" class="box-head-list-li flex-center" v-for="(item,index) in textList"
-				 :key="index" @click="listTabClick(index)">{{item}}</view>
+				<view :class="index==0?'box-head-list-li-affter':''" class="box-head-list-li flex-center"
+					v-for="(item,index) in textList" :key="index" @click="listTabClick(index)">{{item}}</view>
 			</view>
 		</view>
 		<view class="box-content">
 			<view class="box-content-wrap">
 				<view class="box-content-wrap-title">积分商城</view>
 				<view class="box-content-wrap-list">
-					<view class="box-content-wrap-list-li flex-center" :class="typeIndex==index?'box-content-wrap-list-li-active':''"
-					 v-for="(item,index) in typeList" :key="index" @click="typeListClick(index)">{{item}}</view>
+					<view class="box-content-wrap-list-li flex-center"
+						:class="typeIndex==index?'box-content-wrap-list-li-active':''" v-for="(item,index) in typeList"
+						:key="index" @click="typeListClick(index)">{{item}}</view>
 				</view>
 			</view>
 			<view class="box-content-goods">
-				<mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption" :height="mesHeight">
-					<view class="box-content-goods-list">
+				<mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption"
+					:height="mesHeight">
+					<view class="box-content-goods-list" :style="{display:isData?'block':'none'}">
 						<view class="box-content-goods-list-li" v-for="(item,index) in goodsList">
 							<view class="box-content-goods-list-li-image">
-								<image :src="item.url" mode=""></image>
+								<image :src="item.simg" mode="aspectFill"></image>
 							</view>
-							<view class="box-content-goods-list-li-title">{{item.title}}</view>
-							<view class="box-content-goods-list-li-number"><text>{{item.number}}</text> 积分</view>
+							<view class="box-content-goods-list-li-title">{{item.name}}</view>
+							<view class="box-content-goods-list-li-number"><text>{{item.score}}</text> 积分</view>
 							<view class="box-content-goods-list-li-btn flex-center">立即兑换</view>
 						</view>
+					</view>
+					<view class="box-content-goods-load"
+						:style="{display:!isData?'block':'none',height:mesHeight+'rpx'}">
+						<loading v-if="isLoad" />
+						<no-data v-if="!isLoad" />
 					</view>
 				</mescroll-uni>
 			</view>
@@ -49,92 +54,39 @@
 	import navTitle from "../../components/navTitle/navTitle.vue"
 	import MescrollMixin from "../../components/mescroll-uni/mescroll-mixins.js";
 	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue"
+	import loading from '../../components/loading/loading.vue'
+	import noData from '../../components/no-data/no-data.vue'
 	export default {
 		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
 				textList: ["积分明细", "兑换记录"],
-				typeList: ["综合", "升序", "降序"],
+				typeList: ["综合", "降序", "升序"],
+				points: 0, //积分数量
 				typeIndex: 0, //当前所在排序
 				mesHeight: 0,
 				downOption: { // 下拉刷新配置
 					auto: false,
 				},
 				upOption: { // 上拉加载配置
+					use: true,
 					noMoreSize: 5,
 					textLoading: "正在加载更多数据",
 					textNoMore: "——  已经到底了  ——",
 					isBounce: true,
-					auto: false,
+					auto: true,
 				},
-				PageNumber: 1, // 请求页数，
-				PageLimt: 10, // 请求条数
-				goodsList: [{
-						url: "../../static/images/goods-001.png",
-						title: "人工智能音箱",
-						number: "25",
-					},
-					{
-						url: "../../static/images/goods-002.png",
-						title: "移动电源/充电宝 蓝牙",
-						number: "36",
-					},
-					{
-						url: "../../static/images/goods-003.png",
-						title: "移动电源/充电宝",
-						number: "25",
-					},
-					{
-						url: "../../static/images/goods-004.png",
-						title: "人工智能音箱",
-						number: "22",
-					},
-					{
-						url: "../../static/images/goods-005.png",
-						title: "移动电源/充电宝",
-						number: "25",
-					},
-					{
-						url: "../../static/images/goods-006.png",
-						title: "人工智能音箱",
-						number: "13",
-					}, {
-						url: "../../static/images/goods-001.png",
-						title: "人工智能音箱",
-						number: "25",
-					},
-					{
-						url: "../../static/images/goods-002.png",
-						title: "移动电源/充电宝 蓝牙",
-						number: "36",
-					},
-					{
-						url: "../../static/images/goods-003.png",
-						title: "移动电源/充电宝",
-						number: "25",
-					},
-					{
-						url: "../../static/images/goods-004.png",
-						title: "人工智能音箱",
-						number: "22",
-					},
-					{
-						url: "../../static/images/goods-005.png",
-						title: "移动电源/充电宝",
-						number: "25",
-					},
-					{
-						url: "../../static/images/goods-006.png",
-						title: "人工智能音箱",
-						number: "13",
-					}
-				]
+				goodsList: [],
+				isData: false, //是否有数据
+				isLoad: true, //加载状态   true 为加载中 false 为无数据
 			};
 		},
 		components: {
 			navTitle,
-			MescrollUni
+			MescrollUni,
+			loading,
+			noData
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -147,7 +99,11 @@
 		onShow() {
 			const sys = uni.getSystemInfoSync();
 			var Heigh = sys.windowHeight
-			this.mesHeight = (Heigh - 304) * 2
+			this.mesHeight = (Heigh - 300) * 2
+		},
+		onLoad() {
+			this.getPoints()
+			// this.getPointsList(1, this.page)
 		},
 		methods: {
 			// 返回
@@ -156,6 +112,73 @@
 					delta: 1
 				})
 			},
+
+			// 获取积分
+			getPoints() {
+				var vuedata = {}
+				this.apiget('api/v1/members/score/info', vuedata).then(res => {
+					if (res.status == 200) {
+						this.points = res.data.data.score
+					}
+				});
+			},
+			// 获取积分商城列表
+			getPointsList(type, page) {
+				var vuedata = {
+					page_index: page.num, // 请求页数，
+					each_page: page.size, // 请求条数
+					select_sort: type
+				}
+				this.apiget('api/v1/members/points_mall/score_service', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.member.length != 0) {
+							this.isData = true;
+							let list = res.data.member
+							//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
+							this.mescroll.endSuccess(list.length);
+							//设置列表数据
+							if (page.num == 1) this.goods = []; //如果是第一页需手动制空列表
+							this.goodsList = this.goodsList.concat(list); //追加新数据
+
+						} else {
+							// 显示无数据背景
+							this.isData = false;
+							this.isLoad = false;
+							this.mescroll.endErr()
+						}
+
+					}
+				});
+			},
+
+
+
+			// 排序点击
+			typeListClick(index) {
+				this.typeIndex = index
+
+				// this.getPointsList(this.typeIndex + 1)
+				var page = {
+					num: 1
+				}
+				this.downCallback(page)
+				this.goodsList = []
+			},
+
+
+			/*下拉刷新的回调*/
+			downCallback(page) {
+				this.mescroll.resetUpScroll()
+				this.goodsList = []
+			},
+
+
+			/*上拉加载的回调*/
+			upCallback(page) {
+				this.getPointsList(this.typeIndex + 1, page)
+			},
+
+
 
 			// 积分明细 兑换记录
 			listTabClick(index) {
@@ -171,36 +194,6 @@
 						})
 						break;
 				}
-			},
-
-			// 排序点击
-			typeListClick(index) {
-				this.typeIndex = index
-			},
-
-
-			/*下拉刷新的回调*/
-			downCallback() {
-				this.PageNumber = 1
-				setTimeout(() => {
-					this.mescroll.endSuccess() // 请求成功 隐藏加载状态
-
-					// this.mescroll.showNoMore()
-
-				}, 1500)
-			},
-
-			/*上拉加载的回调*/
-			upCallback(page) {
-				this.PageNumber++
-				console.log(this.PageNumber)
-				setTimeout(() => {
-					this.mescroll.endSuccess() // 请求成功 隐藏加载状态
-					// if (this.PageNumber > 3) {
-					this.mescroll.showNoMore()
-					// }
-				}, 1500)
-				console.log("上拉加载")
 			},
 		}
 	}
@@ -361,6 +354,7 @@
 						width: 350rpx;
 						height: 540rpx;
 						background: #fff;
+						float: left;
 
 						.box-content-goods-list-li-image {
 							image {

@@ -8,82 +8,97 @@
 				<liuyuno-tabs ref="boxTabs" :tabData="tabs" :activeIndex="defaultIndex" @tabClick='tabClick' />
 			</view>
 			<view class="box-content-wrap">
-				<view class="box-content-wrap-item">
-					<swiper class="swiper-box" :current="defaultIndex" @change="tabChange">
-						<swiper-item class="swiper-box-item-list">
-							<view class="list-wrap">
-								<view class="list-wrap-item" v-for="(item,index) in 20" :key="index">
-									<view class="list-wrap-item-left list-wrap-item-left-bg-blue flex-center">
-										<view class="list-wrap-item-left-money">20 <text>元</text></view>
-										<view class="list-wrap-item-left-text">满200元可用</view>
-									</view>
-									<view class="list-wrap-item-right">
-										<view class="list-wrap-item-right-info">
-											<view class="list-wrap-item-right-info-title">全平台通用券</view>
-											<view class="list-wrap-item-right-info-text" style="margin-top: 50rpx;">门店：全平台</view>
-											<view class="list-wrap-item-right-info-text">有效期：2020.01.09-2020.01.18</view>
+				<mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption"
+					:height="mesHeight">
+					<view class="box-content-wrap-item">
+						<swiper class="swiper-box" :current="defaultIndex" @change="tabChange">
+							<swiper-item class="swiper-box-item-list">
+								<view class="list-wrap">
+									<view class="list-wrap-item" v-for="(item,index) in couponList" :key="index">
+										<view class="list-wrap-item-left list-wrap-item-left-bg-blue flex-center">
+											<view class="list-wrap-item-left-money">20 <text>元</text></view>
+											<view class="list-wrap-item-left-text">满200元可用</view>
 										</view>
-										<view class="list-wrap-item-right-btn list-wrap-item-right-btn-blue flex-center">立即使用</view>
+										<view class="list-wrap-item-right">
+											<view class="list-wrap-item-right-info">
+												<view class="list-wrap-item-right-info-title">全平台通用券</view>
+												<view class="list-wrap-item-right-info-text" style="margin-top: 50rpx;">
+													门店：全平台</view>
+												<view class="list-wrap-item-right-info-text">有效期：2020.01.09-2020.01.18
+												</view>
+											</view>
+											<view
+												class="list-wrap-item-right-btn list-wrap-item-right-btn-blue flex-center">
+												立即使用</view>
+										</view>
 									</view>
 								</view>
-							</view>
-						</swiper-item>
-						<swiper-item class="swiper-box-item-list">
-							<view class="list-wrap">
-								<view class="list-wrap-item" v-for="(item,index) in 20" :key="index">
-									<view class="list-wrap-item-left list-wrap-item-left-bg-yellow flex-center">
-										<view class="list-wrap-item-left-money">20 <text>元</text></view>
-										<view class="list-wrap-item-left-text">满200元可用</view>
-									</view>
-									<view class="list-wrap-item-right">
-										<view class="list-wrap-item-right-info">
-											<view class="list-wrap-item-right-info-title">店铺通用券</view>
-											<view class="list-wrap-item-right-info-text" style="margin-top: 50rpx;">门店：罗约蓝池·温泉SPA</view>
-											<view class="list-wrap-item-right-info-text">有效期：2020.01.09-2020.01.18</view>
+							</swiper-item>
+							<swiper-item class="swiper-box-item-list">
+								<view class="list-wrap">
+									<view class="list-wrap-item" v-for="(item,index) in couponList" :key="index">
+										<view class="list-wrap-item-left list-wrap-item-left-bg-yellow flex-center">
+											<view class="list-wrap-item-left-money">20 <text>元</text></view>
+											<view class="list-wrap-item-left-text">满200元可用</view>
 										</view>
-										<view class="list-wrap-item-right-btn list-wrap-item-right-btn-yellow flex-center">立即使用</view>
+										<view class="list-wrap-item-right">
+											<view class="list-wrap-item-right-info">
+												<view class="list-wrap-item-right-info-title">店铺通用券</view>
+												<view class="list-wrap-item-right-info-text" style="margin-top: 50rpx;">
+													门店：罗约蓝池·温泉SPA</view>
+												<view class="list-wrap-item-right-info-text">有效期：2020.01.09-2020.01.18
+												</view>
+											</view>
+											<view
+												class="list-wrap-item-right-btn list-wrap-item-right-btn-yellow flex-center">
+												立即使用</view>
+										</view>
 									</view>
 								</view>
-							</view>
-						</swiper-item>
-						<swiper-item class="swiper-box-item-list">
-							<view class="list-wrap">
-								<view class="list-wrap-item" v-for="(item,index) in 20" :key="index">
-									<view class="list-wrap-item-left list-wrap-item-left-bg-gray flex-center">
-										<view class="list-wrap-item-left-money">20 <text>元</text></view>
-										<view class="list-wrap-item-left-text">满200元可用</view>
-									</view>
-									<view class="list-wrap-item-right">
-										<view class="list-wrap-item-right-info">
-											<view class="list-wrap-item-right-info-title">店铺通用券</view>
-											<view class="list-wrap-item-right-info-text" style="margin-top: 50rpx;">门店：罗约蓝池·温泉SPA</view>
-											<view class="list-wrap-item-right-info-text">有效期：2020.01.09-2020.01.18</view>
+							</swiper-item>
+							<swiper-item class="swiper-box-item-list">
+								<view class="list-wrap">
+									<view class="list-wrap-item" v-for="(item,index) in couponList" :key="index">
+										<view class="list-wrap-item-left list-wrap-item-left-bg-gray flex-center">
+											<view class="list-wrap-item-left-money">20 <text>元</text></view>
+											<view class="list-wrap-item-left-text">满200元可用</view>
 										</view>
-										<view class="list-wrap-item-right-info-abandoned"></view>
+										<view class="list-wrap-item-right">
+											<view class="list-wrap-item-right-info">
+												<view class="list-wrap-item-right-info-title">店铺通用券</view>
+												<view class="list-wrap-item-right-info-text" style="margin-top: 50rpx;">
+													门店：罗约蓝池·温泉SPA</view>
+												<view class="list-wrap-item-right-info-text">有效期：2020.01.09-2020.01.18
+												</view>
+											</view>
+											<view class="list-wrap-item-right-info-abandoned"></view>
+										</view>
 									</view>
 								</view>
-							</view>
-						</swiper-item>
-						<swiper-item class="swiper-box-item-list">
-							<view class="list-wrap">
-								<view class="list-wrap-item" v-for="(item,index) in 20" :key="index">
-									<view class="list-wrap-item-left list-wrap-item-left-bg-gray flex-center">
-										<view class="list-wrap-item-left-money">20 <text>元</text></view>
-										<view class="list-wrap-item-left-text">满200元可用</view>
-									</view>
-									<view class="list-wrap-item-right">
-										<view class="list-wrap-item-right-info">
-											<view class="list-wrap-item-right-info-title">店铺通用券</view>
-											<view class="list-wrap-item-right-info-text" style="margin-top: 50rpx;">门店：罗约蓝池·温泉SPA</view>
-											<view class="list-wrap-item-right-info-text">有效期：2020.01.09-2020.01.18</view>
+							</swiper-item>
+							<swiper-item class="swiper-box-item-list">
+								<view class="list-wrap">
+									<view class="list-wrap-item" v-for="(item,index) in couponList" :key="index">
+										<view class="list-wrap-item-left list-wrap-item-left-bg-gray flex-center">
+											<view class="list-wrap-item-left-money">20 <text>元</text></view>
+											<view class="list-wrap-item-left-text">满200元可用</view>
 										</view>
-										<view class="list-wrap-item-right-info-be-overdue"></view>
+										<view class="list-wrap-item-right">
+											<view class="list-wrap-item-right-info">
+												<view class="list-wrap-item-right-info-title">店铺通用券</view>
+												<view class="list-wrap-item-right-info-text" style="margin-top: 50rpx;">
+													门店：罗约蓝池·温泉SPA</view>
+												<view class="list-wrap-item-right-info-text">有效期：2020.01.09-2020.01.18
+												</view>
+											</view>
+											<view class="list-wrap-item-right-info-be-overdue"></view>
+										</view>
 									</view>
 								</view>
-							</view>
-						</swiper-item>
-					</swiper>
-				</view>
+							</swiper-item>
+						</swiper>
+					</view>
+				</mescroll-uni>
 			</view>
 		</view>
 		<view class="box-footer">
@@ -95,17 +110,40 @@
 <script>
 	import navTitle from "../../components/navTitle/navTitle.vue"
 	import liuyunoTabs from "@/components/liuyuno-tabs/liuyuno-tabs.vue";
+	import MescrollMixin from "../../components/mescroll-uni/mescroll-mixins.js";
+	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue"
 	export default {
+		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
 				defaultIndex: 0,
 				tabs: ["平台优惠券", "店铺优惠券", "已使用", "已过期"],
+				mesHeight: 0,
+				downOption: { // 下拉刷新配置
+					auto: false,
+				},
+				upOption: { // 上拉加载配置
+					noMoreSize: 5,
+					textLoading: "正在加载更多数据",
+					textNoMore: "——  已经到底了  ——",
+					isBounce: true,
+					auto: false,
+				},
+				couponList: [],
+				status: -1,
+				type: -1
 			};
 		},
 		components: {
 			navTitle,
-			liuyunoTabs
+			liuyunoTabs,
+			MescrollUni
+		},
+		onShow() {
+			const sys = uni.getSystemInfoSync();
+			var Height = sys.windowHeight
+			this.mesHeight = (Height - 160) * 2
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -115,15 +153,95 @@
 				}
 			});
 		},
+		onLoad() {
+			var page = {
+				num: 1,
+				size: 10,
+			}
+			this.upCallback(page)
+		},
 		methods: {
+
+			/*下拉刷新的回调*/
+			downCallback() {
+				this.mescroll.resetUpScroll()
+				this.goodsList = []
+			},
+
+			/*上拉加载的回调*/
+			upCallback(page) {
+				this.getDataList(page, this.orderType)
+			},
+
+			// 获取数据
+			getDataList(page, status, type) {
+				var vuedata = {
+					page_index: page.num, // 请求页数，
+					each_page: page.size, // 请求条数
+					status: this.status,
+					type: this.type
+				}
+				this.apiget('api/v1/members/coupon', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.data.length != 0) {
+							let list = res.data.data
+							let totalSize = res.data.total_rows
+							//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
+							this.mescroll.endBySize(list.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+							//设置列表数据
+							if (page.num == 1) this.couponList = []; //如果是第一页需手动制空列表
+							this.couponList = this.couponList.concat(list); //追加新数据
+							console.log(this.couponList)
+						} else {
+							// 显示无数据背景
+							this.mescroll.showEmpty()
+						}
+
+					}
+				});
+			},
+
+
+
+
 			// tabs 点击
 			tabClick(e) {
 				this.defaultIndex = e
+
+				this.setType(this.defaultIndex)
+
 			},
 			// 滑动切换列表
 			tabChange(e) {
 				this.$refs.boxTabs.tabToIndex(e.detail.current)
 				this.defaultIndex = e.detail.current
+				this.setType(this.defaultIndex)
+			},
+
+			setType(defaultIndex) {
+				switch (defaultIndex) {
+					case 0:
+						this.status = -1
+						this.type = -1
+						break;
+					case 1:
+						this.status = -1
+						this.type = 1
+						break;
+					case 2:
+						this.status = 1
+						this.type = ''
+						break;
+					case 3:
+						this.status = -2
+						this.type = ''
+						break;
+				}
+				var page = {
+					num: 1,
+					size: 10,
+				}
+				this.upCallback(page)
 			},
 
 			// 领取更多优惠券按钮
@@ -136,7 +254,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.box {
 		display: flex;
 		flex-direction: column;
@@ -270,6 +388,7 @@
 											background: url(../../static/images/used-icon.png) no-repeat;
 											background-size: contain;
 										}
+
 										.list-wrap-item-right-info-be-overdue {
 											position: absolute;
 											top: 47rpx;

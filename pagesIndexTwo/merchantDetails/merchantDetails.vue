@@ -32,7 +32,7 @@
 											印象诗意·悠然SPA
 										</view>
 										<view class="item-wrap-left-box-score">
-											<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="item in 5"></image>
+											<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 											<text>5分</text>
 										</view>
 										<view class="item-wrap-left-box-bottom">
@@ -411,13 +411,10 @@
 											display: flex;
 											align-items: center;
 
-											image {
-												width: 30rpx;
-												height: 30rpx;
-											}
+										
 
 											text {
-												margin-left: 8rpx;
+												margin-right: 6rpx;
 												font-size: 24rpx;
 												color: #999;
 											}

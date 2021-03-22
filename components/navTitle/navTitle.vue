@@ -2,7 +2,7 @@
 	<view class="nav-wrap" :style="{paddingTop:barHeight+'px'}">
 		<view class="nav-box">
 			<view class="nav-back" @click="Gback">
-				<text class="iconfont iconfanhui" style="color: #333;font-size: 34rpx;"></text>
+				<text class="iconfont iconfanhui" style="color: #000;font-size: 36rpx;"></text>
 			</view>
 			<view class="nav-title">{{navTitle}}</view>
 		</view>
@@ -30,13 +30,15 @@
 				}
 			});
 		},
+
 		methods: {
 			//返回
 			Gback() {
+				console.log("225252")
 				uni.navigateBack({
 					delta: 1
 				})
-			}
+			},
 		},
 	}
 </script>
@@ -47,15 +49,19 @@
 			display: flex;
 			align-items: center;
 			height: 88rpx;
-background: #fff;
+			padding: 0 10px;
+			box-sizing: border-box;
+			background: #fff;
+
 			.nav-back {
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				width: 50rpx;
+				width: 80rpx;
 				// height: 34rpx;
-				margin-left: 20rpx;
+				margin-right: 20rpx;
 				box-sizing: border-box;
+				flex-shrink: 0;
 
 				image {
 					width: 18rpx;
@@ -68,7 +74,8 @@ background: #fff;
 				align-items: center;
 				justify-content: center;
 				flex: 1;
-				margin-left: -70rpx;
+				padding-right: 70rpx;
+				box-sizing: border-box;
 				font-size: 34rpx;
 				font-family: Source Han Sans CN;
 				font-weight: 500;

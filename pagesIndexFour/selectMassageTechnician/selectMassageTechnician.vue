@@ -24,15 +24,16 @@
 										<text class="technician-info-top-title-name">王二麻子</text>
 										<text class="technician-info-top-title-msg">【金牌技师】</text>
 									</view>
-									<view class="technician-wrap-list-li-info-check" v-if="isChick==index">
-										<image src="../../static/images/check-icon.png" mode="aspectFill"></image>
+									<view class="technician-wrap-list-li-info-check">
+										<text class="iconfont iconxuanzhong2 icon-font" style="color:#26BF82;font-size: 44rpx;" v-if="isChick==index"></text>
+										<text class="iconfont iconweixuanzhong icon-font" style="color:#ccc;font-size: 44rpx;" v-else></text>
 									</view>
-									<view class="technician-wrap-list-li-info-no-check" v-else></view>
+									<!-- <view class="technician-wrap-list-li-info-no-check" v-else></view> -->
 									<!-- <view class="technician-wrap-list-li-info-no-disable" v-if="index==2&&index==8&&index==12"></view> -->
 									
 								</view>
 								<view class="technician-wrap-list-li-info-score">
-									<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="item in 5"></image>
+									<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 									<text>5分</text>
 								</view>
 								<view class="technician-wrap-list-li-info-introduce">
@@ -200,13 +201,10 @@
 									display: flex;
 									align-items: center;
 
-									image {
-										width: 30rpx;
-										height: 30rpx;
-									}
+									
 
 									text {
-										margin-left: 10rpx;
+										margin-right: 6rpx;
 										font-size: 24rpx;
 										color: #999;
 									}

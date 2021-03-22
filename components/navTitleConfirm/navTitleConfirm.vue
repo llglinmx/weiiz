@@ -3,7 +3,7 @@
 		<view class="nav-box">
 			<view class="nav-back" @click="Gback">
 				<!-- <image src="../../static/images/back.png" mode="aspectFill"></image> -->
-				<text class="iconfont iconfanhui" style="color: #333;font-size: 40rpx;"></text>
+				<text class="iconfont iconfanhui" style="color: #000;font-size: 36rpx;"></text>
 			</view>
 			<view class="nav-title">{{navTitle}}</view>
 			<view class="nav-confirm" @click="confirm">
@@ -68,13 +68,9 @@
 				justify-content: center;
 				width: 50rpx;
 				height: 34rpx;
-				margin-left: 20rpx;
+				margin-left: 30rpx;
 				box-sizing: border-box;
-
-				image {
-					width: 18rpx;
-					height: 34rpx;
-				}
+				
 			}
 
 			.nav-title {

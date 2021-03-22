@@ -3,7 +3,7 @@
 		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
 			<view class="box-head-nav">
 				<view class="box-head-nav-back" @click="Gback">
-					<image src="../../static/images/back.png" mode="aspectFill"></image>
+					<text class="iconfont iconfanhui" style="color: #333;font-size: 40rpx;"></text>
 				</view>
 				<view class="box-head-nav-text"></view>
 			</view>

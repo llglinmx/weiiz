@@ -20,7 +20,8 @@
 					<view class="box-content-wrap-left-title">印象诗意·悠然SPA</view>
 				</view>
 				<view class="box-content-wrap-right">
-					<image src="../../static/images/check-coupons.png" mode="aspectFill"></image>
+					<!-- <text class="iconfont iconxuanzhong icon-font" style="color:#26BF82;font-size: 32rpx;"></text> -->
+					<text class="iconfont iconxuanzhong icon-font" style="color: #E6E6E6;font-size: 32rpx;"></text>
 					<text>匿名评价</text>
 				</view>
 			</view>
@@ -28,7 +29,8 @@
 				<view class="box-content-comment-score">
 					<view class="box-content-comment-score-title">门店评分</view>
 					<view class="box-content-comment-score-icon">
-						<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="item in 5"></image>
+						<text class="iconfont iconwujiaoxing icon-font" style="color: #ededed;font-size: 44rpx;" v-for="item in 5"></text>
+						<!-- <text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 44rpx;" v-for="item in 5"></text> -->
 					</view>
 				</view>
 				<view class="box-content-comment-textarea">
@@ -49,7 +51,8 @@
 					<view class="box-content-wrap-left-title">王二麻子</view>
 				</view>
 				<view class="box-content-wrap-right">
-					<image src="../../static/images/check-coupons.png" mode="aspectFill"></image>
+					<text class="iconfont iconxuanzhong icon-font" style="color:#26BF82;font-size: 32rpx;"></text>
+					<!-- <text class="iconfont iconxuanzhong icon-font" style="color: #E6E6E6;font-size: 32rpx;"></text> -->
 					<text>匿名评价</text>
 				</view>
 			</view>
@@ -57,7 +60,7 @@
 				<view class="box-content-comment-score">
 					<view class="box-content-comment-score-title">技师评分</view>
 					<view class="box-content-comment-score-icon">
-						<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="item in 5"></image>
+						<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 44rpx;" v-for="item in 5"></text>
 					</view>
 				</view>
 				<view class="box-content-comment-textarea">
@@ -237,10 +240,8 @@
 						align-items: center;
 						margin-left: 40rpx;
 
-						image {
-							margin-right: 10rpx;
-							width: 48rpx;
-							height: 48rpx;
+						.icon-font{
+							margin-right: 8rpx;
 						}
 					}
 				}

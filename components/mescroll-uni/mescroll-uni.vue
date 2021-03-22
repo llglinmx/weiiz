@@ -138,7 +138,6 @@
 				if (this.isFixed) {
 					return "auto"
 				} else if(this.height){
-					console.log(this.toPx(this.height))
 					return this.toPx(this.height) + 'px'
 				}else{
 					return "100%"
@@ -350,7 +349,6 @@
 			vm.$emit('init', vm.mescroll);
 			
 			// 设置高度
-			
 			const sys = uni.getSystemInfoSync();
 			if(sys.windowTop) vm.windowTop = sys.windowTop;
 			if(sys.windowBottom) vm.windowBottom = sys.windowBottom;

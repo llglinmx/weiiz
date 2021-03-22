@@ -11,7 +11,7 @@
 						<text>罗约蓝池·温泉SPA</text>
 					</view>
 					<view class="content-wrap-top-more">
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 					</view>
 				</view>
 				<view class="content-wrap-top-list">
@@ -56,8 +56,8 @@
 						选择按摩技师
 					</view>
 					<view class="box-content-select-technician-more">
-						<image src="../../static/images/more-icon-FF967D.png" mode="aspectFill" v-if="!isSelect"></image>
-						<image src="../../static/images/more.png" mode="aspectFill" v-else></image>
+						<text class="iconfont icongengduo icon-font" style="color: #FF8366;font-size: 32rpx;margin-top: 4rpx;"  v-if="!isSelect"></text>
+						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 32rpx;margin-top: 4rpx;" v-else></text>
 					</view>
 				</view>
 				<view class="select-technician-info" :class="isSelect?'select-technician-info-auto':''">
@@ -88,7 +88,7 @@
 						</view>
 						<view class="appointment-time-wrap-text">
 							<text>2021-01-10 15:30-16:30</text>
-							<image src="../../static/images/more.png" mode="aspectFill"></image>
+							<text class="iconfont icongengduo icon-font" style="color: #000;font-size: 32rpx;"></text>
 						</view>
 					</view>
 				</view>
@@ -136,7 +136,7 @@
 					<view class="box-content-coupon-top-title">优惠券</view>
 					<view class="box-content-coupon-top-more">
 						<text>-￥50.00</text>
-						<image src="../../static/images/more-icon-FF967D.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #FF8366;font-size: 32rpx;margin-top: 4rpx;" ></text>
 					</view>
 				</view>
 				<view class="box-content-coupon-bottom">
@@ -536,14 +536,12 @@
 						}
 
 						.appointment-time-wrap-text {
+							display: flex;
 							text {
 								color: #26BF82;
 							}
-
-							image {
-								width: 30rpx;
-								height: 30rpx;
-								margin-left: 20rpx;
+							.icon-font{
+								margin-left: 10rpx;
 								transform: rotate(270deg);
 								transition: 0.3s;
 							}
@@ -668,10 +666,8 @@
 							color: #FF8366;
 						}
 
-						image {
-							width: 28rpx;
-							height: 28rpx;
-							margin-left: 20rpx;
+						.icon-font{
+							margin-left: 8rpx;
 						}
 					}
 				}

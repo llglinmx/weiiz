@@ -11,7 +11,8 @@
 					<image src="../../static/images/logo.png" mode="widthFix"></image>
 				</view>
 				<view class="index-head-language flex-center" @click="clickLanguage">
-					<image src="../../static/images/code.png" mode="aspectFill"></image>
+					<text class="iconfont iconyuyan icon-font" style="color: #fff;font-size: 32rpx;"></text>
+
 					<text>EN</text>
 				</view>
 			</view>
@@ -22,21 +23,23 @@
 			<view class="index-content-search">
 				<view class="content-search-box">
 					<view class="content-search-ico">
-						<text class="iconfont iconsousuo1 icon-font" style="color: #999;font-size: 40rpx;font-weight: 500;"></text>
+						<text class="iconfont iconsousuo1 icon-font"
+							style="color: #999;font-size: 40rpx;font-weight: 500;"></text>
 						<!-- <image src="../../static/images/search.png" mode=""></image> -->
 					</view>
 					<view class="content-search-text">
 						<input type="text" placeholder="搜索SPA、商家" />
 					</view>
 					<view class="content-search-scan">
-						<text class="iconfont iconsaoyisao icon-font" style="color: #999;font-size: 30rpx;font-weight: 500;"></text>
+						<text class="iconfont iconsaoyisao icon-font"
+							style="color: #999;font-size: 30rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 			</view>
 			<!-- 轮播图 -->
 			<view class="index-content-banner">
-				<swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration"
-				 :circular="circular">
+				<swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval"
+					:duration="duration" :circular="circular">
 					<swiper-item v-for="(item,index) in imageList">
 						<image :src="item.url" mode="" class="swiper-item"></image>
 					</swiper-item>
@@ -51,7 +54,8 @@
 						<text>新时代好商机，你来不来？海量商家入驻</text>
 					</view>
 					<view class="content-notice-more">
-						<text class="iconfont icongengduo icon-font" style="color: #333;font-size: 24rpx;font-weight: 500;"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #333;font-size: 24rpx;font-weight: 500;"></text>
 						<!-- <image src="../../static/images/more.png" mode="aspectFill"></image> -->
 					</view>
 				</view>
@@ -95,25 +99,28 @@
 						选择语言
 					</view>
 					<view class="popup-list">
-						<view class="popup-list-li" v-for="(item,index) in textList" @click="selectLanguage(index)" :class="selectIndex==index?'popup-list-li-active':''">
-							<text>{{item}}</text>
-							<image src="../../static/images/code.png" mode="" v-if="selectIndex==index"></image>
+						<view class="popup-list-li" v-for="(item,index) in textList"
+							@click="selectLanguage(item.id,index)" :class="item.default==1?'popup-list-li-active':''">
+							<text>{{item.name}}</text>
+							<text class="iconfont icondagou icon-font" style="color:#26BF82;font-size: 40rpx;"
+								v-if="item.default==1"></text>
 						</view>
 					</view>
 					<view class="popup-btn" @click="confirmBtn">
 						确定
 					</view>
 				</view>
-				<view class="popup-close" @click="closeLanguage"></view>
+				<view class="popup-close flex-center" @click="closeLanguage">
+					<text class="iconfont iconcuowu icon-font" style="color:#fff;font-size: 48rpx;"></text>
+				</view>
 			</view>
-
 		</uni-popup>
 	</view>
 </template>
 
 <script>
 	import Tabbar from "../../components/tabbar/tabbar.vue"
-	import UniPopup from "../../uni_modules/uni-popup/components/uni-popup/uni-popup.vue"
+	import UniPopup from "../../components/uni-popup/uni-popup.vue"
 	export default {
 		data() {
 			return {
@@ -141,7 +148,7 @@
 				barHeight: 0, //顶部电量导航栏高度
 				isLangShow: false,
 				isPopup: false,
-				selectIndex: 0,
+				selectIndex: 0, //当前选择的语言
 			}
 		},
 		components: {
@@ -150,6 +157,7 @@
 		},
 		onLoad() {
 
+			this.languageList();
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -164,10 +172,17 @@
 			// 打开切换语言
 			clickLanguage() {
 				this.$refs.popup.open()
+				this.textList.forEach(item => {
+					item.default = '-1'
+				})
+				this.textList[this.selectIndex].default = 1
 			},
 			// 选择语言
-			selectLanguage(index) {
-				this.selectIndex = index
+			selectLanguage(id, index) {
+				this.textList.forEach(item => {
+					item.default = '-1'
+				})
+				this.textList[index].default = 1
 			},
 			// 选择语言 关闭
 			closeLanguage() {
@@ -177,6 +192,21 @@
 			confirmBtn() {
 				this.$refs.popup.close()
 			},
+
+			// 请求语言列表
+			languageList() {
+				this.apiget('language', {}).then(res => {
+					if (res.status == 200) {
+						this.textList = res.data.lng.reverse()
+						this.textList.forEach((item, index) => {
+							if (item.default == 1) { //判断默认选中语言包
+								this.selectIndex = index
+							}
+						})
+					}
+				});
+			},
+
 			// 列表点击
 			moreClick(item) {
 				switch (item) {
@@ -250,7 +280,8 @@
 					text {
 						margin-left: 15rpx;
 					}
-					.icon-font{
+
+					.icon-font {
 						font-size: 28rpx;
 					}
 				}
@@ -339,14 +370,15 @@
 
 				swiper {
 					border-radius: 15rpx;
+					overflow: hidden;
 
 					swiper-item {
-						border-radius: 15rpx;
 
 						.swiper-item {
 							width: 100%;
 							height: 300rpx;
-							border-radius: 15rpx;
+
+							image {}
 						}
 					}
 
@@ -547,14 +579,12 @@
 
 						text {}
 
-						image {
+						.icon-font {
 							position: absolute;
+							right: 30rpx;
 							top: 0;
 							bottom: 0;
-							right: 30rpx;
 							margin: auto;
-							width: 32rpx;
-							height: 32rpx;
 						}
 					}
 

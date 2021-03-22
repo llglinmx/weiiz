@@ -8,7 +8,8 @@
 		<view class="box-content">
 			<view class="box-content-wrap">
 				<view class="box-content-wrap-icon">
-					<image src="../../static/images/pay-icon.png" mode="aspectFill"></image>
+					<text class="iconfont iconzhifuchenggong icon-font" style="color: #26BF82;font-size: 160rpx;"></text>
+					
 				</view>
 				<view class="box-content-wrap-title">
 					订单支付成功
@@ -22,7 +23,12 @@
 				</view>
 			</view>
 			<view class="box-content-main">
-
+				<view class="box-content-main-text">
+					温馨提示：
+				</view>
+				<view class="box-content-main-text">
+					平台不会以订单异常、系统升级为由要求您点击任何网址链接进行退款操作。
+				</view>
 			</view>
 		</view>
 		<view class="box-footer">
@@ -153,7 +159,12 @@
 			}
 
 			.box-content-main {
+				padding-top: 50rpx;
 				flex: 1;
+				.box-content-main-text{
+					font-size: 24rpx;
+					color: #999;
+				}
 			}
 		}
 

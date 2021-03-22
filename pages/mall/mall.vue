@@ -3,14 +3,14 @@
 		<view class="mall-head" :style="{paddingTop:barHeight+'px'}">
 			<view class="mall-head-top">
 				<view class="mall-head-top-search flex-center">
-					<image src="../../static/images/search-white.png" mode=""></image>
+					<text class="iconfont iconsousuo1 icon-font" style="color: #fff;font-size: 52rpx;"></text>
 				</view>
 				<view class="mall-head-top-title">
 					商城
 				</view>
 				<view class="mall-head-top-shopping" @click="shoppingList">
 					<view class="head-top-shopping-icon flex-center">
-						<image src="../../static/images/shopping.png" mode=""></image>
+						<text class="iconfont icongouwuche icon-font" style="color: #fff;font-size: 48rpx;"></text>
 					</view>
 					<view class="head-top-shooping-msg flex-center">
 						3
@@ -19,12 +19,13 @@
 			</view>
 			<view class="mall-head-list">
 				<view class="mall-head-box-wrap">
-					<view class="mall-head-list-li flex-center" v-for="(item,index) in list" @click="clickList(item)">
-						<view class="head-list-li-icon">
-							<image :src="item.icon" mode=""></image>
+					<view class="mall-head-list-li flex-center" v-for="(item,index) in typeList" :key="item.id"
+						@click="clickList(item)">
+						<view class="head-list-li-icon flex-center">
+							<image :src="item.icon" mode="aspectFill"></image>
 						</view>
 						<view class="head-list-li-title">
-							{{item.title}}
+							{{item.name}}
 						</view>
 					</view>
 				</view>
@@ -36,20 +37,25 @@
 					热门推荐
 				</view>
 				<view class="mall-content-recommend-more">
-					<image src="../../static/images/more.png" mode=""></image>
+					<text class="iconfont icongengduo icon-font"
+						style="color: #333;font-size: 30rpx;margin-top: 4rpx;"></text>
 				</view>
 			</view>
 			<view class="mall-content-box">
-				<mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption" :height="mesHeight">
+				<mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption"
+					:height="mesHeight">
 					<view class="mall-content-box-list">
-						<view class="mall-list-li" v-for="(item,index) in goodsList" :key="index" @click="clickGoodsDtails(item)">
+						<view class="mall-list-li" v-for="(item,index) in goodsList" :key="index"
+							@click="clickGoodsDtails(item)">
 							<view class="mall-list-li-item">
 								<view class="mall-list-li-image">
 									<image :src="item.image" mode=""></image>
 								</view>
 								<view class="mall-list-li-collect flex-center">
-									<image src="../../static/images/store-active.png" mode="aspectFill" v-if="item.isStore"></image>
-									<image src="../../static/images/store.png" mode="aspectFill" v-else></image>
+									<text class="iconfont iconguanzhu-xuanzhong icon-font"
+										style="color:#FF967D;font-size: 48rpx;" v-if="item.isStore"></text>
+									<text class="iconfont iconguanzhu icon-font" style="color: #000;font-size: 48rpx;"
+										v-else></text>
 								</view>
 							</view>
 							<view class="mall-list-li-goods-name">
@@ -90,37 +96,8 @@
 					isBounce: true,
 					auto: false,
 				},
-				PageNumber: 1, // 请求页数，
-				PageLimt: 10, // 请求条数
-				list: [{
-						icon: "../../static/images/code.png",
-						title: "按摩"
-					},
-					{
-						icon: "../../static/images/code.png",
-						title: "美容"
-					},
-					{
-						icon: "../../static/images/code.png",
-						title: "美甲"
-					},
-					{
-						icon: "../../static/images/code.png",
-						title: "医美"
-					},
-					{
-						icon: "../../static/images/code.png",
-						title: "健身"
-					},
-					{
-						icon: "../../static/images/code.png",
-						title: "化妆"
-					},
-					{
-						icon: "../../static/images/code.png",
-						title: "按摩"
-					}
-				],
+
+				typeList: [],
 				goodsList: [{
 						image: "../../static/images/001.png",
 						goodsName: "玻尿酸深层补水面膜",
@@ -185,8 +162,8 @@
 		},
 		onShow() {
 			const sys = uni.getSystemInfoSync();
-			var Heigh = sys.windowHeight
-			this.mesHeight = (Heigh - 190) * 2
+			var Height = sys.windowHeight
+			this.mesHeight = (Height - 190) * 2
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -197,9 +174,12 @@
 				}
 			});
 		},
+		onLoad() {
+			this.getData()
+		},
 		methods: {
 			clickList(e) {
-				switch (e.title) {
+				switch (e.name) {
 					case "美容":
 						uni.navigateTo({
 							url: "../../pagesMall/beautyMall/beautyMall"
@@ -207,6 +187,19 @@
 						break;
 				}
 			},
+
+			getData() {
+				var vuedata = {
+
+				}
+				this.apiget('pc/index', vuedata).then(res => {
+					if (res.status == 200) {
+						this.typeList = res.data.classList
+					}
+				});
+			},
+
+
 			// 点击进入购物车列表
 			shoppingList() {
 				uni.navigateTo({

@@ -8,23 +8,26 @@
 		</view>
 		<view class="box-content">
 			<view class="box-content-store-list" v-if="defaultIndex==0">
-				<view class="box-content-store-list-li" v-for="(item,index) in 10" :key="index">
+				<view class="box-content-store-list-li" v-for="(item,index) in storeList" :key="index">
 					<uni-swipe-action>
-						<uni-swipe-action-item :right-options="options" @click="onClick" @change="swipeChange($event, index)">
+						<uni-swipe-action-item :right-options="options" @click="onClick"
+							@change="swipeChange($event, index)">
 							<view class="store-list-li-content">
 								<view class="store-list-li-content-image">
 									<image src="../../static/images/00002.png" mode="aspectFill"></image>
 								</view>
 								<view class="store-list-li-content-info">
-									<view class="store-list-li-content-info-title">罗约蓝池·温泉SPA</view>
+									<view class="store-list-li-content-info-title">{{item.store_items.name}}</view>
 									<view class="store-list-li-content-info-score">
-										<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
+										<text class="iconfont iconwujiaoxing icon-font"
+											style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 										<text>5分</text>
 									</view>
 									<view class="store-list-li-content-info-wrap">
-										<view class="info-wrap-text">明发商业广场</view>
+										<view class="info-wrap-text">{{item.store_items.address}}</view>
 										<view class="info-wrap-address">
-											<text class="iconfont icondingwei1 icon-font" style="color: #ccc;font-size: 24rpx;margin-top: 4rpx;"></text>
+											<text class="iconfont icondingwei1 icon-font"
+												style="color: #ccc;font-size: 24rpx;margin-top: 4rpx;"></text>
 											<text>4.3km</text>
 										</view>
 									</view>
@@ -43,7 +46,8 @@
 				<view class="box-content-technician-list-li" v-if="isTecDate">
 					<view class="box-content-item-technician-wrap">
 						<view class="content-item-technician-wrap-list">
-							<view class="content-item-technician-wrap-list-li" v-for="(item,index) in 5" :key="index" @click="technicianDetails(item)">
+							<view class="content-item-technician-wrap-list-li" v-for="(item,index) in 5" :key="index"
+								@click="technicianDetails(item)">
 								<view class="box-content-item-technician-wrap-top">
 									<view class="technician-wrap-top-title">
 										<image src="../../static/images/tool.jpg" mode="aspectFill"></image>
@@ -66,7 +70,8 @@
 
 										</view>
 										<view class="technician-wrap-list-li-info-score">
-											<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
+											<text class="iconfont iconwujiaoxing icon-font"
+												style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 
 											<text>5分</text>
 										</view>
@@ -113,6 +118,9 @@
 				tabs: ["门店", "技师"],
 				defaultIndex: 0, //当前所在页面
 				isTecDate: true, //技师页是否有数据
+				storeList: [],
+				PageNumber: 1, // 请求页数，
+				PageLimt: 10, // 请求条数
 				options: [{
 					text: '分享',
 					style: {
@@ -139,17 +147,40 @@
 				}
 			});
 		},
+		onLoad() {
+			this.getStore();
+		},
 		methods: {
 			// tabs 点击
 			tabClick(e) {
 				this.defaultIndex = e
 			},
+
+			// 门店列表
+			getStore() {
+				var vuedata = {
+					page_index: this.PageNumber, // 请求页数，
+					each_page: this.PageLimt, // 请求条数
+					type: 2,
+					cid: '',
+				}
+				this.apiget('api/v1/members/collection', vuedata).then(res => {
+					if (res.status == 200) {
+						this.storeList = res.data.data
+					}
+				});
+			},
+
+
+
+
+
 			onClick(e) {
 				console.log('点击了' + (e.position === 'left' ? '左侧' : '右侧') + e.content.text + '按钮')
 			},
 			swipeChange(e, index) {
 				console.log('当前状态：' + e + '，下标：' + index)
-			}
+			},
 		}
 	}
 </script>
@@ -221,6 +252,7 @@
 								justify-content: space-between;
 
 								.info-wrap-text {
+									margin-right: 10rpx;
 									color: #333;
 									font-size: 24rpx;
 								}
@@ -231,7 +263,7 @@
 									color: #999;
 									font-size: 24rpx;
 
-									.icon-font{
+									.icon-font {
 										margin-right: 8rpx;
 									}
 								}

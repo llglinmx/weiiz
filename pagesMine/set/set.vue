@@ -8,26 +8,29 @@
 				<view class="content-list-li" @click="listAllClick('info')">
 					<view class="content-list-li-title">个人信息</view>
 					<view class="content-list-li-more flex-center">
-						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
-						
+						<text class="iconfont icongengduo icon-font"
+							style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 				<view class="content-list-li" @click="listAllClick('bodyState')">
 					<view class="content-list-li-title">身体状态</view>
 					<view class="content-list-li-more flex-center">
-						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 				<view class="content-list-li" @click="listAllClick('contacts')">
 					<view class="content-list-li-title">紧急联系人</view>
 					<view class="content-list-li-more flex-center">
-						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 				<view class="content-list-li" @click="listAllClick('security')">
 					<view class="content-list-li-title">账号安全</view>
 					<view class="content-list-li-more flex-center">
-						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 			</view>
@@ -35,13 +38,15 @@
 				<view class="content-list-li" @click="listAllClick('pushSet')">
 					<view class="content-list-li-title">推送设置</view>
 					<view class="content-list-li-more flex-center">
-						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 				<view class="content-list-li" @click="listAllClick('empower')">
 					<view class="content-list-li-title">合作授权</view>
 					<view class=" content-list-li-more flex-center">
-					<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 			</view>
@@ -49,25 +54,29 @@
 				<view class="content-list-li" @click="listAllClick('aboutUs')">
 					<view class="content-list-li-title">关于我们</view>
 					<view class="content-list-li-more flex-center">
-						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 				<view class="content-list-li" @click="()=>{listAllClick('problem')}">
 					<view class="content-list-li-title">常见问题</view>
 					<view class="content-list-li-more flex-center">
-						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 				<view class="content-list-li" @click="listAllClick('feedback')">
 					<view class="content-list-li-title">反馈</view>
 					<view class="content-list-li-more flex-center">
-						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 				<view class="content-list-li" @click="listAllClick('report')">
 					<view class="content-list-li-title">举报</view>
 					<view class="content-list-li-more flex-center">
-						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #ccc;font-size: 40rpx;font-weight: 500;"></text>
 					</view>
 				</view>
 			</view>
@@ -75,21 +84,31 @@
 		<view class="box-footer">
 			<btnPink btnName="退出登录" @btnClick="logOut"></btnPink>
 		</view>
+		<uni-popup ref="popup" type="dialog">
+			<uni-popup-dialog type="warn" mode='base' title="警告" :content="content" :duration="2000"
+				:before-close="true" @close="close" @confirm="confirm"></uni-popup-dialog>
+		</uni-popup>
 	</view>
 </template>
 
 <script>
 	import navTitle from "../../components/navTitle/navTitle.vue"
 	import btnPink from "../../components/btnPink/btnPink.vue"
+	import UniPopup from "../../components/uni-popup/uni-popup.vue"
+	import UniPopupDialog from "../../components/uni-popup/uni-popup-dialog.vue"
+
 	export default {
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
+				content: '你确定要退出登录吗？'
 			};
 		},
 		components: {
 			navTitle,
-			btnPink
+			btnPink,
+			UniPopup,
+			UniPopupDialog
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -100,6 +119,7 @@
 			});
 		},
 		methods: {
+
 			// 所有点击事件
 			listAllClick(type) {
 				switch (type) {
@@ -169,11 +189,35 @@
 
 			// 退出登录按钮
 			logOut() {
-				uni.showToast({
-					title: "退出登录",
-					icon: "none"
-				})
-			}
+				this.$refs.popup.open()
+			},
+			// 弹窗点击取消
+			close(done) {
+				// TODO 做一些其他的事情，before-close 为true的情况下，手动执行 done 才会关闭对话框
+				// ...
+				done()
+			},
+			// 弹窗点击确认
+			confirm(done, value) {
+				var data = {}
+				this.apiput('api/v1/logout', data).then(res => {
+					if (res.status == 200) {
+						uni.removeStorageSync('token');
+						uni.showToast({
+							icon: 'none',
+							duration: 1000,
+							title: "退出成功"
+						});
+						setTimeout(function() {
+							uni.reLaunch({
+								url: "../../pagesIndex/login/login"
+							})
+						}, 1000);
+						done()
+					}
+				});
+			},
+
 		}
 	}
 </script>

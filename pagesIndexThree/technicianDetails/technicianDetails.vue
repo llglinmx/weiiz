@@ -15,7 +15,7 @@
 						<view class="box-content-info-wrap-title-text">【金牌技师】</view>
 					</view>
 					<view class="box-content-info-wrap-score">
-						<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="item in 5"></image>
+						<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 						<text>5分</text>
 					</view>
 					<view class="box-content-info-wrap-msg">工龄：2年</view>
@@ -41,12 +41,12 @@
 				</view>
 				<view class="box-content-store-shop-address">
 					<view class="store-shop-address-info">
-						<image src="../../static/images/address-icon-green.png" mode="aspectFill"></image>
+						<text class="iconfont icondingwei1 icon-font" style="color: #26BF82;font-size: 40rpx;margin-top: 4rpx;"></text>
 						<text>中国 福建省 厦门市 集美区 杏滨路罗约酒店负一楼</text>
 					</view>
 					<view class="store-shop-address-more">
 						<text>距离6.1km</text>
-						<image src="../../static/images/more-green.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #26BF82;font-size:40rpx;margin-top: 4rpx;"></text>
 					</view>
 				</view>
 			</view>
@@ -60,10 +60,10 @@
 			</view>
 			<view class="box-content-service-items">
 				<view class="box-content-service-items-wrap">
-					<view class="box-content-service-items-wrap-title">服务工种</view>
+					<view class="box-content-service-items-wrap-title">服务项目</view>
 					<view class="box-content-service-items-wrap-text">
 						<text>其他项目</text>
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 					</view>
 				</view>
 
@@ -96,7 +96,7 @@
 						精选评论
 					</view>
 					<view class="box-content-comment-wrap-selected-more">
-						<image src="../../static/images/more-gray.png" mode=""></image>
+						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 					</view>
 				</view>
 				<view class="box-content-item-comment">
@@ -114,7 +114,7 @@
 							<view class="comment-list-item-info">
 								<view class="comment-list-item-info-nickname">SKB露娜可可</view>
 								<view class="comment-list-item-info-score">
-									<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="item in 5"></image>
+									<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 									<text>5分</text>
 								</view>
 								<view class="comment-list-item-info-content">
@@ -257,13 +257,8 @@
 						display: flex;
 						align-items: center;
 
-						image {
-							width: 30rpx;
-							height: 30rpx;
-						}
-
 						text {
-							margin-left: 10rpx;
+							margin-right: 6rpx;
 							font-size: 24rpx;
 							color: #999;
 						}
@@ -306,16 +301,17 @@
 					align-items: center;
 					justify-content: space-between;
 					height: 98rpx;
-					
+
 					.store-shop-name-info {
 						display: flex;
 						align-items: center;
-						
+
 						image {
 							width: 28rpx;
 							height: 28rpx;
 						}
-						text{
+
+						text {
 							margin-left: 8rpx;
 							font-size: 28rpx;
 							font-weight: 500;
@@ -339,7 +335,7 @@
 						display: flex;
 						align-items: center;
 						margin-right: 40rpx;
-						
+
 						image {
 							width: 48rpx;
 							height: 48rpx;
@@ -624,13 +620,9 @@
 									display: flex;
 									align-items: center;
 
-									image {
-										width: 30rpx;
-										height: 30rpx;
-									}
-
+									
 									text {
-										margin-left: 8rpx;
+										margin-right: 6rpx;
 										font-size: 24rpx;
 										color: #999;
 									}

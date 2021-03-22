@@ -2,22 +2,17 @@
 	<view class="nav-wrap" :style="{paddingTop:barHeight+'px'}">
 		<view class="nav-box">
 			<view class="nav-back" @click="Gback">
-				<!-- <image src="../../static/images/back.png" mode="aspectFill"></image> -->
-				<text class="iconfont iconfanhui" style="color: #333;font-size: 40rpx;"></text>
+				<text class="iconfont iconfanhui" style="color: #000;font-size: 36rpx;"></text>
 			</view>
 			<view class="nav-title">{{navTitle}}</view>
 			<view class="nav-right">
-				<image src="../../static/images/store.png" mode="aspectFill"></image>
-				<image src="../../static/images/share-ico.png" mode="aspectFill"></image>
+				<text class="iconfont iconguanzhu icon-font" style="color: #000;font-size: 52rpx" @click="store"></text>
+				<text class="iconfont iconfenxiang icon-font" style="color: #000;font-size: 52rpx" @click="share"></text>
 			</view>
 		</view>
 	</view>
 </template>
 
-<!-- 
-			<NavTitle navTitle="顶部导航栏"></NavTitle>
-			 import NavTitle from "../../components/navTitle/navTitle.vue"
-			 -->
 
 <script>
 	export default {
@@ -46,7 +41,15 @@
 				uni.navigateBack({
 					delta: 1
 				})
-			}
+			},
+			// 收藏
+			store(){
+				this.$emit("store")
+			},
+			// 分享
+			share(){
+				this.$emit("share")
+			},
 		},
 	}
 </script>
@@ -57,6 +60,8 @@
 			display: flex;
 			align-items: center;
 			height: 88rpx;
+			padding: 0 10px;
+			box-sizing: border-box;
 			background: #fff;
 
 			.nav-back {
@@ -64,14 +69,8 @@
 				align-items: center;
 				justify-content: center;
 				width: 50rpx;
-				height: 34rpx;
 				margin-left: 20rpx;
 				box-sizing: border-box;
-
-				image {
-					width: 18rpx;
-					height: 34rpx;
-				}
 			}
 
 			.nav-title {
@@ -79,7 +78,7 @@
 				align-items: center;
 				justify-content: center;
 				flex: 1;
-				margin-left: 80rpx;
+				margin-left: 50rpx;
 				font-size: 34rpx;
 				font-family: Source Han Sans CN;
 				font-weight: 500;
@@ -89,16 +88,11 @@
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				margin-right: 40rpx;
-				image:nth-child(1){
-					width: 52rpx;
-					height: 48rpx;
+				margin-right: 20rpx;
+				text:nth-child(1){
+					margin-right: 20rpx;
 				}
-				image:nth-child(2){
-					margin-left: 30rpx;
-					width: 42rpx;
-					height: 42rpx;
-				}
+				
 			}
 		}
 	}

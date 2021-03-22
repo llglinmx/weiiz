@@ -2,7 +2,7 @@
 	<view class="nav-wrap" :style="{paddingTop:barHeight+'px'}">
 		<view class="nav-box">
 			<view class="nav-back" @click="Gback">
-				<text class="iconfont iconfanhui" style="color: #fff;font-size: 34rpx;"></text>
+				<text class="iconfont iconfanhui" style="color: #fff;font-size: 36rpx;"></text>
 			</view>
 			<view class="nav-title">{{navTitle}}</view>
 			<view class="nav-right">

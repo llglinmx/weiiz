@@ -4,21 +4,23 @@
 			<navTitle navTitle="积分明细"></navTitle>
 		</view>
 		<view class="box-content">
-			<mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption" :height="mesHeight">
-				<view class="box-content-list">
-					<view class="box-content-list-li" v-for="(item,index) in 100" :Key="index">
+			<mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption"
+				:height="mesHeight">
+				<view class="box-content-list" v-if="isData">
+					<view class="box-content-list-li" v-for="(item,index) in goodsList" :Key="item.id">
 						<view class="box-content-list-list-wrap">
-							<view class="box-content-list-list-wrap-title">
-								消费项目所得
-							</view>
-							<view class="box-content-list-list-wrap-text">
-								2021年1月10日 12:00:23
-							</view>
+							<view class="box-content-list-list-wrap-title">{{item.type_name}}</view>
+							<view class="box-content-list-list-wrap-text">{{item.createtime}}</view>
 						</view>
-						<view class="box-content-list-list-msg" :class="index%2!=0?'box-content-list-list-green':'box-content-list-list-black'">
-							<text>{{index%2!=0?'+':'-'}}00{{index+1}}</text>
+						<view class="box-content-list-list-msg"
+							:class="item.score>0?'box-content-list-list-green':'box-content-list-list-black'">
+							<text>{{item.score>0?'+':''}}{{item.score}}</text>
 						</view>
 					</view>
+				</view>
+				<view class="box-content-load" :style="{height:mesHeight+'rpx'}" v-if="!isData">
+					<loading v-if="isLoad" />
+					<no-data v-if="!isLoad" />
 				</view>
 			</mescroll-uni>
 		</view>
@@ -30,11 +32,14 @@
 	import navTitle from "../../components/navTitle/navTitle.vue"
 	import MescrollMixin from "../../components/mescroll-uni/mescroll-mixins.js";
 	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue"
+	import loading from '../../components/loading/loading.vue'
+	import noData from "../../components/no-data/no-data.vue"
 	export default {
 		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
+				goodsList: [],
 				mesHeight: 0,
 				downOption: { // 下拉刷新配置
 					auto: false,
@@ -44,15 +49,17 @@
 					textLoading: "正在加载更多数据",
 					textNoMore: "——  已经到底了  ——",
 					isBounce: true,
-					auto: false,
+					auto: true,
 				},
-				PageNumber: 1, // 请求页数，
-				PageLimt: 10, // 请求条数
+				isData: false, //是否有数据
+				isLoad: true, //加载状态   true 为加载中 false 为无数据
 			};
 		},
 		components: {
 			navTitle,
-			MescrollUni
+			MescrollUni,
+			loading,
+			noData
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -71,26 +78,41 @@
 
 			/*下拉刷新的回调*/
 			downCallback() {
-				this.PageNumber = 1
-				setTimeout(() => {
-					this.mescroll.endSuccess() // 请求成功 隐藏加载状态
-
-					// this.mescroll.showNoMore()
-
-				}, 1500)
+				this.mescroll.resetUpScroll()
+				this.goodsList = []
 			},
 
 			/*上拉加载的回调*/
 			upCallback(page) {
-				this.PageNumber++
-				console.log(this.PageNumber)
-				setTimeout(() => {
-					this.mescroll.endSuccess() // 请求成功 隐藏加载状态
-					// if (this.PageNumber > 3) {
-					this.mescroll.showNoMore()
-					// }
-				}, 1500)
-				console.log("上拉加载")
+				this.getPointsDetails(page)
+			},
+
+			getPointsDetails(page) {
+				var vuedata = {
+					page_index: page.num, // 请求页数，
+					each_page: page.size, // 请求条数
+					select_sort: 1
+				}
+				this.apiget('api/v1/members/score', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.data.length != 0) {
+							this.isData = true;
+							let list = res.data.data
+							let totalSize = res.data.total_rows
+							//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
+							this.mescroll.endBySize(list.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+							//设置列表数据
+							if (page.num == 1) this.goodsList = []; //如果是第一页需手动制空列表
+							this.goodsList = this.goodsList.concat(list); //追加新数据
+							// console.log(this.goodsList)
+						} else {
+							this.isData = false;
+							this.isLoad = false;
+							this.mescroll.endErr()
+						}
+
+					}
+				});
 			},
 		}
 	}

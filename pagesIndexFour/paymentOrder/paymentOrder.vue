@@ -25,7 +25,8 @@
 					</view>
 				</view>
 				<view class="box-content-info-check">
-					<image src="../../static/images/no-check-coupons.png" mode="aspectFill"></image>
+					<text class="iconfont iconxuanzhong icon-font" style="color: #FF967D;font-size: 36rpx;"></text>
+					<!-- <text class="iconfont iconweixuanzhong1 icon-font" style="color: #ccc;font-size: 36rpx;"></text> -->
 				</view>
 			</view>
 
@@ -36,7 +37,8 @@
 						<view class="box-content-list-li-all-title">微信</view>
 					</view>
 					<view class="box-content-list-li-check">
-						<image src="../../static/images/no-check-coupons.png" mode="aspectFill"></image>
+						<text class="iconfont iconweixuanzhong1 icon-font" style="color: #ccc;font-size: 36rpx;"></text>
+						<!-- <text class="iconfont iconxuanzhong icon-font" style="color: #FF967D;font-size: 36rpx;"></text> -->
 					</view>
 				</view>
 			</view>

@@ -60,7 +60,7 @@
 					</view>
 					<view class="box-content-wrap-shop-more">
 						<text>共6家可用</text>
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 					</view>
 				</view>
 
@@ -74,13 +74,13 @@
 								印象诗意·悠然SPA
 							</view>
 							<view class="list-content-info-score">
-								<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="item in 5"></image>
+								<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 								<text>5分</text>
 							</view>
 							<view class="list-content-info-box">
 								<view class="list-content-info-box-text">明发商业广场</view>
 								<view class="list-content-info-address">
-									<image src="../../static/images/address-gray.png" mode="aspectFill"></image>
+									<text class="iconfont icondingwei1 icon-font" style="color: #ccc;font-size: 24rpx;margin-top: 4rpx;"></text>
 									<text>6.1km</text>
 								</view>
 							</view>
@@ -124,7 +124,7 @@
 						精选评论
 					</view>
 					<view class="box-content-comment-wrap-selected-more">
-						<image src="../../static/images/more-gray.png" mode=""></image>
+						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 					</view>
 				</view>
 				<view class="box-content-item-comment">
@@ -142,7 +142,7 @@
 							<view class="comment-list-item-info">
 								<view class="comment-list-item-info-nickname">SKB露娜可可</view>
 								<view class="comment-list-item-info-score">
-									<image src="../../static/images/stars-icon.png" mode="aspectFill" v-for="item in 5"></image>
+									<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 									<text>5分</text>
 								</view>
 								<view class="comment-list-item-info-content">
@@ -543,13 +543,8 @@
 									display: flex;
 									align-items: center;
 
-									image {
-										width: 30rpx;
-										height: 30rpx;
-									}
-
 									text {
-										margin-left: 8rpx;
+										margin-right: 6rpx;
 										font-size: 24rpx;
 										color: #999;
 									}
@@ -672,13 +667,8 @@
 								display: flex;
 								align-items: center;
 
-								image {
-									width: 30rpx;
-									height: 30rpx;
-								}
-
 								text {
-									margin-left: 10rpx;
+									margin-right: 10rpx;
 									color: #999;
 									font-size: 24rpx;
 								}
