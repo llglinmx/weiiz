@@ -25,7 +25,7 @@
 						<view class="box-content-list-li-info-area-code flex-center">
 							<text>+86</text>
 							<text class="iconfont iconxiangxiajiantou icon-font"
-								style="color: #000;font-size: 28rpx"></text>
+								style="color: #000;font-size: 28rpx;margin-top: 4rpx;"></text>
 						</view>
 						<input class="box-content-list-li-info-input" v-model.trim="phone" type="number"
 							placeholder="请输入手机号码" />
@@ -267,6 +267,9 @@
 						uni.navigateBack({
 							delta: 1
 						})
+						this.$store.commit("upAdd",true)
+						
+						// this.$store.state.isAdd = true
 					}
 				});
 				console.log(vuedata)
@@ -296,6 +299,7 @@
 			overflow-y: scroll;
 
 			.box-content-list {
+				overflow-y: scroll;
 				padding: 0 0 0 40rpx;
 				box-sizing: border-box;
 				margin-top: 20rpx;
@@ -328,15 +332,10 @@
 							border: 1rpx solid #CCCCCC;
 							border-radius: 22rpx;
 
-							text {}
-
-							image {
-								width: 28rpx;
-								height: 28rpx;
-								margin-left: 10rpx;
-								transform: rotate(90deg);
-								transition: 0.3s;
+							text {
+								font-size: 24rpx;
 							}
+
 						}
 
 						.box-content-list-li-info-input {

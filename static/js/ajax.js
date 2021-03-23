@@ -23,7 +23,8 @@ const httpClient = {
 				success: function(res) {
 					uni.hideLoading()
 					// console.log("接口获取原始数据：-------------------",res.data)
-					console.log(url)
+					// console.log(url)
+					// console.log(res)
 					if (res.statusCode == 402) {
 						uni.showToast({
 							icon: 'none',
@@ -34,7 +35,18 @@ const httpClient = {
 							uni.reLaunch({
 								url: '/pagesIndex/login/login'
 							});
-						}, 1500);
+						}, 1000);
+					} else if (res.statusCode == 400) {
+						uni.showToast({
+							icon: 'none',
+							duration: 1000,
+							title: "请求错误，请重新登录"
+						});
+						setTimeout(function() {
+							uni.reLaunch({
+								url: '/pagesIndex/login/login'
+							});
+						}, 1000);
 					} else {
 						if (res.data.error != null) {
 							uni.showToast({
@@ -67,6 +79,12 @@ const httpClient = {
 		let allurl = this.geturl(url);
 		return this.request('PUT', allurl, data)
 	},
+
+	Delete: function(url, data) {
+		let allurl = this.geturl(url);
+		return this.request('DELETE', allurl, data)
+	},
+
 	geturl: function(url) {
 		return baseconfig.server + url
 	}

@@ -24,8 +24,9 @@
 					<text class="iconfont iconyincangmima icon-font" style="color: #ccc;" @click="showPass"
 						v-if="isShowPassword"></text>
 				</view>
-				<view class="box-content-list-li" style="padding: 0;height: 100rpx;">
-					<input type="number" @input="verificationCode" v-model.trim="codeVal" placeholder="请输入右侧验证码" confirm-type="done" />
+				<view class="box-content-list-li" style="padding:20rpx 0;">
+					<input type="number" @input="verificationCode" v-model.trim="codeVal" placeholder="请输入右侧验证码"
+						confirm-type="done" />
 					<view class="code-box" @click="getCode">
 						<image :src="codeImage" mode="aspectFill"></image>
 					</view>
@@ -40,7 +41,7 @@
 				<text>《隐私保护政策》</text>
 			</view>
 			<view class="box-content-wrap-msg">
-				<text>其他登录方式 --</text>
+				<text>其他登录方式</text>
 			</view>
 			<view class="login-mode">
 				<view class="login-mode-li" v-for="(item,index) in imageList" :key="index">
@@ -175,10 +176,17 @@
 				this.apipost('login', data).then(res => {
 					switch (res.status) {
 						case 200:
-							uni.setStorageSync('token', res.data.member.token);
-							uni.reLaunch({
-								url: "../../pages/index/index"
+							uni.showToast({
+								title: "登录成功",
+								icon: "none"
 							})
+
+							uni.setStorageSync('token', res.data.member.token);
+							setTimeout(function() {
+								uni.reLaunch({
+									url: "../../pages/index/index"
+								})
+							}, 1000)
 							break;
 						case 401:
 							uni.showToast({
@@ -304,6 +312,8 @@
 					align-items: center;
 
 					input {
+						margin-right: 20rpx;
+						flex: 1;
 						font-size: 32rpx;
 					}
 

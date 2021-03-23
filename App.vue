@@ -32,4 +32,7 @@
 		align-items: center;
 		font-weight: 500;
 	}
+	.content{
+		height: 100%;
+	}
 </style>

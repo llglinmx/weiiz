@@ -200,6 +200,7 @@
 			// 弹窗点击确认
 			confirm(done, value) {
 				var data = {}
+
 				this.apiput('api/v1/logout', data).then(res => {
 					if (res.status == 200) {
 						uni.removeStorageSync('token');

@@ -6,11 +6,15 @@
 		<view class="box-content">
 			<view class="box-content-map-wrap box-content-public" :style="{width:mapWidth+'px'}">
 				<view class="box-wrap-tabs">
-					<view class="box-wrap-tabs-li" v-for="(item,index) in tabsList" :key="index" @click="tabsShowList(item,index)">
-						<view class="box-tabs-li-text" :class="idx==index?'box-tabs-li-text-active':''">{{item.title}}</view>
+					<view class="box-wrap-tabs-li" v-for="(item,index) in tabsList" :key="index"
+						@click="tabsShowList(item,index)">
+						<view class="box-tabs-li-text" :class="idx==index?'box-tabs-li-text-active':''">{{item.title}}
+						</view>
 						<view class="box-tabs-li-icon">
-							<text class="iconfont iconxiangxiajiantou icon-font" style="color: #ccc;font-size: 28rpx;" v-if="idx!=index"></text>
-							<text class="iconfont iconxiangxiajiantou icon-font" style="color: #FF8366;font-size: 28rpx;" v-else></text>
+							<text class="iconfont iconxiangxiajiantou icon-font" style="color: #ccc;font-size: 28rpx;"
+								v-if="idx!=index"></text>
+							<text class="iconfont iconxiangxiajiantou icon-font"
+								style="color: #FF8366;font-size: 28rpx;" v-else></text>
 
 						</view>
 					</view>
@@ -21,24 +25,28 @@
 					</view>
 					<view class="map-wrap-main-list" :style="{bottom:bottomDistance+'px'}">
 						<view class="map-wrap-list-icon" @click="shrinkHidden">
-							<text class="iconfont iconxiangxiajiantou icon-font" style="color: #999;font-size: 44rpx;"></text>
+							<text class="iconfont iconxiangxiajiantou icon-font"
+								style="color: #999;font-size: 44rpx;"></text>
 						</view>
 						<view class="map-wrap-list-content">
 							<view class="list-content-image">
-								<image src="../../static/images/shop-ico.png" mode="aspectFill"></image>
+								<image style="width: 164rpx;height: 164rpx;" src="../../static/images/shop-ico.png"
+									mode="aspectFill"></image>
 							</view>
 							<view class="list-content-info">
 								<view class="list-content-info-title">
 									印象诗意·悠然SPA
 								</view>
 								<view class="list-content-info-score">
-									<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
+									<text class="iconfont iconwujiaoxing icon-font"
+										style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 									<text>5分</text>
 								</view>
 								<view class="list-content-info-box">
 									<view class="list-content-info-box-text">明发商业广场</view>
 									<view class="list-content-info-address">
-										<text class="iconfont icondingwei1 icon-font" style="color: #ccc;font-size: 24rpx;margin-top: 4rpx;"></text>
+										<text class="iconfont icondingwei1 icon-font"
+											style="color: #ccc;font-size: 24rpx;margin-top: 4rpx;"></text>
 										<text>6.1km</text>
 									</view>
 								</view>
@@ -69,40 +77,52 @@
 						</view>
 					</view>
 				</view>
-				<view class="box-content-business-list">
-					<view class="map-wrap-list-content" v-for="(item,index) in 10" @click="merchantDetails(item)">
-						<view class="list-content-image">
-							<image src="../../static/images/shop-ico.png" mode="aspectFill"></image>
+				<view class="box-content-business-list" :style="{display:isData?'block':'none'}">
+					<mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption"
+						:up="upOption" :height="mesHeight">
+						<view class="box-content-business-list-main">
+							<view class="map-wrap-list-content" v-for="(item,index) in storeList" :key="item.id"
+								@click="merchantDetails(item)">
+								<view class="list-content-image">
+									<image :src="item.bimg" mode="aspectFill"></image>
+								</view>
+								<view class="list-content-info">
+									<view class="list-content-info-title">{{item.name}}</view>
+									<view class="list-content-info-score">
+										<text class="iconfont iconwujiaoxing icon-font"
+											:style="{color:isComment(item.comment,storeIndex)?'#FFCD4D':'#eee',}"
+											style="font-size: 28rpx;" v-for="(store,storeIndex) in 5"></text>
+										<text>5分</text>
+									</view>
+									<view class="list-content-info-box">
+										<view class="list-content-info-box-text">{{item.address}}</view>
+										<view class="list-content-info-address">
+											<text class="iconfont icondingwei1 icon-font"
+												style="color: #ccc;font-size: 24rpx;margin-top: 4rpx;"></text>
+											<text>6.1km</text>
+										</view>
+									</view>
+									<view class="list-content-info-service-content">
+										<view class="list-info-service-content-li flex-center" v-if="index!=0">
+											按摩/SPA
+										</view>
+										<view class="list-content-info-service-content-msg" v-else>
+											区域综合排名第1
+										</view>
+									</view>
+								</view>
+							</view>
 						</view>
-						<view class="list-content-info">
-							<view class="list-content-info-title">
-								印象诗意·悠然SPA
-							</view>
-							<view class="list-content-info-score">
-								<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
-								<text>5分</text>
-							</view>
-							<view class="list-content-info-box">
-								<view class="list-content-info-box-text">明发商业广场</view>
-								<view class="list-content-info-address">
-									<text class="iconfont icondingwei1 icon-font" style="color: #ccc;font-size: 24rpx;margin-top: 4rpx;"></text>
-									<text>6.1km</text>
-								</view>
-							</view>
-							<view class="list-content-info-service-content">
-								<view class="list-info-service-content-li flex-center" v-if="index!=0">
-									按摩/SPA
-								</view>
-								<view class="list-content-info-service-content-msg" v-else>
-									区域综合排名第1
-								</view>
-							</view>
-						</view>
-					</view>
+					</mescroll-uni>
+				</view>
+				<view class="map-wrap-list-content-load" v-if="!isData">
+					<loading v-if="isLoad" />
+					<no-data v-if="!isLoad" />
 				</view>
 			</view>
 			<view class="box-content-tab-btn" @click="tabClick" :class="isFlag?'box-content-tab-btn-state':''">
-				<text class="iconfont iconcaidan icon-font" style="color: #666;font-size: 48rpx;margin-top: 4rpx;"></text>
+				<text class="iconfont iconcaidan icon-font"
+					style="color: #666;font-size: 48rpx;margin-top: 4rpx;"></text>
 				<text>商家列表</text>
 			</view>
 
@@ -126,13 +146,33 @@
 <script>
 	import navTitle from "../../components/navTitle/navTitle.vue"
 	import UniPopup from "../../components/uni-popup/uni-popup.vue"
+	import MescrollMixin from "../../components/mescroll-uni/mescroll-mixins.js";
+	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue"
+	import loading from '../../components/loading/loading.vue'
+	import noData from '../../components/no-data/no-data.vue'
 	export default {
+		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
 				mapWidth: 0,
 				mapLeft: 0,
 				isFlag: false, // 用于切换商家显示界面
+				isData: false, //是否有数据
+				isLoad: true, //加载状态   true 为加载中 false 为无数据
+				mesHeight: 0,
+				downOption: { // 下拉刷新配置
+					auto: false,
+				},
+				upOption: { // 上拉加载配置
+					use: true,
+					noMoreSize: 5,
+					textLoading: "正在加载更多数据",
+					textNoMore: "——  已经到底了  ——",
+					isBounce: true,
+					auto: true,
+				},
+				storeList: [],
 				tabsList: [{
 						title: "全部",
 						type: "all"
@@ -178,7 +218,10 @@
 		},
 		components: {
 			navTitle,
-			UniPopup
+			UniPopup,
+			MescrollUni,
+			loading,
+			noData
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -190,9 +233,13 @@
 
 			// 获取地图商家盒子宽度
 			uni.createSelectorQuery().in(this).select(".box-content").boundingClientRect(data => {
+				this.mesHeight = data.height * 2
 				this.mapWidth = data.width
 				this.mapLeft = data.width
 			}).exec();
+		},
+		onLoad() {
+
 		},
 		methods: {
 			// 商家切换开关
@@ -232,7 +279,66 @@
 				uni.navigateTo({
 					url: "../../pagesIndexTwo/merchantDetails/merchantDetails"
 				})
-			}
+			},
+
+
+			/*下拉刷新的回调*/
+			downCallback(page) {
+				this.isLoad = true
+				this.isData = false
+				this.mescroll.resetUpScroll()
+				this.storeList = []
+			},
+
+
+			/*上拉加载的回调*/
+			upCallback(page) {
+				this.getStore(page)
+			},
+
+			// 商家
+			getStore(page) {
+				var vuedata = {
+					page_index: page.num, // 请求页数，
+					each_page: page.size, // 请求条数
+					orderby: 'ASC',
+					ordertype: 'distance',
+				}
+				this.apiget('pc/store', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.storeList.length != 0) {
+							this.isData = true;
+							var arr = []
+							let list = res.data.storeList
+							let totalSize = res.data.total_rows
+
+							this.mescroll.endBySize(list.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+							//设置列表数据
+							if (page.num == 1) this.storeList = []; //如果是第一页需手动制空列表
+							this.storeList = this.storeList.concat(list); //追加新数据
+
+
+						} else {
+							// 显示无数据背景
+							this.isData = false;
+							this.isLoad = false;
+							this.mescroll.endErr()
+						}
+
+					}
+				})
+			},
+
+			isComment(comment, index) {
+				var score = parseInt(comment)
+				if (score > index) {
+					return true
+				} else {
+					return false
+				}
+
+			},
+
 		}
 	}
 </script>
@@ -341,13 +447,16 @@
 							}
 						}
 
+
 						.map-wrap-list-content {
 							display: flex;
+
 
 							.list-content-image {
 								image {
 									width: 164rpx;
 									height: 164rpx;
+									border-radius: 10rpx;
 								}
 							}
 
@@ -379,7 +488,7 @@
 									justify-content: space-between;
 
 									.list-content-info-box-text {
-										line-height: 40rpx;
+										line-height: 28rpx;
 										font-size: 24rpx;
 										color: #666;
 									}
@@ -425,6 +534,8 @@
 					}
 
 				}
+
+
 			}
 
 			.box-content-list-wrap {
@@ -438,9 +549,9 @@
 				flex-direction: column;
 
 				.box-content-business-list {
-					padding: 0 20rpx;
+					// padding: 0 20rpx;
 					box-sizing: border-box;
-					margin-top: 10rpx;
+					// margin-top: 10rpx;
 					flex: 1;
 					overflow-y: scroll;
 
@@ -536,6 +647,11 @@
 						}
 					}
 				}
+
+				.map-wrap-list-content-load {
+					flex: 1;
+				}
+
 			}
 
 			.box-content-tab-btn {

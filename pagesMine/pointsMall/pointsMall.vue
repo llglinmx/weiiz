@@ -102,7 +102,7 @@
 			this.mesHeight = (Heigh - 300) * 2
 		},
 		onLoad() {
-			this.getPoints()
+			// this.getPoints()
 			// this.getPointsList(1, this.page)
 		},
 		methods: {
@@ -134,12 +134,13 @@
 						if (res.data.member.length != 0) {
 							this.isData = true;
 							let list = res.data.member
+							let totalSize = res.data.total_rows
 							//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
-							this.mescroll.endSuccess(list.length);
+						this.mescroll.endBySize(list.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
 							//设置列表数据
 							if (page.num == 1) this.goods = []; //如果是第一页需手动制空列表
 							this.goodsList = this.goodsList.concat(list); //追加新数据
-
+							console.log(this.goodsList)
 						} else {
 							// 显示无数据背景
 							this.isData = false;
