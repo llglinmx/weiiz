@@ -78,11 +78,12 @@
 					</view>
 				</view>
 				<view class="box-content-business-list" :style="{display:isData?'block':'none'}">
-					<mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption"
-						:up="upOption" :height="mesHeight">
+					<z-paging ref="paging" @query="queryList" :list.sync="storeList" loading-more-no-more-text="已经到底了"
+						:refresher-angle-enable-change-continued="false" :touchmove-propagation-enabled="true"
+						:use-custom-refresher="true">
 						<view class="box-content-business-list-main">
 							<view class="map-wrap-list-content" v-for="(item,index) in storeList" :key="item.id"
-								@click="merchantDetails(item)">
+								@click="merchantDetails(item.id)">
 								<view class="list-content-image">
 									<image :src="item.bimg" mode="aspectFill"></image>
 								</view>
@@ -113,7 +114,7 @@
 								</view>
 							</view>
 						</view>
-					</mescroll-uni>
+					</z-paging>
 				</view>
 				<view class="map-wrap-list-content-load" v-if="!isData">
 					<loading v-if="isLoad" />
@@ -150,6 +151,7 @@
 	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue"
 	import loading from '../../components/loading/loading.vue'
 	import noData from '../../components/no-data/no-data.vue'
+	import zPaging from '../../uni_modules/z-paging/components/z-paging/z-paging.vue'
 	export default {
 		mixins: [MescrollMixin], // 使用mixin
 		data() {
@@ -160,18 +162,7 @@
 				isFlag: false, // 用于切换商家显示界面
 				isData: false, //是否有数据
 				isLoad: true, //加载状态   true 为加载中 false 为无数据
-				mesHeight: 0,
-				downOption: { // 下拉刷新配置
-					auto: false,
-				},
-				upOption: { // 上拉加载配置
-					use: true,
-					noMoreSize: 5,
-					textLoading: "正在加载更多数据",
-					textNoMore: "——  已经到底了  ——",
-					isBounce: true,
-					auto: true,
-				},
+
 				storeList: [],
 				tabsList: [{
 						title: "全部",
@@ -220,6 +211,7 @@
 			navTitle,
 			UniPopup,
 			MescrollUni,
+			zPaging,
 			loading,
 			noData
 		},
@@ -275,32 +267,22 @@
 				this.bottomDistance = (-(264 / 2)) // 回到初始位置
 			},
 			// 跳转商家详情
-			merchantDetails(item) {
+			merchantDetails(id) {
 				uni.navigateTo({
-					url: "../../pagesIndexTwo/merchantDetails/merchantDetails"
+					url: "../../pagesIndexTwo/merchantDetails/merchantDetails?id=" + id
 				})
 			},
 
-
-			/*下拉刷新的回调*/
-			downCallback(page) {
-				this.isLoad = true
-				this.isData = false
-				this.mescroll.resetUpScroll()
-				this.storeList = []
-			},
-
-
-			/*上拉加载的回调*/
-			upCallback(page) {
-				this.getStore(page)
+			// 上拉 下拉 
+			queryList(pageNo, pageSize) {
+				this.getStore(pageNo, pageSize)
 			},
 
 			// 商家
-			getStore(page) {
+			getStore(num, size) {
 				var vuedata = {
-					page_index: page.num, // 请求页数，
-					each_page: page.size, // 请求条数
+					page_index: num, // 请求页数，
+					each_page: size, // 请求条数
 					orderby: 'ASC',
 					ordertype: 'distance',
 				}
@@ -308,14 +290,11 @@
 					if (res.status == 200) {
 						if (res.data.storeList.length != 0) {
 							this.isData = true;
-							var arr = []
 							let list = res.data.storeList
 							let totalSize = res.data.total_rows
 
-							this.mescroll.endBySize(list.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
-							//设置列表数据
-							if (page.num == 1) this.storeList = []; //如果是第一页需手动制空列表
-							this.storeList = this.storeList.concat(list); //追加新数据
+							this.$refs.paging.addData(list);
+
 
 
 						} else {
@@ -329,6 +308,7 @@
 				})
 			},
 
+			// 评分
 			isComment(comment, index) {
 				var score = parseInt(comment)
 				if (score > index) {
@@ -336,7 +316,6 @@
 				} else {
 					return false
 				}
-
 			},
 
 		}

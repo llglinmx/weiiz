@@ -48,27 +48,27 @@
 			}
 		}
 	},
-	"h5": {
-		"router": {
-			"mode": "history"
-		},
-		"devServer": {
-			"port": 8080,
-			"disableHostCheck": true,
-			"https": false,
-			"proxy": {
-				"/api": {
-					"target": "http://spaapi.juhucn.com",
-					"changeOrigin": true,
-					"source": false,
-					"pathRewrite": {
-						"^/api": ""
-					}
-				}
-			}
-		}
+	// "h5": {
+	// 	"router": {
+	// 		"mode": "history"
+	// 	},
+	// 	"devServer": {
+	// 		"port": 8080,
+	// 		"disableHostCheck": true,
+	// 		"https": false,
+	// 		"proxy": {
+	// 			"/api": {
+	// 				"target": "http://localhost/spa",
+	// 				"changeOrigin": true,
+	// 				"source": false,
+	// 				"pathRewrite": {
+	// 					"^/api": ""
+	// 				}
+	// 			}
+	// 		}
+	// 	}
 
-	},
+	// },
 	/* 快应用特有相关 */
 	"quickapp": {},
 	/* 小程序特有相关 */

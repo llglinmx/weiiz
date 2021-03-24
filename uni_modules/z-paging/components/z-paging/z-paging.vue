@@ -1626,7 +1626,7 @@ c、z-paging默认会禁止所有touchmove事件冒泡以避免下拉刷新冲�
 
 <style scoped>
 	.paging-container-content {
-		height: 100%;
+		flex: 1;
 	}
 
 	.z-paging-content,
@@ -1646,6 +1646,8 @@ c、z-paging默认会禁止所有touchmove事件冒泡以避免下拉刷新冲�
 	}
 
 	.paging-container {
+		display: flex;
+		flex-direction: column;
 		flex: 1;
 		position: relative;
 	}

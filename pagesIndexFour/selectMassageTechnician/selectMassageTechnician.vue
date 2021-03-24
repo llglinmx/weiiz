@@ -3,76 +3,99 @@
 		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
 			<nav-title-confirm navTitle="选择按摩技师" @confirm="confirmBtn"></nav-title-confirm>
 		</view>
-		<view class="box-content">
+		<view class="box-content" :style="{display:isData?'block':'none'}">
 			<view class="box-content-item-technician box-content-item-common-styles">
 				<view class="box-content-item-project-wrap">
 					<scroll-view scroll-y="true" class="scroll-Y">
 						<view class="box-content-item-project-list">
-							<view class="project-list-li flex-center" v-for="(item,index) in classifyList" :key="index">{{item}}</view>
+							<view class="project-list-li flex-center" v-for="(item,index) in classifyList" :key="index">
+								{{item}}
+							</view>
 						</view>
 					</scroll-view>
 				</view>
 				<view class="box-content-item-technician-wrap">
-					<view class="content-item-technician-wrap-list">
-						<view class="content-item-technician-wrap-list-li" v-for="(item,index) in 20" :key="index" @click="checkTechnician(index)">
-							<view class="technician-wrap-list-li-image">
-								<image src="../../static/images/shop-ico.png" mode="aspectFill"></image>
-							</view>
-							<view class="technician-wrap-list-li-info">
-								<view class="technician-wrap-list-li-info-top">
-									<view class="technician-info-top-title">
-										<text class="technician-info-top-title-name">王二麻子</text>
-										<text class="technician-info-top-title-msg">【金牌技师】</text>
-									</view>
-									<view class="technician-wrap-list-li-info-check">
-										<text class="iconfont iconxuanzhong2 icon-font" style="color:#26BF82;font-size: 44rpx;" v-if="isChick==index"></text>
-										<text class="iconfont iconweixuanzhong icon-font" style="color:#ccc;font-size: 44rpx;" v-else></text>
-									</view>
-									<!-- <view class="technician-wrap-list-li-info-no-check" v-else></view> -->
-									<!-- <view class="technician-wrap-list-li-info-no-disable" v-if="index==2&&index==8&&index==12"></view> -->
-									
+					<z-paging ref="paging" @query="queryList" :list.sync="technicianList"
+						loading-more-no-more-text="已经到底了" :refresher-angle-enable-change-continued="false"
+						:touchmove-propagation-enabled="true" :use-custom-refresher="true">
+						<view class="content-item-technician-wrap-list">
+							<view class="content-item-technician-wrap-list-li" v-for="(item,index) in technicianList"
+								:key="item.id" @click="checkTechnician(index,item.id)">
+								<view class="technician-wrap-list-li-image">
+									<image src="../../static/images/shop-ico.png" mode="aspectFill"></image>
 								</view>
-								<view class="technician-wrap-list-li-info-score">
-									<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
-									<text>5分</text>
-								</view>
-								<view class="technician-wrap-list-li-info-introduce">
-									<view class="technician-list-li-info-introduce-text">
-										工龄：2年
+								<view class="technician-wrap-list-li-info">
+									<view class="technician-wrap-list-li-info-top">
+										<view class="technician-info-top-title">
+											<text class="technician-info-top-title-name">{{item.name}}</text>
+											<text class="technician-info-top-title-msg">【金牌技师】</text>
+										</view>
+										<view class="technician-wrap-list-li-info-check">
+											<text class="iconfont iconxuanzhong2 icon-font"
+												style="color:#26BF82;font-size: 44rpx;" v-if="isChick==index"></text>
+											<text class="iconfont iconweixuanzhong icon-font"
+												style="color:#ccc;font-size: 44rpx;" v-else></text>
+										</view>
+										<!-- <view class="technician-wrap-list-li-info-no-check" v-else></view> -->
+										<!-- <view class="technician-wrap-list-li-info-no-disable" v-if="index==2&&index==8&&index==12"></view> -->
+
 									</view>
-									<view class="technician-list-li-info-introduce-text">
-										预约次数：1240
+									<view class="technician-wrap-list-li-info-score">
+										<text class="iconfont iconwujiaoxing icon-font"
+											style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
+										<text>5分</text>
 									</view>
-								</view>
-								<view class="technician-wrap-list-li-info-category">
-									<view class="technician-list-li-info-category-item" v-for="item in 3">
-										背部按摩
+									<view class="technician-wrap-list-li-info-introduce">
+										<view class="technician-list-li-info-introduce-text">
+											工龄：{{item.service_times}}年
+										</view>
+										<view class="technician-list-li-info-introduce-text">
+											预约次数：{{item.service_num}}
+										</view>
+									</view>
+									<view class="technician-wrap-list-li-info-category">
+										<view class="technician-list-li-info-category-item" v-for="item in 3">
+											背部按摩
+										</view>
 									</view>
 								</view>
 							</view>
 						</view>
-					</view>
+					</z-paging>
 				</view>
 			</view>
-		</view>
-		<view class="box-footer">
 
+		</view>
+		<view class="box-content" :style="{display:!isData?'block':'none'}">
+			<loading v-if="isLoad" />
+			<no-data v-if="!isLoad" />
 		</view>
 	</view>
 </template>
 
 <script>
 	import navTitleConfirm from "../../components/navTitleConfirm/navTitleConfirm.vue"
+	import zPaging from '../../uni_modules/z-paging/components/z-paging/z-paging.vue'
+	import loading from '../../components/loading/loading.vue'
+	import noData from '../../components/no-data/no-data.vue'
 	export default {
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
 				classifyList: ["泰式按摩", "中式按摩", "韩式按摩", "美式按摩", "足底按摩"], //按摩分类
-				isChick: -1
+				isChick: -1,
+				storeId: '', //门店id
+				technicianList: [],
+				isData: false,
+				isLoad: true,
+				technicianId: -1,
 			};
 		},
 		components: {
-			navTitleConfirm
+			navTitleConfirm,
+			zPaging,
+			loading,
+			noData
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -82,19 +105,56 @@
 				}
 			});
 		},
+		onLoad(options) {
+			this.storeId = options.storeId
+		},
+		onShow() {
+			this.technicianId = this.$store.state.checkId
+			console.log("选择技师：" + this.technicianId)
+		},
 		methods: {
+
+			// 上拉 下拉 
+			queryList(pageNo, pageSize) {
+				this.getTechnician(pageNo, pageSize)
+			},
+
+			// 获取技师列表
+			getTechnician() {
+				var vuedata = {
+					store: this.storeId
+				}
+				this.apiget('pc/engineer', vuedata).then(res => {
+					if (res.status == 200) {
+						this.isData = true
+						var list = res.data.engineerList
+						this.$refs.paging.addData(list);
+
+						this.technicianList.forEach(item => {
+							console.log(item.id)
+						})
+					} else {
+						this.isData = false
+						this.isLoad = false
+					}
+				})
+			},
+
+
+
 			// 选中技师点击
-			checkTechnician(index) {
+			checkTechnician(index, id) {
 				if (index != this.isChick) {
 					this.isChick = index;
 				} else {
 					this.isChick = -1;
 				}
+				this.$store.commit("upCheckId", id)
 			},
 			// 确认按钮点击
-			confirmBtn(){
+			confirmBtn() {
 				uni.navigateBack({
-					delta:1
+					delta: 1
 				})
 			}
 		}
@@ -177,6 +237,7 @@
 										width: 35rpx;
 										height: 35rpx;
 										border: 1rpx solid #fff;
+
 										image {
 											width: 100%;
 											height: 100%;
@@ -188,6 +249,7 @@
 										height: 35rpx;
 										border: 1rpx solid #CCCCCC;
 									}
+
 									.technician-wrap-list-li-info-no-disable {
 										width: 35rpx;
 										height: 35rpx;
@@ -201,7 +263,7 @@
 									display: flex;
 									align-items: center;
 
-									
+
 
 									text {
 										margin-right: 6rpx;

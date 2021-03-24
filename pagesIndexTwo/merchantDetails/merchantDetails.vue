@@ -1,7 +1,7 @@
 <template>
 	<view class="box">
 		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
-			<navTitleAll navTitle="商家详情"></navTitleAll>
+			<navTitleAll @store="store" :isStore='Number(isStore)' navTitle="商家详情"></navTitleAll>
 			<view class="box-head-tabs">
 				<liuyuno-tabs ref="boxTabs" :tabData="tabs" :activeIndex="defaultIndex" @tabClick='tabClick' />
 			</view>
@@ -13,7 +13,8 @@
 						<view class="box-content-item-wrap">
 							<view class="box-content-item-wrap-image">
 								<swiper class="box-content-item-wrap-banner" :autoplay="true" :interval="5000">
-									<swiper-item class="box-content-item-wrap-banner-li" v-for="(item,index) in imageList" :key="index">
+									<swiper-item class="box-content-item-wrap-banner-li"
+										v-for="(item,index) in imageList" :key="index">
 										<image :src="item.url" mode="aspectFill"></image>
 									</swiper-item>
 								</swiper>
@@ -25,15 +26,15 @@
 							<view class="box-content-item-wrap-info">
 								<view class="item-wrap-info-left">
 									<view class="item-wrap-info-left-image">
-										<image src="../../static/images/00002.png" mode=""></image>
+										<image :src="merchantData.simg" mode="aspectFill"></image>
 									</view>
 									<view class="item-wrap-info-left-box">
-										<view class="item-wrap-left-box-title">
-											印象诗意·悠然SPA
-										</view>
+										<view class="item-wrap-left-box-title">{{merchantData.name}}</view>
 										<view class="item-wrap-left-box-score">
-											<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
-											<text>5分</text>
+											<text class="iconfont iconwujiaoxing icon-font"
+												:style="{color:isComment(merchantData.comment,storeIndex)?'#FFCD4D':'#eee',}"
+												style="font-size: 28rpx;" v-for="(store,storeIndex) in 5"></text>
+											<text>{{merchantData.comment}}分</text>
 										</view>
 										<view class="item-wrap-left-box-bottom">
 											<view class="item-wrap-left-box-bottom-text flex-center">
@@ -42,171 +43,242 @@
 										</view>
 									</view>
 								</view>
-								<view class="item-wrap-info-right">
-									<text class="iconfont icondianhua icon-font" style="color:#FF8366;font-size: 44rpx;"></text>
+								<view class="item-wrap-info-right" @click="makeCall(merchantData.mobile)">
+									<text class="iconfont icondianhua icon-font"
+										style="color:#FF8366;font-size: 44rpx;"></text>
 									<text>电话</text>
 								</view>
 							</view>
 							<view class="box-content-item-wrap-business-time">
-								营业时间：周一至周日 9:00-20:00
+								营业时间：周一至周日 {{merchantData.plan_date}}
 							</view>
 							<view class="box-content-item-wrap-address">
 								<view class="box-content-item-wrap-address-left">
 									<view class="box-content-item-wrap-left-address-icon">
-										<text class="iconfont icondingwei1 icon-font" style="color: #26BF82;font-size: 34rpx;"></text>
+										<text class="iconfont icondingwei1 icon-font"
+											style="color: #26BF82;font-size: 34rpx;"></text>
 									</view>
-									<view class="box-content-item-wrap-address-left-text">中国 福建省 厦门市 集美区 杏滨路罗约酒店负一楼</view>
+									<view class="box-content-item-wrap-address-left-text">{{merchantData.address}}
+									</view>
 								</view>
 								<view class="box-content-item-wrap-address-right">
 									<view class="box-content-item-wrap-address-right-text">距离6.1KM</view>
 									<view class="box-content-item-wrap-right-address-icon">
-										<text class="iconfont icongengduo icon-font" style="color: #26BF82;font-size: 40rpx;margin-top: 4rpx;"></text>
+										<text class="iconfont icongengduo icon-font"
+											style="color: #26BF82;font-size: 40rpx;margin-top: 4rpx;"></text>
 									</view>
 								</view>
 							</view>
 							<view class="box-content-item-wrap-business-description">
 								<view class="content-item-wrap-business-description">
-									其他门店 （3家）
+									其他门店
+									（{{merchantData && merchantData.otherStores && merchantData.otherStores.length}}家）
 								</view>
 								<view class="more-icon">
-									<text class="iconfont icongengduo icon-font" style="color: #26BF82;font-size: 40rpx;margin-top: 4rpx;"></text>
+									<text class="iconfont icongengduo icon-font"
+										style="color: #26BF82;font-size: 40rpx;margin-top: 4rpx;"></text>
 								</view>
 							</view>
-							<view class="box-content-item-wrap-business-introduce">
-								水疗（SPA）这种休闲美容方式的历史很久远。在15世纪欧洲的比利时有一个被称之为SPAU的小山谷，山谷中有一个富含矿物质的热温泉旅游、疗养区，当时有许多贵族到这里来度假疗养这就是SPA最初的形式。18世纪后开始在欧洲贵族中风行开来，成为贵族们休闲度假、强身健体的首选，20世纪末在欧美民间社会又重新掀起了SPA热潮，并于21世纪初传入亚洲各国。
-							</view>
+							<view class="box-content-item-wrap-business-introduce" v-html="merchantData.content"></view>
 						</view>
 
 					</swiper-item>
 					<swiper-item class="swiper-box-item-list">
-						<view class="box-content-item-project box-content-item-common-styles">
-							<view class="box-content-item-project-wrap">
-								<scroll-view scroll-y="true" class="scroll-Y">
-									<view class="box-content-item-project-list">
-										<view class="project-list-li flex-center" v-for="(item,index) in classifyList" :key="index">{{item}}</view>
-									</view>
-								</scroll-view>
-							</view>
-							<view class="box-project-list">
-								<view class="box-project-list-li" v-for="(item,index) in 10" @click="projectDetails">
-									<view class="box-project-list-li-image">
-										<image src="../../static/images/002.png" mode="aspectFill"></image>
-									</view>
-									<view class="box-project-list-li-info">
-										<view class="box-project-list-li-info-title">泰式古法按摩</view>
-										<view class="box-project-list-li-info-list">
-											<view class="project-list-li-info-list-item">60分钟</view>
-											<view class="project-list-li-info-list-item">背部按摩</view>
+						<view class="box-content-item-project box-content-item-common-styles"
+							:style="{display:isDataPro?'block':'none'}">
+							<view class="box-content-item-project-main">
+								<view class="box-content-item-project-wrap">
+									<scroll-view scroll-y="true" class="scroll-Y">
+										<view class="box-content-item-project-list">
+											<view class="project-list-li flex-center"
+												v-for="(item,index) in classifyList" :key="index">{{item}}</view>
 										</view>
-										<view class="box-project-list-li-info-sold">已售200</view>
-										<view class="box-project-list-li-info-bottom">
-											<view class="project-list-li-info-bottom-price">
-												<view class="list-li-info-bottom-present-price">200.00</view>
-												<view class="list-li-info-bottom-original-price">800.00</view>
+									</scroll-view>
+								</view>
+								<view class="box-project-list">
+									<z-paging ref="paging" @query="queryList" :list.sync="projectList"
+										loading-more-no-more-text="已经到底了"
+										:refresher-angle-enable-change-continued="false"
+										:touchmove-propagation-enabled="true" :mounted-auto-call-reload="false"
+										:use-custom-refresher="true">
+										<view class="box-project-list-main">
+											<view class="box-project-list-li" v-for="(item,index) in projectList"
+												@click="projectDetails" :key="item.id">
+												<view class="box-project-list-li-image">
+													<image :src="item.simg" mode="aspectFill"></image>
+												</view>
+												<view class="box-project-list-li-info">
+													<view class="box-project-list-li-info-title">{{item.name}}</view>
+													<view class="box-project-list-li-info-list">
+														<view class="project-list-li-info-list-item">
+															{{item.service_time}}分钟
+														</view>
+														<view class="project-list-li-info-list-item"
+															v-if="item.rc_name">{{item.rc_name}}
+														</view>
+													</view>
+													<view class="box-project-list-li-info-sold">已售{{item.sold}}</view>
+													<view class="box-project-list-li-info-bottom">
+														<view class="project-list-li-info-bottom-price">
+															<view class="list-li-info-bottom-present-price">
+																{{item.price}}
+															</view>
+															<view class="list-li-info-bottom-original-price">
+																{{item.o_price}}
+															</view>
+														</view>
+														<view class="project-list-li-info-bottom-btn flex-center"
+															@click.stop="reservationService(item.id)">预约</view>
+													</view>
+												</view>
 											</view>
-											<view class="project-list-li-info-bottom-btn flex-center" @click.stop="reservationService">预约</view>
 										</view>
-									</view>
+									</z-paging>
 								</view>
 							</view>
 						</view>
-					</swiper-item>
-					<swiper-item class="swiper-box-item-list">
-						<view class="box-content-item-technician box-content-item-common-styles">
-							<view class="box-content-item-project-wrap">
-								<scroll-view scroll-y="true" class="scroll-Y">
-									<view class="box-content-item-project-list">
-										<view class="project-list-li flex-center" v-for="(item,index) in classifyList" :key="index">{{item}}</view>
-									</view>
-								</scroll-view>
-							</view>
-							<view class="box-content-item-technician-wrap">
-								<view class="content-item-technician-wrap-list">
-									<view class="content-item-technician-wrap-list-li" v-for="(item,index) in 5" :key="index" @click="technicianDetails(item)">
-										<view class="technician-wrap-list-li-image">
-											<image src="../../static/images/shop-ico.png" mode="aspectFill"></image>
-										</view>
-										<view class="technician-wrap-list-li-info">
-											<view class="technician-wrap-list-li-info-top">
-												<view class="technician-info-top-title">
-													<text class="technician-info-top-title-name">王二麻子</text>
-													<text class="technician-info-top-title-msg">【金牌技师】</text>
-												</view>
-												<view class="technician-wrap-list-li-info-top-btn flex-center">
-													预约
-												</view>
-											</view>
-											<view class="technician-wrap-list-li-info-score">
-												<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
-												<text>5分</text>
-											</view>
-											<view class="technician-wrap-list-li-info-introduce">
-												<view class="technician-list-li-info-introduce-text">
-													工龄：2年
-												</view>
-												<view class="technician-list-li-info-introduce-text">
-													预约次数：1240
-												</view>
-											</view>
-											<view class="technician-wrap-list-li-info-category">
-												<view class="technician-list-li-info-category-item" v-for="item in 3">
-													背部按摩
-												</view>
-											</view>
-										</view>
-									</view>
-								</view>
-							</view>
+						<view class="box-content-item-project" :style="{display:!isDataPro?'block':'none'}">
+							<loading v-if="isLoadPro" />
+							<no-data v-if="!isLoadPro" />
 						</view>
 					</swiper-item>
 					<swiper-item class="swiper-box-item-list">
-						<view class="box-content-item-comment">
-							<view class="box-content-item-comment-category">
-								<view class="comment-category-li flex-center" v-for="(item,index) in commentTypeList" :key="index" :class="commentIndex==index?'comment-category-li-active':''"
-								 @click="commentTypeClick(index)">
-									{{item.title}}(20)
+						<view class="box-content-item-technician box-content-item-common-styles"
+							:style="{display:isDataTer?'block':'none'}">
+							<view class="box-content-item-technician-main">
+								<view class="box-content-item-project-wrap">
+									<scroll-view scroll-y="true" class="scroll-Y">
+										<view class="box-content-item-project-list">
+											<view class="project-list-li flex-center"
+												v-for="(item,index) in classifyList" :key="index">{{item}}</view>
+										</view>
+									</scroll-view>
+								</view>
+								<view class="box-content-item-technician-wrap">
+									<z-paging ref="paging1" @query="terQueryList" :list.sync="technicianList"
+										loading-more-no-more-text="已经到底了"
+										:refresher-angle-enable-change-continued="false"
+										:touchmove-propagation-enabled="true" :mounted-auto-call-reload="false"
+										:use-custom-refresher="true">
+
+										<view class="content-item-technician-wrap-list">
+											<view class="content-item-technician-wrap-list-li"
+												v-for="(item,index) in technicianList" :key="item.id"
+												@click="technicianDetails(item)">
+												<view class="technician-wrap-list-li-image">
+													<image src="../../static/images/shop-ico.png" mode="aspectFill">
+													</image>
+												</view>
+												<view class="technician-wrap-list-li-info">
+													<view class="technician-wrap-list-li-info-top">
+														<view class="technician-info-top-title">
+															<text
+																class="technician-info-top-title-name">{{item.name}}</text>
+															<text class="technician-info-top-title-msg">【金牌技师】</text>
+														</view>
+														<view class="technician-wrap-list-li-info-top-btn flex-center">
+															预约
+														</view>
+													</view>
+													<view class="technician-wrap-list-li-info-score">
+														<text class="iconfont iconwujiaoxing icon-font"
+															style="color: #FFCD4D;font-size: 28rpx;"
+															v-for="item in 5"></text>
+														<text>5分</text>
+													</view>
+													<view class="technician-wrap-list-li-info-introduce">
+														<view class="technician-list-li-info-introduce-text">
+															工龄：{{item.service_times}}年
+														</view>
+														<view class="technician-list-li-info-introduce-text">
+															预约次数：{{item.service_num}}
+														</view>
+													</view>
+													<view class="technician-wrap-list-li-info-category">
+														<view class="technician-list-li-info-category-item"
+															v-for="val in label(item.service)" v-if="item.service!=''">
+															{{val}}
+														</view>
+													</view>
+												</view>
+											</view>
+										</view>
+									</z-paging>
+								</view>
+
+							</view>
+						</view>
+						<view class="box-content-item-technician" :style="{display:!isDataTer?'block':'none'}">
+							<loading v-if="isLoadTer" />
+							<no-data v-if="!isLoadTer" />
+						</view>
+					</swiper-item>
+					<swiper-item class="swiper-box-item-list">
+						<view class="box-content-item-comment" :style="{display:isDataComment?'block':'none'}">
+							<view class="box-content-item-comment-main">
+								<view class="box-content-item-comment-category">
+									<view class="comment-category-li flex-center"
+										v-for="(item,index) in commentTypeList" :key="index"
+										:class="commentIndex==index?'comment-category-li-active':''"
+										@click="commentTypeClick(index)">
+										{{item.title}}({{item.num}})
+									</view>
+								</view>
+								<view class="box-content-item-comment-list-main">
+									<z-paging ref="paging2" @query="commentQueryList" :list.sync="commentList"
+										loading-more-no-more-text="已经到底了"
+										:refresher-angle-enable-change-continued="false"
+										:touchmove-propagation-enabled="true" :mounted-auto-call-reload="false"
+										:use-custom-refresher="true">
+										<view class="box-content-item-comment-list">
+											<view class="comment-list-item" v-for="(item,index) in commentList"
+												:key="item.id">
+												<view class="comment-list-item-image">
+													<image :src="item.avatar" mode="aspectFill"></image>
+												</view>
+												<view class="comment-list-item-info">
+													<view class="comment-list-item-info-nickname">SKB露娜可可</view>
+													<view class="comment-list-item-info-score">
+														<text class="iconfont iconwujiaoxing icon-font"
+															style="color: #FFCD4D;font-size: 28rpx;"
+															v-for="item in 5"></text>
+														<text>5分</text>
+													</view>
+													<view class="comment-list-item-info-content">
+														经常累的时候过来按摩，技师服务很好，按摩还会询问力度，很会聊天，这里地理位置也很好找，环境也挺好的，服务员也很热情，来这里整体给我的感觉都是不错的，推荐大家来这家店体验一下。
+													</view>
+													<view class="comment-list-item-info-message-time">
+														2020年10月20日 16:25:01
+													</view>
+													<view class="comment-list-item-info-picture-image">
+														<view class="picture-image-li" v-for="item in 5">
+															<image src="../../static/images/shop-ico.png"
+																mode="aspectFill">
+															</image>
+														</view>
+													</view>
+													<view class="comment-list-item-info-reply">
+														<view class="comment-list-item-info-reply-name">
+															王二麻子回复：
+														</view>
+														<view class="comment-list-item-info-reply-content">
+															感谢您的支持与认可！我们会继续努力提供更优质的服务与项目
+														</view>
+													</view>
+												</view>
+											</view>
+										</view>
+									</z-paging>
 								</view>
 							</view>
-							<view class="box-content-item-comment-list">
-								<view class="comment-list-item" v-for="(item,index) in 5">
-									<view class="comment-list-item-image">
-										<image src="../../static/images/002.png" mode="aspectFill"></image>
-									</view>
-									<view class="comment-list-item-info">
-										<view class="comment-list-item-info-nickname">SKB露娜可可</view>
-										<view class="comment-list-item-info-score">
-											<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
-											<text>5分</text>
-										</view>
-										<view class="comment-list-item-info-content">
-											经常累的时候过来按摩，技师服务很好，按摩还会询问力度，很会聊天，这里地理位置也很好找，环境也挺好的，服务员也很热情，来这里整体给我的感觉都是不错的，推荐大家来这家店体验一下。
-										</view>
-										<view class="comment-list-item-info-message-time">
-											2020年10月20日 16:25:01
-										</view>
-										<view class="comment-list-item-info-picture-image">
-											<view class="picture-image-li" v-for="item in 5">
-												<image src="../../static/images/shop-ico.png" mode="aspectFill"></image>
-											</view>
-										</view>
-										<view class="comment-list-item-info-reply">
-											<view class="comment-list-item-info-reply-name">
-												王二麻子回复：
-											</view>
-											<view class="comment-list-item-info-reply-content">
-												感谢您的支持与认可！我们会继续努力提供更优质的服务与项目
-											</view>
-										</view>
-									</view>
-								</view>
-							</view>
+						</view>
+						<view class="box-content-item-comment" :style="{display:!isDataComment?'block':'none'}">
+							<loading v-if="isLoadTer" />
+							<no-data v-if="!isLoadTer" />
 						</view>
 					</swiper-item>
 				</swiper>
 			</view>
-		</view>
-		<view class="box-footer">
-
 		</view>
 	</view>
 </template>
@@ -214,6 +286,10 @@
 <script>
 	import navTitleAll from "../../components/navTitleAll/navTitleAll.vue"
 	import liuyunoTabs from "@/components/liuyuno-tabs/liuyuno-tabs.vue";
+	import zPaging from '../../uni_modules/z-paging/components/z-paging/z-paging.vue'
+	import loading from '../../components/loading/loading.vue'
+	import noData from '../../components/no-data/no-data.vue'
+
 	export default {
 		data() {
 			return {
@@ -236,23 +312,42 @@
 				classifyList: ["泰式按摩", "中式按摩", "韩式按摩", "美式按摩", "足底按摩"], //按摩分类
 				commentTypeList: [{
 						title: "全部",
+						num: 0
 					},
 					{
 						title: "好评",
+						num: 0
 					},
 					{
 						title: "中评",
+						num: 0
 					},
 					{
 						title: "差评",
+						num: 0
 					}
 				], //评论类型
 				commentIndex: 0, //评论类型当前选中
+				id: '', //商家id
+				projectList: [],
+				technicianList: [],
+				commentList: [],
+				merchantData: {},
+				isDataPro: false,
+				isLoadPro: true,
+				isDataTer: false,
+				isLoadTer: true,
+				isDataComment: false,
+				isLoadComment: true,
+				isStore: 0, //是否收藏
 			};
 		},
 		components: {
 			liuyunoTabs,
-			navTitleAll
+			navTitleAll,
+			zPaging,
+			loading,
+			noData
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -262,15 +357,90 @@
 				}
 			});
 		},
+		onLoad(options) {
+			this.id = options.id
+			this.getMerchantInfo(this.id)
+		},
 		methods: {
-			// tabs 点击
-			tabClick(e) {
-				this.defaultIndex = e
+			// 拨打电话
+			makeCall(tel) {
+				console.log(tel)
+				uni.makePhoneCall({
+					// 手机号
+					phoneNumber: tel,
+					// 成功回调
+					success: (res) => {
+						console.log('调用成功!')
+					},
+					// 失败回调
+					fail: (res) => {
+						console.log('调用失败!')
+					}
+				});
+			},
+			// 顶部收藏
+			store(state) {
+				// 等于1 为已收藏  
+				state == 1 ? this.cancelCollection() : this.addCollection()
+			},
+			// 添加收藏
+			addCollection() {
+				this.isStore = 1
+				var vuedata = {
+					type: 2,
+					itemid: this.id
+				}
+				this.apipost('api/v1/members/collection/add', vuedata).then(res => {
+					if (res.status == 200) {
+						uni.showToast({
+							title: "添加收藏成功",
+							icon: "none"
+						})
+						return false;
+					}
+					this.isStore = 0
+				})
+			},
+			// 取消收藏
+			cancelCollection() {
+				this.isStore = 0
+				var vuedata = {
+					type: 2,
+					itemid: this.id
+				}
+				this.apipost('api/v1/members/collection/cancel', vuedata).then(res => {
+					if (res.status == 200) {
+						uni.showToast({
+							title: "取消收藏成功",
+							icon: "none"
+						})
+						return false;
+					}
+					this.isStore = 1
+				})
+			},
+			// 切割字符
+			label(str) {
+				return str.split(',')
+			},
+
+			// 项目 上拉 下拉
+			queryList(pageNo, pageSize) {
+				this.getProject(pageNo, pageSize)
+			},
+			// 技师 上拉 下拉
+			terQueryList(pageNo, pageSize) {
+				this.getTechnician(pageNo, pageSize)
+			},
+			// 技师 上拉 下拉
+			commentQueryList(pageNo, pageSize) {
+				this.getComment(pageNo, pageSize)
 			},
 
 			// 评论类型点击
 			commentTypeClick(index) {
 				this.commentIndex = index
+				this.getComment(1,10)
 			},
 			// 商家详情里的项目列表点击进入项目详情
 			projectDetails() {
@@ -286,20 +456,146 @@
 			},
 
 			// 商家项目预约服务
-			reservationService() {
+			reservationService(id) {
+				var str = {
+					id: id,
+					store: this.id
+				}
+
 				uni.navigateTo({
-					url: "../../pagesIndexThree/orderByAppointment/orderByAppointment"
+					url: "../../pagesIndexThree/orderByAppointment/orderByAppointment?data=" + JSON.stringify(str)
 				})
-				// uni.showToast({
-				// 	title: "弹出",
-				// 	icon: "none"
-				// })
+				this.$store.commit("upCheckId", -1)
 			},
+
+			// 获取商家信息
+			getMerchantInfo(id) {
+				var vuedata = {
+					id: id
+				}
+				this.apiget('pc/store', vuedata).then(res => {
+					if (res.status == 200) {
+						this.merchantData = res.data.storeList
+						this.isStore = res.data.storeList.collection ? 1 : 0 //是否收藏
+					}
+				})
+			},
+
+
+			// 获取项目列表
+			getProject(num, size) {
+				var vuedata = {
+					page_index: num, // 请求页数，
+					each_page: size, // 请求条数
+					store: this.id
+				}
+				this.apiget('pc/reserve', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.reserveList.length != 0) {
+							this.isDataPro = true
+							let list = res.data.reserveList
+							let totalSize = res.data.total_rows
+							this.$refs.paging.addData(list);
+
+						} else {
+							this.isDataPro = false
+							this.isLoadPro = false
+						}
+
+					}
+				})
+			},
+
+			// 获取技师列表
+			getTechnician(num, size) {
+				var vuedata = {
+					page_index: num, // 请求页数，
+					each_page: size, // 请求条数
+					store: this.id
+				}
+				this.apiget('pc/engineer', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.engineerList.length != 0) {
+							this.isDataTer = true
+							let list = res.data.engineerList
+							let totalSize = res.data.total_rows
+							this.$refs.paging1.addData(list);
+						} else {
+							this.isDataTer = false
+							this.isLoadTer = false
+						}
+					}
+				})
+			},
+
+			// 获取评论列表
+			getComment(num, size) {
+				var vuedata = {
+					page_index: num, // 请求页数，
+					each_page: size, // 请求条数
+					id: this.id,
+					type: 4,
+					star: this.commentIndex,
+				}
+				this.apiget('pc/comment', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.comment.length != 0) {
+							this.isDataComment = true
+							let list = res.data.comment
+							let totalSize = res.data.total_rows
+							// this.commentTypeList[0].num = res.data.comment
+
+							this.$refs.paging2.addData(list);
+						} else {
+							this.isDataComment = false
+							this.isLoadComment = false
+						}
+					}
+				})
+			},
+
+			// tabs 点击
+			tabClick(e) {
+				this.defaultIndex = e
+			},
+
 
 			// 滑动切换列表
 			tabChange(e) {
 				this.$refs.boxTabs.tabToIndex(e.detail.current)
 				this.defaultIndex = e.detail.current
+				this.tabIndex(this.defaultIndex)
+			},
+
+			tabIndex(index) {
+				var page = {
+					num: 1,
+					size: 10,
+				}
+				switch (index) {
+					case 0:
+						break;
+					case 1:
+						// this.isLoadPro = true
+						this.getProject(page.num, page.size)
+						break;
+					case 2:
+						this.getTechnician(page.num, page.size)
+						break;
+					case 3:
+						this.getComment(page.num, page.size)
+						break;
+				}
+			},
+
+			// 评分
+			isComment(comment, index) {
+				var score = parseInt(comment)
+				if (score > index) {
+					return true
+				} else {
+					return false
+				}
 			},
 		}
 	}
@@ -343,6 +639,8 @@
 									height: 376rpx;
 									border-radius: 20rpx;
 									border-radius: 20rpx;
+									overflow: hidden;
+									border-radius: 20rpx;
 
 									.box-content-item-wrap-banner-li {
 										height: 376rpx;
@@ -350,7 +648,7 @@
 										image {
 											width: 100%;
 											height: 376rpx;
-											border-radius: 20rpx;
+
 										}
 									}
 								}
@@ -392,6 +690,7 @@
 										image {
 											width: 126rpx;
 											height: 126rpx;
+											border-radius: 10rpx;
 										}
 									}
 
@@ -411,7 +710,7 @@
 											display: flex;
 											align-items: center;
 
-										
+
 
 											text {
 												margin-right: 6rpx;
@@ -547,89 +846,96 @@
 
 						.box-content-item-project {
 							height: 100%;
-							display: flex;
-							flex-direction: column;
 
-							.box-project-list {
-								flex: 1;
-								overflow-y: scroll;
-								padding: 0 40rpx;
-								box-sizing: border-box;
+							.box-content-item-project-main {
+								height: 100%;
+								display: flex;
+								flex-direction: column;
 
-								.box-project-list-li {
-									display: flex;
-									margin-bottom: 40rpx;
+								.box-project-list {
+									flex: 1;
+									overflow-y: scroll;
+									padding: 0 40rpx;
+									box-sizing: border-box;
 
-									.box-project-list-li-image {
-										image {
-											width: 196rpx;
-											height: 196rpx;
-										}
-									}
-
-									.box-project-list-li-info {
-										display: flex;
-										flex-direction: column;
-										justify-content: space-around;
-										margin-left: 20rpx;
-										flex: 1;
-
-										.box-project-list-li-info-title {
-											line-height: 30rpx;
-											font-size: 34rpx;
-											color: #000;
-										}
-
-										.box-project-list-li-info-list {
+									.box-project-list-main {
+										.box-project-list-li {
 											display: flex;
-											flex-wrap: wrap;
+											margin-bottom: 40rpx;
 
-											.project-list-li-info-list-item {
-												padding: 6rpx 10rpx;
-												box-sizing: border-box;
-												margin-right: 5rpx;
-												margin-bottom: 5rpx;
-												font-size: 22rpx;
-												color: #666;
-												background: #F5F5F5;
-												border-radius: 3rpx;
+											.box-project-list-li-image {
+												image {
+													width: 196rpx;
+													height: 196rpx;
+													border-radius: 10rpx;
+												}
 											}
-										}
 
-										.box-project-list-li-info-sold {
-											font-size: 24rpx;
-											color: #666;
-										}
-
-										.box-project-list-li-info-bottom {
-											display: flex;
-											align-items: center;
-											justify-content: space-between;
-
-											.project-list-li-info-bottom-price {
+											.box-project-list-li-info {
 												display: flex;
-												align-items: center;
+												flex-direction: column;
+												justify-content: space-around;
+												margin-left: 20rpx;
+												flex: 1;
 
-												.list-li-info-bottom-present-price {
+												.box-project-list-li-info-title {
+													line-height: 30rpx;
 													font-size: 34rpx;
-													color: #FF4D4D;
+													color: #000;
 												}
 
-												.list-li-info-bottom-original-price {
-													margin-left: 8rpx;
+												.box-project-list-li-info-list {
+													display: flex;
+													flex-wrap: wrap;
+
+													.project-list-li-info-list-item {
+														padding: 6rpx 10rpx;
+														box-sizing: border-box;
+														margin-right: 5rpx;
+														margin-bottom: 5rpx;
+														font-size: 22rpx;
+														color: #666;
+														background: #F5F5F5;
+														border-radius: 3rpx;
+													}
+												}
+
+												.box-project-list-li-info-sold {
 													font-size: 24rpx;
-													color: #999;
-													text-decoration: line-through;
+													color: #666;
 												}
-											}
 
-											.project-list-li-info-bottom-btn {
-												width: 116rpx;
-												height: 48rpx;
-												background: #FF8366;
-												border-radius: 29rpx;
-												font-size: 28rpx;
-												color: #fff;
+												.box-project-list-li-info-bottom {
+													display: flex;
+													align-items: center;
+													justify-content: space-between;
+
+													.project-list-li-info-bottom-price {
+														display: flex;
+														align-items: center;
+
+														.list-li-info-bottom-present-price {
+															font-size: 34rpx;
+															color: #FF4D4D;
+														}
+
+														.list-li-info-bottom-original-price {
+															margin-left: 8rpx;
+															font-size: 24rpx;
+															color: #999;
+															text-decoration: line-through;
+														}
+													}
+
+													.project-list-li-info-bottom-btn {
+														width: 116rpx;
+														height: 48rpx;
+														background: #FF8366;
+														border-radius: 29rpx;
+														font-size: 28rpx;
+														color: #fff;
+													}
+												}
 											}
 										}
 									}
@@ -640,260 +946,265 @@
 						.box-content-item-technician {
 							height: 100%;
 
-							.box-content-item-technician-wrap {
+							.box-content-item-technician-main {
 								height: 100%;
-								overflow-y: scroll;
 								display: flex;
 								flex-direction: column;
 
-
-								.content-item-technician-wrap-list {
-									padding: 0 40rpx;
-									box-sizing: border-box;
-									height: 100%;
+								.box-content-item-technician-wrap {
+									flex: 1;
 									overflow-y: scroll;
+									display: flex;
+									flex-direction: column;
 
-									.content-item-technician-wrap-list-li {
-										display: flex;
-										margin-bottom: 40rpx;
 
-										.technician-wrap-list-li-image {
-											image {
-												width: 164rpx;
-												height: 164rpx;
-											}
-										}
+									.content-item-technician-wrap-list {
+										padding: 0 40rpx;
+										box-sizing: border-box;
+										height: 100%;
+										overflow-y: scroll;
 
-										.technician-wrap-list-li-info {
+										.content-item-technician-wrap-list-li {
 											display: flex;
-											flex: 1;
-											flex-direction: column;
+											margin-bottom: 40rpx;
 
-											margin-left: 20rpx;
+											.technician-wrap-list-li-image {
+												image {
+													width: 164rpx;
+													height: 164rpx;
+												}
+											}
 
-											.technician-wrap-list-li-info-top {
+											.technician-wrap-list-li-info {
 												display: flex;
-												justify-content: space-between;
-												align-items: flex-start;
+												flex: 1;
+												flex-direction: column;
 
-												.technician-info-top-title {
+												margin-left: 20rpx;
+
+												.technician-wrap-list-li-info-top {
 													display: flex;
-													align-items: center;
-													font-size: 34rpx;
-													color: #000;
-													line-height: 30rpx;
+													justify-content: space-between;
+													align-items: flex-start;
 
-													.technician-info-top-title-name {}
+													.technician-info-top-title {
+														display: flex;
+														align-items: center;
+														font-size: 34rpx;
+														color: #000;
+														line-height: 30rpx;
 
-													.technician-info-top-title-msg {
+														.technician-info-top-title-name {}
+
+														.technician-info-top-title-msg {
+															font-size: 28rpx;
+															color: #FF8366;
+														}
+													}
+
+													.technician-wrap-list-li-info-top-btn {
+														width: 116rpx;
+														height: 48rpx;
+														background: #FF8366;
+														border-radius: 29rpx;
 														font-size: 28rpx;
-														color: #FF8366;
+														color: #fff;
 													}
 												}
 
-												.technician-wrap-list-li-info-top-btn {
-													width: 116rpx;
-													height: 48rpx;
-													background: #FF8366;
-													border-radius: 29rpx;
-													font-size: 28rpx;
-													color: #fff;
+												.technician-wrap-list-li-info-score {
+													display: flex;
+													align-items: center;
+
+													text {
+														margin-right: 6rpx;
+														font-size: 24rpx;
+														color: #999;
+													}
 												}
-											}
 
-											.technician-wrap-list-li-info-score {
-												display: flex;
-												align-items: center;
-
-												text {
-													margin-right: 6rpx;
+												.technician-wrap-list-li-info-introduce {
+													display: flex;
+													margin: 10rpx 0;
 													font-size: 24rpx;
+													line-height: 24rpx;
 													color: #999;
+
+													.technician-list-li-info-introduce-text {
+														padding: 0 20rpx;
+														box-sizing: border-box;
+														border-right: 1rpx solid #ccc;
+													}
+
+													.technician-list-li-info-introduce-text:first-child {
+														padding-left: 0;
+													}
+
+													.technician-list-li-info-introduce-text:last-child {
+														border-right: 0;
+													}
 												}
+
+												.technician-wrap-list-li-info-category {
+													display: flex;
+													// flex-wrap: wrap;
+													overflow: hidden;
+													text-overflow: ellipsis;
+													white-space: nowrap;
+
+													.technician-list-li-info-category-item {
+														padding: 6rpx 10rpx;
+														box-sizing: border-box;
+														margin-right: 5rpx;
+														margin-bottom: 5rpx;
+														font-size: 22rpx;
+														color: #666;
+														background: #F5F5F5;
+														border-radius: 3rpx;
+													}
+												}
+
 											}
-
-											.technician-wrap-list-li-info-introduce {
-												display: flex;
-												margin: 10rpx 0;
-												font-size: 24rpx;
-												line-height: 24rpx;
-												color: #999;
-
-												.technician-list-li-info-introduce-text {
-													padding: 0 20rpx;
-													box-sizing: border-box;
-													border-right: 1rpx solid #ccc;
-												}
-
-												.technician-list-li-info-introduce-text:first-child {
-													padding-left: 0;
-												}
-
-												.technician-list-li-info-introduce-text:last-child {
-													border-right: 0;
-												}
-											}
-
-											.technician-wrap-list-li-info-category {
-												display: flex;
-												// flex-wrap: wrap;
-												overflow: hidden;
-												text-overflow: ellipsis;
-												white-space: nowrap;
-
-												.technician-list-li-info-category-item {
-													padding: 6rpx 10rpx;
-													box-sizing: border-box;
-													margin-right: 5rpx;
-													margin-bottom: 5rpx;
-													font-size: 22rpx;
-													color: #666;
-													background: #F5F5F5;
-													border-radius: 3rpx;
-												}
-											}
-
 										}
 									}
 								}
+
 							}
-
-
 						}
 
 						.box-content-item-comment {
 							height: 100%;
-							display: flex;
-							flex-direction: column;
 
-							.box-content-item-comment-category {
+							.box-content-item-comment-main {
+								height: 100%;
 								display: flex;
-								padding: 30rpx 40rpx 40rpx;
-								box-sizing: border-box;
+								flex-direction: column;
 
-								.comment-category-li {
-									width: 154rpx;
-									height: 60rpx;
-									border: 1px solid #ccc;
-									margin-right: 20rpx;
-									color: #999;
-									font-size: 28rpx;
-									border-radius: 35rpx;
-									transition: 0.2s;
-								}
-
-								.comment-category-li:last-child {
-									margin-right: 0;
-								}
-
-								.comment-category-li-active {
-									color: #FF8366 !important;
-									border: 1px solid #FF8366 !important;
-								}
-							}
-
-							.box-content-item-comment-list {
-								flex: 1;
-								overflow-y: scroll;
-								padding: 0 40rpx;
-								box-sizing: border-box;
-
-								.comment-list-item:last-child {
-									border-bottom: 0;
-								}
-
-								.comment-list-item:first-child {
-									padding-top: 0;
-								}
-
-								.comment-list-item {
+								.box-content-item-comment-category {
 									display: flex;
-									padding: 40rpx 0;
-									border-bottom: 1rpx solid #ededed;
+									padding: 30rpx 40rpx 40rpx;
 									box-sizing: border-box;
 
-									.comment-list-item-image {
-										image {
-											width: 88rpx;
-											height: 88rpx;
-											border-radius: 50%;
-										}
+									.comment-category-li {
+										width: 154rpx;
+										height: 60rpx;
+										border: 1px solid #ccc;
+										margin-right: 20rpx;
+										color: #999;
+										font-size: 28rpx;
+										border-radius: 35rpx;
+										transition: 0.2s;
 									}
 
-									.comment-list-item-info {
-										flex: 1;
-										display: flex;
-										flex-direction: column;
-										margin-left: 20rpx;
+									.comment-category-li:last-child {
+										margin-right: 0;
+									}
 
-										.comment-list-item-info-nickname {
-											// line-height: 40rpx;
-											font-size: 32rpx;
-											color: #000;
+									.comment-category-li-active {
+										color: #FF8366 !important;
+										border: 1px solid #FF8366 !important;
+									}
+								}
+
+								.box-content-item-comment-list-main {
+									flex: 1;
+									overflow-y: scroll;
+									padding: 0 40rpx;
+									box-sizing: border-box;
+
+									.box-content-item-comment-list {
+										.comment-list-item:last-child {
+											border-bottom: 0;
 										}
 
-										.comment-list-item-info-score {
+										.comment-list-item:first-child {
+											padding-top: 0;
+										}
+
+										.comment-list-item {
 											display: flex;
-											align-items: center;
+											padding: 40rpx 0;
+											border-bottom: 1rpx solid #ededed;
+											box-sizing: border-box;
 
-											text {
-												margin-right: 6rpx;
-												font-size: 24rpx;
-												color: #999;
-											}
-										}
-
-										.comment-list-item-info-content {
-											margin-top: 8rpx;
-											font-size: 28rpx;
-											color: #333;
-										}
-
-										.comment-list-item-info-message-time {
-											line-height: 50rpx;
-											font-size: 24rpx;
-											color: #999;
-										}
-
-										.comment-list-item-info-picture-image {
-											display: flex;
-											flex-wrap: wrap;
-
-											.picture-image-li {
-												margin-right: 8rpx;
-
+											.comment-list-item-image {
 												image {
-													width: 182rpx;
-													height: 182rpx;
+													width: 88rpx;
+													height: 88rpx;
+													border-radius: 50%;
+												}
+											}
+
+											.comment-list-item-info {
+												flex: 1;
+												display: flex;
+												flex-direction: column;
+												margin-left: 20rpx;
+
+												.comment-list-item-info-nickname {
+													// line-height: 40rpx;
+													font-size: 32rpx;
+													color: #000;
+												}
+
+												.comment-list-item-info-score {
+													display: flex;
+													align-items: center;
+
+													text {
+														margin-right: 6rpx;
+														font-size: 24rpx;
+														color: #999;
+													}
+												}
+
+												.comment-list-item-info-content {
+													margin-top: 8rpx;
+													font-size: 28rpx;
+													color: #333;
+												}
+
+												.comment-list-item-info-message-time {
+													line-height: 50rpx;
+													font-size: 24rpx;
+													color: #999;
+												}
+
+												.comment-list-item-info-picture-image {
+													display: flex;
+													flex-wrap: wrap;
+
+													.picture-image-li {
+														margin-right: 8rpx;
+
+														image {
+															width: 182rpx;
+															height: 182rpx;
+														}
+													}
+												}
+
+												.comment-list-item-info-reply {
+													padding: 20rpx;
+													box-sizing: border-box;
+													border-radius: 10rpx;
+													background: #F7F7F7;
+													font-size: 28rpx;
+
+													.comment-list-item-info-reply-name {
+														color: #999999;
+													}
+
+													.comment-list-item-info-reply-content {
+														color: #333;
+													}
 												}
 											}
 										}
-
-										.comment-list-item-info-reply {
-											padding: 20rpx;
-											box-sizing: border-box;
-											border-radius: 10rpx;
-											background: #F7F7F7;
-											font-size: 28rpx;
-
-											.comment-list-item-info-reply-name {
-												color: #999999;
-											}
-
-											.comment-list-item-info-reply-content {
-												color: #333;
-											}
-										}
-
-
-
 									}
 								}
 							}
-
 						}
-
-
 
 
 						.box-content-item-common-styles {

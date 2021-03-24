@@ -22,11 +22,16 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
 	state: {
 		isAdd: false,
+		checkId: -1
 	},
 	mutations: {
 		//用于判断是否添加地址 等同于发送监听
 		upAdd(state, bool) {
 			state.isAdd = bool
+		},
+		// 选择按摩技师
+		upCheckId(state, id) {
+			state.checkId = id
 		},
 	},
 	actions: {}

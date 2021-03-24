@@ -7,29 +7,28 @@
 			<view class="box-content-wrap">
 				<view class="content-wrap-top">
 					<view class="content-wrap-top-title">
-						<image src="../../static/images/tool.jpg" mode="aspectFill"></image>
-						<text>罗约蓝池·温泉SPA</text>
+						<text class="iconfont iconshangjia" style="font-size: 28rpx;color: #FF8366;"></text>
+						<text>{{dataTop.name}}</text>
 					</view>
 					<view class="content-wrap-top-more">
-						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 					</view>
 				</view>
 				<view class="content-wrap-top-list">
 					<view class="content-wrap-top-list-li">
 						<view class="content-wrap-top-list-li-image">
-							<image src="../../static/images/001.png" mode="aspectFill"></image>
+							<image :src="dataList.simg" mode="aspectFill"></image>
 						</view>
 						<view class="content-wrap-top-list-li-info">
 							<view class="content-wrap-top-list-li-info-top">
-								<view class="content-wrap-top-list-li-info-top-text">
-									全身按摩SPA
-								</view>
+								<view class="content-wrap-top-list-li-info-top-text">{{dataList.name}}</view>
 								<view class="content-wrap-top-list-li-info-top-price">
-									￥238.00
+									￥{{dataList.price}}
 								</view>
 							</view>
 							<view class="content-wrap-top-list-li-info-type">
-								<view class="list-li-info-type-item flex-center" v-for="item in 5">足底按摩</view>
+								<!-- <view class="list-li-info-type-item flex-center" v-for="item in label(dataList.service_effectiveness)">{{item}}</view> -->
 							</view>
 						</view>
 					</view>
@@ -51,16 +50,19 @@
 			</view>
 
 			<view class="box-content-select-technician">
-				<view class="content-select-technician-wrap" :class="isSelect?'technician-wrap-border':''" @click="selectTechnician">
-					<view class="box-content-select-technician-title" :class="isSelect?'title-color':''">
+				<view class="content-select-technician-wrap" :class="technicianId!=-1?'technician-wrap-border':''"
+					@click="selectTechnician">
+					<view class="box-content-select-technician-title" :class="technicianId!=-1?'title-color':''">
 						选择按摩技师
 					</view>
 					<view class="box-content-select-technician-more">
-						<text class="iconfont icongengduo icon-font" style="color: #FF8366;font-size: 32rpx;margin-top: 4rpx;"  v-if="!isSelect"></text>
-						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 32rpx;margin-top: 4rpx;" v-else></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #FF8366;font-size: 32rpx;margin-top: 4rpx;" v-if="!technicianId!=-1"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #999;font-size: 32rpx;margin-top: 4rpx;" v-else></text>
 					</view>
 				</view>
-				<view class="select-technician-info" :class="isSelect?'select-technician-info-auto':''">
+				<view class="select-technician-info" :class="technicianId!=-1?'select-technician-info-auto':''">
 					<view class="select-technician-info-image">
 						<image src="../../static/images/shop-ico.png" mode="aspectFill"></image>
 					</view>
@@ -74,13 +76,14 @@
 							<view class="select-technician-info-main-text">X1</view>
 						</view>
 						<view class="select-technician-info-main-bottom">
-							<view class="select-technician-info-main-bottom-item flex-center" v-for="item in 3">足底按摩</view>
+							<view class="select-technician-info-main-bottom-item flex-center" v-for="item in 5">足浴
+							</view>
 						</view>
 					</view>
 				</view>
 			</view>
 
-			<view class="box-content-appointment-time">
+			<view class="box-content-appointment-time" :class="technicianId!=-1?'box-content-appointment-time-active':''">
 				<view class="box-content-appointment-time-wrap">
 					<view class="box-content-appointment-time-wrap-top">
 						<view class="appointment-time-wrap-title">
@@ -97,8 +100,8 @@
 				</view>
 				<view class="box-content-appointment-time-main">
 					<view class="appointment-time-main-list">
-						<view class="appointment-time-main-list-li flex-center" :class="index==20?'main-list-li-active':''" v-for="(item,index) in timeList"
-						 :key="index">
+						<view class="appointment-time-main-list-li flex-center"
+							:class="index==20?'main-list-li-active':''" v-for="(item,index) in timeList" :key="index">
 							<text>{{item}}</text>
 						</view>
 					</view>
@@ -113,7 +116,8 @@
 							<input type="text" value="" placeholder="请输入你的完整姓名" />
 						</view>
 						<view class="appointment-info-list-li-title-type">
-							<view class="appointment-info-list-li-title-type-name flex-center" v-for="(item,index) in typeList" :key="index">{{item}}</view>
+							<view class="appointment-info-list-li-title-type-name flex-center"
+								v-for="(item,index) in typeList" :key="index">{{item}}</view>
 						</view>
 					</view>
 					<view class="box-content-appointment-info-list-li">
@@ -136,7 +140,8 @@
 					<view class="box-content-coupon-top-title">优惠券</view>
 					<view class="box-content-coupon-top-more">
 						<text>-￥50.00</text>
-						<text class="iconfont icongengduo icon-font" style="color: #FF8366;font-size: 32rpx;margin-top: 4rpx;" ></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #FF8366;font-size: 32rpx;margin-top: 4rpx;"></text>
 					</view>
 				</view>
 				<view class="box-content-coupon-bottom">
@@ -177,6 +182,10 @@
 					"09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
 					"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
 				],
+				dataTop: {},
+				dataList: {},
+				sotreId: '', //门店id
+				technicianId: -1
 			};
 		},
 		components: {
@@ -191,7 +200,21 @@
 				}
 			});
 		},
+		onLoad(options) {
+			var data = JSON.parse(options.data)
+			this.getDetails(data.id, data.store)
+		},
+		onShow() {
+			this.technicianId = this.$store.state.checkId
+			console.log("预约下单：" + this.technicianId)
+		},
 		methods: {
+
+			// 切割字符
+			label(str) {
+				return str.split(',')
+			},
+
 			// 步进器
 			stepperClick(type) {
 				switch (type) {
@@ -211,12 +234,32 @@
 				}
 			},
 
+			// 获取详情
+			getDetails(id, store) {
+				var vuedata = {
+					id: id,
+					store: store,
+				}
+				this.apiget('api/v1/order/service', vuedata).then(res => {
+					if (res.status == 200) {
+						this.dataTop = res.data.store
+						this.dataList = res.data.service
+						this.storeId = res.data.store.id
+
+						console.log(res.data)
+					}
+				})
+			},
+
+
 			// 点击选择技师
 			selectTechnician() {
 				uni.navigateTo({
-					url: "../../pagesIndexFour/selectMassageTechnician/selectMassageTechnician"
+					url: "../../pagesIndexFour/selectMassageTechnician/selectMassageTechnician?storeId=" + this
+						.storeId
 				})
 
+				this.$store.commit("upCheckId", this.technicianId)
 				// this.isSelect = !this.isSelect
 			},
 
@@ -273,14 +316,8 @@
 						display: flex;
 						align-items: center;
 
-
-						image {
-							width: 28rpx;
-							height: 28rpx;
-						}
-
 						text {
-							margin-left: 10rpx;
+							margin-right: 10rpx;
 							font-size: 28rpx;
 							color: #000;
 							font-weight: 500;
@@ -307,6 +344,7 @@
 							image {
 								width: 138rpx;
 								height: 138rpx;
+								border-radius: 10rpx;
 							}
 						}
 
@@ -515,9 +553,17 @@
 
 			}
 
-			.box-content-appointment-time {
+			.box-content-appointment-time-active {
+				height: 600rpx !important;
 				margin-top: 20rpx;
+
+			}
+
+			.box-content-appointment-time {
 				background: #fff;
+				transition: 0.3s;
+				height: 0;
+				overflow: hidden;
 
 				.box-content-appointment-time-wrap {
 					padding: 0 40rpx;
@@ -537,10 +583,12 @@
 
 						.appointment-time-wrap-text {
 							display: flex;
+
 							text {
 								color: #26BF82;
 							}
-							.icon-font{
+
+							.icon-font {
 								margin-left: 10rpx;
 								transform: rotate(270deg);
 								transition: 0.3s;
@@ -561,7 +609,7 @@
 						flex-wrap: wrap;
 
 						.appointment-time-main-list-li {
-							width: 120rpx;
+							width: 116rpx;
 							height: 58rpx;
 							font-size: 28rpx;
 						}
@@ -666,7 +714,7 @@
 							color: #FF8366;
 						}
 
-						.icon-font{
+						.icon-font {
 							margin-left: 8rpx;
 						}
 					}

@@ -6,7 +6,8 @@
 			</view>
 			<view class="nav-title">{{navTitle}}</view>
 			<view class="nav-right">
-				<text class="iconfont iconguanzhu icon-font" style="color: #000;font-size: 52rpx" @click="store"></text>
+
+				<text class="iconfont icon-font" :class="isStore?'iconguanzhu-xuanzhong':'iconguanzhu'" :style="{color:isStore?'#FF967D':'#000'}" style="font-size: 52rpx" @click="store"></text>
 				<text class="iconfont iconfenxiang icon-font" style="color: #000;font-size: 52rpx" @click="share"></text>
 			</view>
 		</view>
@@ -25,6 +26,10 @@
 			navTitle: {
 				type: String,
 				default: "导航栏"
+			},
+			isStore:{
+				type:Number,
+				default:0
 			}
 		},
 		onReady() {
@@ -44,7 +49,7 @@
 			},
 			// 收藏
 			store(){
-				this.$emit("store")
+				this.$emit("store",this.isStore)
 			},
 			// 分享
 			share(){
