@@ -93,7 +93,7 @@
 										<text class="iconfont iconwujiaoxing icon-font"
 											:style="{color:isComment(item.comment,storeIndex)?'#FFCD4D':'#eee',}"
 											style="font-size: 28rpx;" v-for="(store,storeIndex) in 5"></text>
-										<text>5分</text>
+										<text>{{storeMsg(item.comment,index)}}分</text>
 									</view>
 									<view class="list-content-info-box">
 										<view class="list-content-info-box-text">{{item.address}}</view>
@@ -294,14 +294,10 @@
 							let totalSize = res.data.total_rows
 
 							this.$refs.paging.addData(list);
-
-
-
 						} else {
 							// 显示无数据背景
 							this.isData = false;
 							this.isLoad = false;
-							this.mescroll.endErr()
 						}
 
 					}
@@ -310,14 +306,42 @@
 
 			// 评分
 			isComment(comment, index) {
-				var score = parseInt(comment)
-				if (score > index) {
+				var store = parseInt(comment)
+				var str = 0
+				if (store <= 20) {
+					str = 1
+				} else if (store > 20 && store <= 40) {
+					str = 2
+				} else if (store > 40 && store <= 60) {
+					str = 3
+				} else if (store > 60 && store <= 80) {
+					str = 4
+				} else if (store > 80) {
+					str = 5
+				}
+				if (str > index) {
 					return true
 				} else {
 					return false
 				}
 			},
-
+			// 评分提示
+			storeMsg(comment, index) {
+				var store = parseInt(comment)
+				var str = 0
+				if (store <= 20) {
+					str = 1
+				} else if (store > 20 && store <= 40) {
+					str = 2
+				} else if (store > 40 && store <= 60) {
+					str = 3
+				} else if (store > 60 && store <= 80) {
+					str = 4
+				} else if (store > 80) {
+					str = 5
+				}
+				return str
+			},
 		}
 	}
 </script>

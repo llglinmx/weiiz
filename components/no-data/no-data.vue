@@ -3,7 +3,7 @@
 		<view class="no-data-box flex-center">
 			<!-- <text class="iconfont icondingdan icon-font"></text> -->
 			<image src="../../static/images/nodata.png" mode="aspectFill"></image>
-			<text class="no-text">暂无任何数据</text>
+			<text class="no-text">{{msg}}</text>
 		</view>
 	</view>
 </template>
@@ -11,7 +11,10 @@
 <script>
 	export default {
 		props: {
-
+			msg:{
+				type:String,
+				default:'暂无任何数据'
+			}
 		}
 	}
 </script>

@@ -1,4 +1,4 @@
-<template>
+ss<template>
 	<view class="box">
 		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
 			<navTitle navTitle="预约下单"></navTitle>
@@ -32,8 +32,8 @@
 							</view>
 						</view>
 					</view>
-					<view class="content-wrap-top-bottom">
-						<view class="content-wrap-top-bottom-num">数量</view>
+					<!-- <view class="content-wrap-top-bottom">
+						<view class="content-wrap-top-bottom-num">预约人数</view>
 						<view class="content-wrap-top-bottom-stepper">
 							<view class="reduce" @click="stepperClick('reduce')">
 								<image src="../../static/images/reduce-icon.png" mode="aspectFill"></image>
@@ -45,52 +45,54 @@
 								<image src="../../static/images/add-icon.png" mode="aspectFill"></image>
 							</view>
 						</view>
-					</view>
+					</view> -->
 				</view>
 			</view>
 
 			<view class="box-content-select-technician">
 				<view class="content-select-technician-wrap" :class="technicianId!=-1?'technician-wrap-border':''"
 					@click="selectTechnician">
-					<view class="box-content-select-technician-title" :class="technicianId!=-1?'title-color':''">
-						选择按摩技师
+					<view class="box-content-select-technician-title" :class="technicianId!=-1?'title-color':''">选择按摩技师
 					</view>
 					<view class="box-content-select-technician-more">
 						<text class="iconfont icongengduo icon-font"
-							style="color: #FF8366;font-size: 32rpx;margin-top: 4rpx;" v-if="!technicianId!=-1"></text>
+							style="color: #FF8366;font-size: 32rpx;margin-top: 4rpx;" v-if="technicianId ==-1"></text>
 						<text class="iconfont icongengduo icon-font"
 							style="color: #999;font-size: 32rpx;margin-top: 4rpx;" v-else></text>
 					</view>
 				</view>
-				<view class="select-technician-info" :class="technicianId!=-1?'select-technician-info-auto':''">
+				<view class="select-technician-info" v-if="technicianId==item.id"
+					:class="technicianId!=-1?'select-technician-info-auto':''" v-for="(item,indx) in technicianList"
+					:key="item.id">
 					<view class="select-technician-info-image">
 						<image src="../../static/images/shop-ico.png" mode="aspectFill"></image>
 					</view>
 					<view class="select-technician-info-main">
 						<view class="select-technician-info-main-top">
-							<view class="select-technician-info-main-top-title">王二麻子</view>
-							<view class="select-technician-info-main-top-price">￥44.70</view>
+							<view class="select-technician-info-main-top-title">{{item.name}}</view>
+							<view class="select-technician-info-main-top-price">￥{{serviceCharge(item.service_fee)}}
+							</view>
 						</view>
 						<view class="select-technician-info-main-center">
-							<view class="select-technician-info-main-title">工龄：2年</view>
-							<view class="select-technician-info-main-text">X1</view>
+							<view class="select-technician-info-main-title">工龄：{{item.service_times}}年</view>
 						</view>
 						<view class="select-technician-info-main-bottom">
-							<view class="select-technician-info-main-bottom-item flex-center" v-for="item in 5">足浴
-							</view>
+							<view class="select-technician-info-main-bottom-item flex-center"
+								v-for="(i,j) in item.reserve_info">{{i.name}}</view>
 						</view>
 					</view>
 				</view>
 			</view>
 
-			<view class="box-content-appointment-time" :class="technicianId!=-1?'box-content-appointment-time-active':''">
+			<view class="box-content-appointment-time"
+				:class="technicianId!=-1?'box-content-appointment-time-active':''">
 				<view class="box-content-appointment-time-wrap">
 					<view class="box-content-appointment-time-wrap-top">
-						<view class="appointment-time-wrap-title">
-							预约时间
-						</view>
+						<view class="appointment-time-wrap-title">预约时间</view>
 						<view class="appointment-time-wrap-text">
-							<text>2021-01-10 15:30-16:30</text>
+							<text :style="{opacity:serviceStartTime!=''&&serviceEndTime!=''?'1':'0'}">
+								{{serviceData}} {{serviceStartTime}}-{{serviceEndTime}}
+							</text>
 							<text class="iconfont icongengduo icon-font" style="color: #000;font-size: 32rpx;"></text>
 						</view>
 					</view>
@@ -101,8 +103,9 @@
 				<view class="box-content-appointment-time-main">
 					<view class="appointment-time-main-list">
 						<view class="appointment-time-main-list-li flex-center"
-							:class="index==20?'main-list-li-active':''" v-for="(item,index) in timeList" :key="index">
-							<text>{{item}}</text>
+							:class="{'mainListLiActiveFirst':startIndex==index,'mainListLiActive':startIndex<=index && index<=endIndex,'mainListLiActiveLast':endIndex==index,'colorActive':item.status==-1}"
+							v-for="(item,index) in timeList" @click="choiceTime(item,index)" :key="item.time">
+							<text>{{item.time}}</text>
 						</view>
 					</view>
 				</view>
@@ -113,23 +116,25 @@
 					<view class="box-content-appointment-info-list-li">
 						<view class="appointment-info-list-li-title">预约姓名</view>
 						<view class="appointment-info-list-li-input">
-							<input type="text" value="" placeholder="请输入你的完整姓名" />
+							<input type="text" v-model.trim="valName" @input='appointmentPerson'
+								placeholder="请输入你的完整姓名" />
 						</view>
 						<view class="appointment-info-list-li-title-type">
 							<view class="appointment-info-list-li-title-type-name flex-center"
-								v-for="(item,index) in typeList" :key="index">{{item}}</view>
+								v-for="(item,index) in typeList" :class="typeListIndex==index?'name-active':''"
+								:key="index" @click="typeListClick(index)">{{item}}</view>
 						</view>
 					</view>
 					<view class="box-content-appointment-info-list-li">
 						<view class="appointment-info-list-li-title">手机号码</view>
 						<view class="appointment-info-list-li-input" style="flex: 1;">
-							<input type="number" value="" placeholder="请输入你的手机号码" />
+							<input type="number" v-model.trim="valPhone" placeholder="请输入你的手机号码" />
 						</view>
 					</view>
 					<view class="box-content-appointment-info-list-li">
 						<view class="appointment-info-list-li-title">订单备注</view>
 						<view class="appointment-info-list-li-input" style="flex: 1;">
-							<input type="text" value="" placeholder="可将您的其他要求告知商家" />
+							<input type="text" v-model.trim="remarks" placeholder="可将您的其他要求告知商家" />
 						</view>
 					</view>
 				</view>
@@ -139,15 +144,15 @@
 				<view class="box-content-coupon-top" @click="checkCoupons">
 					<view class="box-content-coupon-top-title">优惠券</view>
 					<view class="box-content-coupon-top-more">
-						<text>-￥50.00</text>
+						<text>-￥{{preferentiaAmount |toFixed}}</text>
 						<text class="iconfont icongengduo icon-font"
 							style="color: #FF8366;font-size: 32rpx;margin-top: 4rpx;"></text>
 					</view>
 				</view>
 				<view class="box-content-coupon-bottom">
-					<view class="box-content-coupon-bottom-text">已优惠￥10</view>
+					<view class="box-content-coupon-bottom-text">已优惠￥{{preferentiaAmount|toFixed}}</view>
 					<view class="box-content-coupon-bottom-price">
-						小计￥<text>888.00</text>
+						小计￥<text>{{totalPrice}}</text>
 					</view>
 				</view>
 			</view>
@@ -155,7 +160,7 @@
 		</view>
 		<view class="box-footer">
 			<view class="box-footer-text">
-				合计￥：<text>520.00</text>
+				合计￥：<text>{{totalPrice}}</text>
 			</view>
 			<view class="box-footer-btn flex-center" @click="appointment">
 				立即预约
@@ -174,23 +179,41 @@
 				num: 1, //下单数量
 				isSelect: false, //是否有选择技师
 				typeList: ["先生", "女士"],
+				typeListIndex: -1,
 				defaultIndex: 0, //星期 当前选中日期
-				tabs: ["今天01-10", "周一01-11", "周二01-11", "周三01-11", "周四01-11", "周五01-11", "周六01-11"],
+				tabs: [],
 				timeList: [
 					"09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
 					"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
 					"09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
 					"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
 				],
+				technicianList: [],
+				tabsList: [],
 				dataTop: {},
 				dataList: {},
 				sotreId: '', //门店id
-				technicianId: -1
+				technicianId: -1, //初始技师id
+				startIndex: -1,
+				endIndex: -1,
+				serviceData: '', //服务日期
+				serviceWeek: '', //服务星期（1,2,3）
+				serviceStartTime: '', //服务开始时间
+				serviceEndTime: '', //服务结束时间
+				valName: '', //预约人姓名
+				valPhone: '', //预约人电话
+				remarks: '', //备注
+				preferentiaAmount: 120, //优惠金额
 			};
 		},
 		components: {
 			navTitle,
 			weekTabs
+		},
+		filters: {
+			toFixed(val) { //保留两位小数
+				return val.toFixed(2)
+			}
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -206,7 +229,17 @@
 		},
 		onShow() {
 			this.technicianId = this.$store.state.checkId
-			console.log("预约下单：" + this.technicianId)
+			if (this.technicianId != -1) {
+				this.getTechnician(1, 30)
+			}
+			// console.log("预约下单：" + this.technicianId)
+			this.getTimeandWeek()
+		},
+		computed: {
+			totalPrice() {
+				var price = Number(this.dataList.price) - Number(this.preferentiaAmount)
+				return price.toFixed(2)
+			},
 		},
 		methods: {
 
@@ -245,12 +278,176 @@
 						this.dataTop = res.data.store
 						this.dataList = res.data.service
 						this.storeId = res.data.store.id
-
-						console.log(res.data)
+						// console.log(res.data)
 					}
 				})
 			},
 
+			// 获取技师
+			getTechnician(num, size) {
+				var vuedata = {
+					page_index: num, // 请求页数，
+					each_page: size, // 请求条数
+					store: this.storeId
+				}
+				this.apiget('pc/engineer', vuedata).then(res => {
+					if (res.status == 200) {
+						this.isData = true
+						var list = res.data.engineerList
+						this.technicianList = list
+						// console.log(list)
+						// this.technicianList.forEach(item => {
+						// 	console.log(item.id)
+						// })
+					} else {
+						this.isData = false
+						this.isLoad = false
+					}
+				})
+			},
+			// 获取技师服务时间
+			getServiceTime(e) {
+				var vuedata = {
+					store: this.storeId,
+					member: this.technicianId, //技师id
+					service: this.dataList.id,
+					date: e.date,
+					week: e.weekNum,
+					fast: 0,
+					order: 0,
+					group_id: 0,
+				}
+				this.apiget('api/v1/order/service/schedule', vuedata).then(res => {
+					if (res.status == 200) {
+						this.timeList = res.data.request[0]
+						this.startIndex = -1;
+						this.endIndex = -1;
+						this.erviceStartTime = ''; //服务开始时间
+						this.serviceEndTime = ''; //服务结束时间
+					}
+				})
+			},
+
+			// 选择时间
+			choiceTime(item, index) {
+				if (item.status == 1) {
+					var time = item.time.split(':');
+					var servtime = item.service_time;
+					var start = 60 * parseInt(time[0]) + parseInt(time[1]) + parseInt(servtime)
+					var d = index + 1;
+					var idx = '';
+					for (index; d < this.timeList.length; d++) {
+						let res = this.timeList[d];
+						let time = res.time.split(':');
+						let end = 60 * parseInt(time[0]) + parseInt(time[1])
+						if (res.status == -1) {
+							uni.showToast({
+								title: "时间不足，不能选择",
+								icon: "none"
+							})
+							return;
+						}
+						if (idx == '' && start <= end) {
+							idx = d;
+							this.startIndex = index;
+							this.endIndex = d;
+							// console.log(item.time, res.time)
+							this.serviceStartTime = item.time;
+							this.serviceEndTime = res.time;
+							return;
+						}
+					}
+
+					uni.showToast({
+						title: "时间不足，不能选择",
+						icon: "none"
+					})
+
+				}
+			},
+
+			// 选择预约人 称呼
+			typeListClick(index) {
+				this.typeListIndex = index
+			},
+			// 监听是否有输入预约人姓名
+			appointmentPerson() {
+				if (this.valName.length > 1) {
+					this.typeListIndex = 0
+					return false;
+				}
+				this.typeListIndex = -1
+			},
+
+
+			// 立即预约按钮
+			appointment() {
+				var reg = /^1[3|4|5|7|8][0-9]{9}$/; //验证规则
+
+				if (this.technicianId != -1) { //判断是否有选择技师
+					if (this.serviceStartTime != '' && this.serviceEndTime != '') { //判断是否有选择服务时间
+						if (this.valName != '' && this.valPhone != '') { // 是否输入联系人与手机号ss
+							if (reg.test(this.valPhone)) { // 判断手机号是否正确
+								this.createOrder()
+								return false
+							}
+							uni.showToast({
+								title: "请输入正确的手机号",
+								icon: "none"
+							})
+							return false
+						}
+						uni.showToast({
+							title: "请检查是否有输入了姓名与手机号",
+							icon: "none"
+						})
+						return false;
+					}
+					uni.showToast({
+						title: "请选择服务时间",
+						icon: "none"
+					})
+					return false;
+				}
+				uni.showToast({
+					title: "请选择技师",
+					icon: "none"
+				})
+
+
+			},
+
+			// 创建订单
+			createOrder() {
+				var vuedata = {
+					service: 1, //服务项目id
+					service_type: 1, // 1到店 2上门
+					store: this.storeId, //门店id
+					fast: 0, //是否默认预约：0否，1是
+					member: this.technicianId, //技师ID
+					plan_date: this.serviceData, //预约日期：格式：2021-03-12
+					start: this.serviceStartTime, //预约时间段开始时间：例：10：00
+					end: this.serviceEndTime, //预约时间段结束时间：例：10：00
+					week: this.serviceWeek, //当天星期：值为（0，1，2，3，4，5，6）
+					name: this.valName, //用户名称
+					mobile: this.valPhone, //用户手机号
+					coupon_gift: 0, //优惠券ID
+					group: 0, //是否团购产品：1是，0否
+					group_id: 0, //团购ID
+				}
+
+				this.apipost('api/v1/order/service/create', vuedata).then(res => {
+					if (res.status == 200) {
+						uni.navigateTo({
+							url: "../../pagesIndexFour/paymentOrder/paymentOrder?id="+res.data
+						})
+					}
+				})
+				// uni.navigateTo({
+				// 	url: "../../pagesIndexFour/paymentOrder/paymentOrder?id=142"
+				// })
+
+			},
 
 			// 点击选择技师
 			selectTechnician() {
@@ -271,14 +468,75 @@
 			},
 			// 星期日期tabs 点击
 			tabClick(e) {
+				if (this.defaultIndex != e) { //用于判断是否重复点击
+					this.getServiceTime(this.tabsList[e])
+					this.serviceData = this.tabsList[e].date
+					this.serviceWeek = this.tabsList[e].weekNum
+				}
 				this.defaultIndex = e
 			},
 
-			// 立即预约按钮
-			appointment() {
-				uni.navigateTo({
-					url: "../../pagesIndexFour/paymentOrder/paymentOrder"
-				})
+			// 获取一周时间
+			getTimeandWeek() {
+				this.tabs = []
+				//获取当前时间
+				var now = new Date();
+
+				//往后几天就循环几次
+				for (let i = 0; i < 7; i++) {
+					//24 * 3600 * 1000 就是计算一天的时间  
+					var date = new Date(now.getTime() + i * 24 * 3600 * 1000);
+					var year = date.getFullYear();
+					var month = date.getMonth() + 1;
+					var day = date.getDate();
+					var dt2 = new Date(now.getTime() + i * 24 * 3600 * 1000);
+					var weekDay = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+
+					var dateDay = this.addMarh(month) + '-' + this.addMarh(day) //日期
+
+					//把七天的时间和星期添加到数组中 判断当前日期是否为当日 当日则显示 今天
+					if (dateDay == this.getTime()) {
+						this.tabs.push('今天' + ' ' + dateDay)
+					} else {
+						this.tabs.push(weekDay[dt2.getDay()] + ' ' + dateDay)
+					}
+					var str = {
+						date: year + '-' + this.addMarh(month) + '-' + this.addMarh(day),
+						mouth: this.addMarh(month) + '-' + this.addMarh(day),
+						week: weekDay[dt2.getDay()],
+						weekNum: dt2.getDay()
+					}
+					this.tabsList.push(str)
+				}
+				if (this.technicianId != -1) { //在已经选择客户的情况下  执行列表第一个时间的 服务时间接口
+					this.getServiceTime(this.tabsList[0])
+					this.serviceData = this.tabsList[0].date
+					this.serviceWeek = this.tabsList[0].weekNum
+				}
+			},
+			// 小于10 补0 
+			addMarh(num) {
+				return num < 10 ? '0' + num : num
+			},
+
+			// 获取当天日期
+			getTime() {
+				var date = new Date(),
+					year = date.getFullYear(),
+					month = date.getMonth() + 1,
+					day = date.getDate(),
+					hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(),
+					minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(),
+					second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+				month >= 1 && month <= 9 ? (month = "0" + month) : "";
+				day >= 0 && day <= 9 ? (day = "0" + day) : "";
+				var timer = month + '-' + day;
+				return timer;
+			},
+			// 服务费
+			serviceCharge(fee) {
+				var str = Number(fee / 100);
+				return (this.dataList.price * str).toFixed(2);
 			},
 		}
 	}
@@ -526,10 +784,6 @@
 								color: #666;
 							}
 
-							.select-technician-info-main-text {
-								font-size: 30rpx;
-								color: #999;
-							}
 						}
 
 						.select-technician-info-main-bottom {
@@ -582,7 +836,10 @@
 						}
 
 						.appointment-time-wrap-text {
+							flex: 1;
 							display: flex;
+							transition: 0.3s;
+							justify-content: flex-end;
 
 							text {
 								color: #26BF82;
@@ -607,26 +864,33 @@
 					.appointment-time-main-list {
 						display: flex;
 						flex-wrap: wrap;
+						// justify-content: center;
 
 						.appointment-time-main-list-li {
-							width: 116rpx;
-							height: 58rpx;
+							width: 118rpx;
+							height: 64rpx;
 							font-size: 28rpx;
+							color: #666;
+							transition: 0.3s;
 						}
 
-						.main-list-li-active {
+						.mainListLiActive {
 							background: #26BF82;
 							color: #fff;
-							border-radius: 32rpx;
+							// border-radius: 32rpx;
 						}
 
-						.main-list-li-active-first {
+						.colorActive {
+							color: #ccc !important;
+						}
+
+						.mainListLiActiveFirst {
 							background: #26BF82;
 							color: #fff;
 							border-radius: 32rpx 0 0 32rpx;
 						}
 
-						.main-list-li-active-last {
+						.mainListLiActiveLast {
 							background: #26BF82;
 							color: #fff;
 							border-radius: 0 32rpx 32rpx 0;
@@ -674,6 +938,11 @@
 								margin-right: 0;
 							}
 
+							.name-active {
+								border: 1rpx solid #FF8366 !important;
+								color: #FF8366 !important;
+							}
+
 							.appointment-info-list-li-title-type-name {
 								width: 96rpx;
 								height: 54rpx;
@@ -682,6 +951,7 @@
 								margin-right: 16rpx;
 								color: #999;
 								font-size: 26rpx;
+								transition: 0.3s;
 							}
 						}
 					}

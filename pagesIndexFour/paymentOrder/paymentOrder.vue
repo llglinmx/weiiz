@@ -6,14 +6,12 @@
 		<view class="box-content">
 			<view class="box-content-wrap">
 				<view class="box-content-wrap-msg-time">
-					支付剩余时间 44:50
+					支付剩余时间 {{rocallTime}}
 				</view>
 				<view class="box-content-wrap-price">
-					￥<text>80.00</text>
+					￥<text>{{dataInfo.payable}}</text>
 				</view>
-				<view class="box-content-wrap-text">
-					罗约蓝池·温泉SPA(集美门店)
-				</view>
+				<view class="box-content-wrap-text">{{dataInfo.store_name}}</view>
 			</view>
 			<view class="box-content-info">
 				<view class="box-content-info-left">
@@ -56,6 +54,8 @@
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
+				rocallTime: '',
+				dataInfo:{}
 			};
 		},
 		components: {
@@ -70,12 +70,56 @@
 				}
 			});
 		},
+		onLoad(options) {
+			let id = options.id
+			this.getOrderInfo(id)
+			
+		},
 		methods: {
 			// 确认支付按钮
 			confirmPay() {
 				uni.navigateTo({
 					url: "../paymentSuccessful/paymentSuccessful"
 				})
+			},
+			// 获取订单信息
+			getOrderInfo(id) {
+				this.apiget('api/v1/members/member_order/' + id, {}).then(res => {
+					if (res.status == 200) {
+						this.dataInfo = res.data
+						this.runBack(45000000) // 传入一个时间戳
+					}
+				})
+			},
+
+
+			// 倒计时
+			runBack(cm) {
+				if (cm > 0) {
+					// 如果时间是超过1分钟，则需要展示的样式是： x分x秒，如果是小于1分钟，则是 00分x秒
+					cm > 60000 ?
+						(this.rocallTime =
+							(new Date(cm).getMinutes() < 10 ?
+								"0" + new Date(cm).getMinutes() :
+								new Date(cm).getMinutes()) +
+							":" +
+							(new Date(cm).getSeconds() < 10 ?
+								"0" + new Date(cm).getSeconds() :
+								new Date(cm).getSeconds())) :
+						(this.rocallTime =
+							"00:" +
+							(new Date(cm).getSeconds() < 10 ?
+								"0" + new Date(cm).getSeconds() :
+								new Date(cm).getSeconds()));
+					let _msThis = this;
+					// 使用setTimeout倒计时，1秒后，重复调用此函数。，直到cm =0为止，跳出这个函数
+					setTimeout(function() {
+						cm -= 1000;
+						_msThis.runBack(cm);
+					}, 1000);
+				} else {
+					console.log("订单已关闭")
+				}
 			},
 		}
 	}

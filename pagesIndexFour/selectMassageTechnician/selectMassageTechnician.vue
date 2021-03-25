@@ -28,11 +28,11 @@
 									<view class="technician-wrap-list-li-info-top">
 										<view class="technician-info-top-title">
 											<text class="technician-info-top-title-name">{{item.name}}</text>
-											<text class="technician-info-top-title-msg">【金牌技师】</text>
+											<text class="technician-info-top-title-msg">【{{item.level_name}}】</text>
 										</view>
 										<view class="technician-wrap-list-li-info-check">
 											<text class="iconfont iconxuanzhong2 icon-font"
-												style="color:#26BF82;font-size: 44rpx;" v-if="isChick==index"></text>
+												style="color:#26BF82;font-size: 44rpx;" v-if="isCheck==index"></text>
 											<text class="iconfont iconweixuanzhong icon-font"
 												style="color:#ccc;font-size: 44rpx;" v-else></text>
 										</view>
@@ -42,8 +42,9 @@
 									</view>
 									<view class="technician-wrap-list-li-info-score">
 										<text class="iconfont iconwujiaoxing icon-font"
-											style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
-										<text>5分</text>
+											:style="{color:isComment(item.comment,storeIndex)?'#FFCD4D':'#eee',}"
+											style="font-size: 28rpx;" v-for="(store,storeIndex) in 5"></text>
+										<text>{{storeMsg(item.comment,index)}}分</text>
 									</view>
 									<view class="technician-wrap-list-li-info-introduce">
 										<view class="technician-list-li-info-introduce-text">
@@ -54,9 +55,8 @@
 										</view>
 									</view>
 									<view class="technician-wrap-list-li-info-category">
-										<view class="technician-list-li-info-category-item" v-for="item in 3">
-											背部按摩
-										</view>
+										<view class="technician-list-li-info-category-item"
+											v-for="(i,j) in item.reserve_info">{{i.name}}</view>
 									</view>
 								</view>
 							</view>
@@ -83,12 +83,13 @@
 			return {
 				barHeight: 0, //顶部电量导航栏高度
 				classifyList: ["泰式按摩", "中式按摩", "韩式按摩", "美式按摩", "足底按摩"], //按摩分类
-				isChick: -1,
+				isCheck: -1,
 				storeId: '', //门店id
 				technicianList: [],
 				isData: false,
 				isLoad: true,
 				technicianId: -1,
+				dataList: [],
 			};
 		},
 		components: {
@@ -110,7 +111,7 @@
 		},
 		onShow() {
 			this.technicianId = this.$store.state.checkId
-			console.log("选择技师：" + this.technicianId)
+			// console.log("选择技师：" + this.technicianId)
 		},
 		methods: {
 
@@ -120,18 +121,27 @@
 			},
 
 			// 获取技师列表
-			getTechnician() {
+			getTechnician(num, size) {
 				var vuedata = {
-					store: this.storeId
+					store: this.storeId,
+					page_index: num, // 请求页数，
+					each_page: size, // 请求条数
 				}
 				this.apiget('pc/engineer', vuedata).then(res => {
 					if (res.status == 200) {
 						this.isData = true
 						var list = res.data.engineerList
+						var arr = []
 						this.$refs.paging.addData(list);
 
-						this.technicianList.forEach(item => {
-							console.log(item.id)
+						this.dataList = this.dataList.concat(list)
+						this.dataList = [...new Set(this.dataList)] //数组去重
+
+						this.dataList.forEach((item, index) => {
+							if (item.id == this.technicianId) {
+								console.log(item)
+								this.isCheck = index;
+							}
 						})
 					} else {
 						this.isData = false
@@ -144,19 +154,58 @@
 
 			// 选中技师点击
 			checkTechnician(index, id) {
-				if (index != this.isChick) {
-					this.isChick = index;
+				if (index != this.isCheck) {
+					this.isCheck = index;
+					this.$store.commit("upCheckId", id)
 				} else {
-					this.isChick = -1;
+					this.isCheck = -1;
+					this.$store.commit("upCheckId", -1)
 				}
-				this.$store.commit("upCheckId", id)
 			},
 			// 确认按钮点击
 			confirmBtn() {
 				uni.navigateBack({
 					delta: 1
 				})
-			}
+			},
+			// 评分
+			isComment(comment, index) {
+				var store = parseInt(comment)
+				var str = 0
+				if (store <= 20) {
+					str = 1
+				} else if (store > 20 && store <= 40) {
+					str = 2
+				} else if (store > 40 && store <= 60) {
+					str = 3
+				} else if (store > 60 && store <= 80) {
+					str = 4
+				} else if (store > 80) {
+					str = 5
+				}
+				if (str > index) {
+					return true
+				} else {
+					return false
+				}
+			},
+			// 评分提示
+			storeMsg(comment, index) {
+				var store = parseInt(comment)
+				var str = 0
+				if (store <= 20) {
+					str = 1
+				} else if (store > 20 && store <= 40) {
+					str = 2
+				} else if (store > 40 && store <= 60) {
+					str = 3
+				} else if (store > 60 && store <= 80) {
+					str = 4
+				} else if (store > 80) {
+					str = 5
+				}
+				return str
+			},
 		}
 	}
 </script>

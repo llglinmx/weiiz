@@ -14,13 +14,14 @@
 							<view class="box-content-item-wrap-image">
 								<swiper class="box-content-item-wrap-banner" :autoplay="true" :interval="5000">
 									<swiper-item class="box-content-item-wrap-banner-li"
-										v-for="(item,index) in imageList" :key="index">
-										<image :src="item.url" mode="aspectFill"></image>
+										v-for="(item,index) in merchantData.bimg" :key="index">
+										<image :src="item" mode="aspectFill"></image>
 									</swiper-item>
 								</swiper>
 								<view class="box-content-item-wrap-msg">
 									<text class="iconfont icontupian" style="font-size: 26rpx;"></text>
-									<text class="box-content-item-wrap-text">4</text>
+									<text class="box-content-item-wrap-text"
+										v-if="merchantData&&merchantData.bimg&&merchantData.bimg.length!=0">{{merchantData.bimg.length}}</text>
 								</view>
 							</view>
 							<view class="box-content-item-wrap-info">
@@ -234,26 +235,26 @@
 											<view class="comment-list-item" v-for="(item,index) in commentList"
 												:key="item.id">
 												<view class="comment-list-item-image">
-													<image :src="item.avatar" mode="aspectFill"></image>
+													<image :src="item.member_avatar" mode="aspectFill"></image>
 												</view>
 												<view class="comment-list-item-info">
-													<view class="comment-list-item-info-nickname">SKB露娜可可</view>
+													<view class="comment-list-item-info-nickname">
+														{{item.member_nickname}}
+													</view>
 													<view class="comment-list-item-info-score">
 														<text class="iconfont iconwujiaoxing icon-font"
 															style="color: #FFCD4D;font-size: 28rpx;"
 															v-for="item in 5"></text>
 														<text>5分</text>
 													</view>
-													<view class="comment-list-item-info-content">
-														经常累的时候过来按摩，技师服务很好，按摩还会询问力度，很会聊天，这里地理位置也很好找，环境也挺好的，服务员也很热情，来这里整体给我的感觉都是不错的，推荐大家来这家店体验一下。
-													</view>
+													<view class="comment-list-item-info-content">{{item.content}}</view>
 													<view class="comment-list-item-info-message-time">
-														2020年10月20日 16:25:01
+														{{item.createtime}}
 													</view>
-													<view class="comment-list-item-info-picture-image">
-														<view class="picture-image-li" v-for="item in 5">
-															<image src="../../static/images/shop-ico.png"
-																mode="aspectFill">
+													<view class="comment-list-item-info-picture-image"
+														v-if="item.bimg!=''&&item.bimg!=null">
+														<view class="picture-image-li" v-for="(i,j) in item.bimg">
+															<image :src="i" mode="aspectFill">
 															</image>
 														</view>
 													</view>
@@ -273,8 +274,8 @@
 							</view>
 						</view>
 						<view class="box-content-item-comment" :style="{display:!isDataComment?'block':'none'}">
-							<loading v-if="isLoadTer" />
-							<no-data v-if="!isLoadTer" />
+							<loading v-if="isLoadComment" />
+							<no-data v-if="!isLoadComment" />
 						</view>
 					</swiper-item>
 				</swiper>
@@ -440,7 +441,7 @@
 			// 评论类型点击
 			commentTypeClick(index) {
 				this.commentIndex = index
-				this.getComment(1,10)
+				this.getComment(1, 10)
 			},
 			// 商家详情里的项目列表点击进入项目详情
 			projectDetails() {
@@ -461,11 +462,12 @@
 					id: id,
 					store: this.id
 				}
+				this.$store.commit("upCheckId", -1)
 
 				uni.navigateTo({
 					url: "../../pagesIndexThree/orderByAppointment/orderByAppointment?data=" + JSON.stringify(str)
 				})
-				this.$store.commit("upCheckId", -1)
+				// console.log(this.$store.state.checkId)
 			},
 
 			// 获取商家信息
@@ -1190,6 +1192,7 @@
 													border-radius: 10rpx;
 													background: #F7F7F7;
 													font-size: 28rpx;
+													margin-top: 10rpx;
 
 													.comment-list-item-info-reply-name {
 														color: #999999;

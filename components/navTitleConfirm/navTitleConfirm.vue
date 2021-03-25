@@ -6,9 +6,7 @@
 				<text class="iconfont iconfanhui" style="color: #000;font-size: 36rpx;"></text>
 			</view>
 			<view class="nav-title">{{navTitle}}</view>
-			<view class="nav-confirm" @click="confirm">
-				确认
-			</view>
+			<view class="nav-confirm" @click="confirm">确认</view>
 		</view>
 	</view>
 </template>

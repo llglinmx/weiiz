@@ -34,7 +34,6 @@
 		methods: {
 			//返回
 			Gback() {
-				console.log("225252")
 				uni.navigateBack({
 					delta: 1
 				})
