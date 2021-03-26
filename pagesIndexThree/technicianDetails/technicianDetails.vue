@@ -1,26 +1,27 @@
 <template>
 	<view class="box">
 		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
-			<navTitleAll navTitle="技师详情"></navTitleAll>
+			<navTitleAll @store="store" :isStore='Number(isStore)' navTitle="技师详情"></navTitleAll>
 		</view>
 		<view class="box-content">
-
 			<view class="box-content-info">
 				<view class="box-content-info-image">
-					<image src="../../static/images/shop-ico.png" mode="aspectFill"></image>
+					<image :src="userInfo.simg" mode="aspectFill"></image>
 				</view>
 				<view class="box-content-info-wrap">
 					<view class="box-content-info-wrap-title">
-						<view class="box-content-info-wrap-title-name">王二麻子</view>
-						<view class="box-content-info-wrap-title-text">【金牌技师】</view>
+						<view class="box-content-info-wrap-title-name">{{userInfo.name}}</view>
+						<view class="box-content-info-wrap-title-text">【{{userInfo.level_name}}】</view>
 					</view>
 					<view class="box-content-info-wrap-score">
-						<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
-						<text>5分</text>
+						<text class="iconfont iconwujiaoxing icon-font"
+							:style="{color:isComment(userInfo.comment,storeIndex)?'#FFCD4D':'#eee',}"
+							style="font-size: 28rpx;" v-for="(store,storeIndex) in 5"></text>
+						<text>{{storeMsg(userInfo.comment)}}分</text>
 					</view>
-					<view class="box-content-info-wrap-msg">工龄：2年</view>
+					<view class="box-content-info-wrap-msg">工龄：{{userInfo.service_times}}年</view>
 					<view class="box-content-info-wrapnum">
-						预约次数：2000
+						预约次数：{{userInfo.service_num}}
 					</view>
 					<view class="box-content-info-wrap-btn flex-center">
 						预约服务
@@ -32,21 +33,24 @@
 				<view class="box-content-store-title">所属门店</view>
 				<view class="box-content-store-shop-name">
 					<view class="store-shop-name-info">
-						<image src="../../static/images/tool.jpg" mode="aspectFill"></image>
-						<text>罗约蓝池·温泉SPA</text>
+						<text class="iconfont iconshangjia"
+							style="font-size: 28rpx;color: #FF967D;margin-top: 4rpx;"></text>
+						<text v-if="userInfo.store_info.name">{{userInfo.store_info.name}}</text>
 					</view>
 					<view class="store-shop-name-more">
-						<image src="../../static/images/more-gray.png" mode="aspectFill"></image>
+						<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size:28rpx"></text>
 					</view>
 				</view>
 				<view class="box-content-store-shop-address">
 					<view class="store-shop-address-info">
-						<text class="iconfont icondingwei1 icon-font" style="color: #26BF82;font-size: 40rpx;margin-top: 4rpx;"></text>
-						<text>中国 福建省 厦门市 集美区 杏滨路罗约酒店负一楼</text>
+						<text class="iconfont icondingwei1 icon-font"
+							style="color: #26BF82;font-size: 40rpx;margin-top: 4rpx;"></text>
+						<text>{{userInfo.store_info.address}}</text>
 					</view>
 					<view class="store-shop-address-more">
 						<text>距离6.1km</text>
-						<text class="iconfont icongengduo icon-font" style="color: #26BF82;font-size:40rpx;margin-top: 4rpx;"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #26BF82;font-size:40rpx;margin-top: 4rpx;"></text>
 					</view>
 				</view>
 			</view>
@@ -54,8 +58,10 @@
 			<view class="box-content-service-type">
 				<view class="box-content-service-type-title">服务工种</view>
 				<view class="box-content-service-type-list">
-					<view class="box-content-service-type-li flex-center" v-for="(item,index) in 5">背部按摩</view>
-
+					<view class="box-content-service-type-li flex-center" v-for="(item,index) in userInfo.reserve_info"
+						:key="item.id">
+						{{item.name}}
+					</view>
 				</view>
 			</view>
 			<view class="box-content-service-items">
@@ -63,26 +69,27 @@
 					<view class="box-content-service-items-wrap-title">服务项目</view>
 					<view class="box-content-service-items-wrap-text">
 						<text>其他项目</text>
-						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 					</view>
 				</view>
 
 				<view class="box-project-list">
-					<view class="box-project-list-li" v-for="(item,index) in 5">
+					<view class="box-project-list-li" v-for="(item,index) in reserveList" :key="item.id">
 						<view class="box-project-list-li-image">
-							<image src="../../static/images/002.png" mode="aspectFill"></image>
+							<image :src="item.simg" mode="aspectFill"></image>
 						</view>
 						<view class="box-project-list-li-info">
-							<view class="box-project-list-li-info-title">泰式古法按摩</view>
+							<view class="box-project-list-li-info-title">{{item.name}}</view>
 							<view class="box-project-list-li-info-list">
 								<view class="project-list-li-info-list-item">60分钟</view>
 								<view class="project-list-li-info-list-item">背部按摩</view>
 							</view>
-							<view class="box-project-list-li-info-sold">已售200</view>
+							<view class="box-project-list-li-info-sold">已售{{item.sold}}</view>
 							<view class="box-project-list-li-info-bottom">
 								<view class="project-list-li-info-bottom-price">
-									<view class="list-li-info-bottom-present-price">200.00</view>
-									<view class="list-li-info-bottom-original-price">800.00</view>
+									<view class="list-li-info-bottom-present-price">{{item.price |keepTwo}}</view>
+									<view class="list-li-info-bottom-original-price">{{item.o_price | keepTwo}}</view>
 								</view>
 								<view class="project-list-li-info-bottom-btn flex-center">预约</view>
 							</view>
@@ -96,36 +103,37 @@
 						精选评论
 					</view>
 					<view class="box-content-comment-wrap-selected-more">
-						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 					</view>
 				</view>
 				<view class="box-content-item-comment">
 					<view class="box-content-item-comment-category">
-						<view class="comment-category-li flex-center" v-for="(item,index) in commentTypeList" :key="index" :class="commentIndex==index?'comment-category-li-active':''"
-						 @click="commentTypeClick(index)">
-							{{item.title}}(20)
+						<view class="comment-category-li flex-center" v-for="(item,index) in commentTypeList"
+							:key="index" :class="commentIndex==index?'comment-category-li-active':''"
+							@click="commentTypeClick(index)">
+							{{item.title}}{{item.num}}
 						</view>
 					</view>
 					<view class="box-content-item-comment-list">
-						<view class="comment-list-item" v-for="(item,index) in 5">
+						<view class="comment-list-item" v-for="(item,index) in commentList" :key="item.id">
 							<view class="comment-list-item-image">
-								<image src="../../static/images/002.png" mode="aspectFill"></image>
+								<image :src="item.member_avatar" mode="aspectFill"></image>
 							</view>
 							<view class="comment-list-item-info">
-								<view class="comment-list-item-info-nickname">SKB露娜可可</view>
+								<view class="comment-list-item-info-nickname">{{item.member_nickname}}</view>
 								<view class="comment-list-item-info-score">
-									<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
+									<text class="iconfont iconwujiaoxing icon-font"
+										style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
 									<text>5分</text>
 								</view>
 								<view class="comment-list-item-info-content">
-									经常累的时候过来按摩，技师服务很好，按摩还会询问力度，很会聊天，这里地理位置也很好找，环境也挺好的，服务员也很热情，来这里整体给我的感觉都是不错的，推荐大家来这家店体验一下。
+									{{item.content}}
 								</view>
-								<view class="comment-list-item-info-message-time">
-									2020年10月20日 16:25:01
-								</view>
+								<view class="comment-list-item-info-message-time">{{item.createtime}}</view>
 								<view class="comment-list-item-info-picture-image">
-									<view class="picture-image-li" v-for="item in 5">
-										<image src="../../static/images/shop-ico.png" mode="aspectFill"></image>
+									<view class="picture-image-li" v-for="(i,j) in item.bimg">
+										<image :src="i" mode="aspectFill"></image>
 									</view>
 								</view>
 								<view class="comment-list-item-info-reply">
@@ -168,17 +176,31 @@
 				],
 				commentTypeList: [{
 						title: "全部",
+						num: 0
 					},
 					{
 						title: "好评",
+						num: 0
 					},
 					{
 						title: "中评",
+						num: 0
 					},
 					{
 						title: "差评",
+						num: 0
 					}
 				], //评论类型
+				id: '',
+				userInfo: {
+					store_info: {
+						name: '',
+						address: ''
+					}
+				},
+				commentList: [],
+				reserveList: [],
+				isStore: 0, //是否收藏
 			};
 		},
 		components: {
@@ -192,10 +214,153 @@
 				}
 			});
 		},
+		filters: {
+			keepTwo(val) {
+				var num = Number(val)
+				return num.toFixed(2)
+			}
+		},
+		onLoad(options) {
+			this.id = options.id
+			this.getDetails(options.id)
+			this.getComment(this.id)
+			this.getProject()
+		},
 		methods: {
+
+			// 顶部收藏
+			store(state) {
+				// 等于1 为已收藏  
+				state == 1 ? this.cancelCollection() : this.addCollection()
+			},
+			// 添加收藏
+			addCollection() {
+				this.isStore = 1
+				var vuedata = {
+					type: 1,
+					itemid: this.userInfo.id
+				}
+				this.apipost('api/v1/members/collection/add', vuedata).then(res => {
+					if (res.status == 200) {
+						uni.showToast({
+							title: "添加收藏成功",
+							icon: "none"
+						})
+						return false;
+					}
+					this.isStore = 0
+				})
+			},
+			// 取消收藏
+			cancelCollection() {
+				this.isStore = 0
+				var vuedata = {
+					type: 1,
+					itemid: this.userInfo.id
+				}
+				this.apipost('api/v1/members/collection/cancel', vuedata).then(res => {
+					if (res.status == 200) {
+						uni.showToast({
+							title: "取消收藏成功",
+							icon: "none"
+						})
+						return false;
+					}
+					this.isStore = 1
+				})
+			},
+
+
+			// 获取详情
+			getDetails(id) {
+				var vuedata = {
+					id: id
+				}
+				this.apiget('pc/engineer', vuedata).then(res => {
+					if (res.status == 200) {
+						this.userInfo = res.data.engineerList
+						this.isStore = res.data.engineerList.is_collection==1 ? 1 : 0 //是否收藏
+					}
+				})
+			},
+			// 获取服务项目
+			getProject(id) {
+				var vuedata = {
+					id: id,
+					page_index: 1,
+					each_page: 50,
+				}
+				this.apiget('pc/reserve/engineer_reserve', vuedata).then(res => {
+					if (res.status == 200) {
+						this.reserveList = res.data.reserveList
+					}
+				})
+			},
+
+			// 获取评论
+			getComment() {
+				var vuedata = {
+					id: this.id,
+					page_index: 1,
+					each_page: 50,
+					star: this.commentIndex,
+				}
+				this.apiget('pc/comment', vuedata).then(res => {
+					if (res.status == 200) {
+						this.commentList = res.data.comment
+						this.commentTypeList[0].num = res.data.all_comment
+						this.commentTypeList[1].num = res.data.Praise
+						this.commentTypeList[2].num = res.data.in_Review
+						this.commentTypeList[3].num = res.data.negative_comment
+					}
+				})
+			},
+
+
+
 			// 评论类型点击
 			commentTypeClick(index) {
-				this.commentIndex = index
+				this.commentIndex = index;
+				this.getComment();
+			},
+
+			// 评分
+			isComment(comment, index) {
+				var store = parseInt(comment)
+				var str = 0
+				if (store <= 20) {
+					str = 1
+				} else if (store > 20 && store <= 40) {
+					str = 2
+				} else if (store > 40 && store <= 60) {
+					str = 3
+				} else if (store > 60 && store <= 80) {
+					str = 4
+				} else if (store > 80) {
+					str = 5
+				}
+				if (str > index) {
+					return true
+				} else {
+					return false
+				}
+			},
+			// 评分提示
+			storeMsg(comment) {
+				var store = parseInt(comment)
+				var str = 0
+				if (store <= 20) {
+					str = 1
+				} else if (store > 20 && store <= 40) {
+					str = 2
+				} else if (store > 40 && store <= 60) {
+					str = 3
+				} else if (store > 60 && store <= 80) {
+					str = 4
+				} else if (store > 80) {
+					str = 5
+				}
+				return str
 			},
 		}
 	}
@@ -228,6 +393,7 @@
 					image {
 						width: 256rpx;
 						height: 256rpx;
+						border-radius: 10rpx;
 					}
 				}
 
@@ -301,18 +467,14 @@
 					align-items: center;
 					justify-content: space-between;
 					height: 98rpx;
+					border-bottom: 1rpx solid #ededed;
 
 					.store-shop-name-info {
 						display: flex;
 						align-items: center;
 
-						image {
-							width: 28rpx;
-							height: 28rpx;
-						}
-
 						text {
-							margin-left: 8rpx;
+							margin-right: 8rpx;
 							font-size: 28rpx;
 							font-weight: 500;
 							color: #000;
@@ -329,6 +491,7 @@
 					display: flex;
 					align-items: center;
 					justify-content: flex-end;
+					margin-top: 30rpx;
 
 					.store-shop-address-info {
 						flex: 2;
@@ -336,13 +499,8 @@
 						align-items: center;
 						margin-right: 40rpx;
 
-						image {
-							width: 48rpx;
-							height: 48rpx;
-						}
-
 						text {
-							margin-left: 8rpx;
+							margin-right: 10rpx;
 							font-size: 28rpx;
 							color: #333;
 						}
@@ -448,6 +606,7 @@
 							image {
 								width: 196rpx;
 								height: 196rpx;
+								border-radius: 10rpx;
 							}
 						}
 
@@ -620,7 +779,7 @@
 									display: flex;
 									align-items: center;
 
-									
+
 									text {
 										margin-right: 6rpx;
 										font-size: 24rpx;

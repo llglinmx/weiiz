@@ -8,7 +8,7 @@
 				<view class="box-content-card">
 					<view class="box-content-card-left">
 						<view class="box-content-card-left-balance">
-							0.00 <text>元</text>
+							{{balance}} <text>元</text>
 						</view>
 						<view class="box-content-card-left-text">
 							当前余额
@@ -23,8 +23,9 @@
 			<view class="box-content-recharge">
 				<view class="box-content-recharge-title">请选择充值金额</view>
 				<view class="box-content-recharge-list">
-					<view class="box-content-recharge-list-li flex-center" :class="idx==index?'box-content-recharge-list-li-active':''"
-					 v-for="(item,index) in moneyList" :key="index" @click="clickRecharge(item,index)">
+					<view class="box-content-recharge-list-li flex-center"
+						:class="idx==index?'box-content-recharge-list-li-active':''" v-for="(item,index) in moneyList"
+						:key="index" @click="clickRecharge(item,index)">
 						<view class="box-content-recharge-list-li-title" :class="idx==index?'text-color':''">
 							{{item}} 元
 						</view>
@@ -40,14 +41,17 @@
 					支付方式
 				</view>
 				<view class="box-content-payment-method-list">
-					<view class="payment-method-list-li" v-for="(item,index) in dataList" :key="index" @click="paymentType(index)">
+					<view class="payment-method-list-li" v-for="(item,index) in dataList" :key="index"
+						@click="paymentType(index)">
 						<view class="payment-method-list-li-wrap">
-							<image src="../../static/images/zfb.png" mode="aspectFill"></image>
+							<image :src="item.image" mode="aspectFill"></image>
 							<text class="payment-method-list-li-title">{{item.title}}</text>
 						</view>
 						<view class="payment-method-list-li-check">
-							<text class="iconfont iconxuanzhong icon-font" style="color: #26BF82;font-size: 36rpx;" v-if="index==checkIindex"></text>
-							<text class="iconfont iconweixuanzhong1 icon-font" style="color: #ccc;font-size: 36rpx;" v-else></text>
+							<text class="iconfont iconxuanzhong icon-font" style="color: #26BF82;font-size: 36rpx;"
+								v-if="index==checkIindex"></text>
+							<text class="iconfont iconweixuanzhong1 icon-font" style="color: #ccc;font-size: 36rpx;"
+								v-else></text>
 						</view>
 					</view>
 				</view>
@@ -70,16 +74,29 @@
 				idx: 0, //当前所选充值金额下标
 				moneyList: ["50", "100", "200", "500", "800", "1000", "1500"],
 				money: '50', //所选金额
-				dataList:[
-					{title:"支付宝",style:"iconzhifubao"},
-					{title:"微信",style:"iconweixin"},
-					{title:"银行卡",style:"iconwangyin"},
+				dataList: [{
+						title: "支付宝",
+						image: "../../static/images/zfb.png"
+					},
+					{
+						title: "微信",
+						image: "../../static/images/wx.png"
+					},
+					{
+						title: "银行卡",
+						image: "../../static/images/yhk.png"
+					},
 				],
+				balance: 0, //余额
 			};
 		},
 		components: {
 			navTitle,
 			btnPink
+		},
+		onShow() {
+			this.balance = this.$store.state.balance
+			console.log(this.$store.state.balance)
 		},
 		// 过滤器
 		filters: {
@@ -275,9 +292,8 @@
 						}
 
 						.payment-method-list-li-check {
-							image {
-								width: 36rpx;
-								height: 36rpx;
+							text{
+								transition: 0.3s;
 							}
 						}
 					}

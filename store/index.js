@@ -21,8 +21,12 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 const store = new Vuex.Store({
 	state: {
-		isAdd: false,
-		checkId: -1
+		isAdd: false, //用于判断地址
+		checkId: -1, //用于判断是否选择技师
+		checkCouponId: -1, //用户判断是否选择优惠券
+		preferentialAmount: 0, //优惠券优惠金额
+		balance: 0, //余额
+		userInfo: {}, //用户信息
 	},
 	mutations: {
 		//用于判断是否添加地址 等同于发送监听
@@ -32,6 +36,24 @@ const store = new Vuex.Store({
 		// 选择按摩技师
 		upCheckId(state, id) {
 			state.checkId = id
+		},
+
+		// 选择优惠券
+		upCheckCouponId(state, id) {
+			state.checkCouponId = id
+		},
+		// 优惠券优惠金额
+		upPreferentialAmount(state, money) {
+			state.preferentialAmount = money
+		},
+
+		// upBalance 更新余额方法
+		upBalance(state, moeny) {
+			state.balance = moeny
+		},
+		//用户信息方法
+		upUserInfo(state, item) {
+			state.userInfo = item
 		},
 	},
 	actions: {}

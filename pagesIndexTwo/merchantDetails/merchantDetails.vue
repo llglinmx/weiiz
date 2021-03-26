@@ -35,7 +35,7 @@
 											<text class="iconfont iconwujiaoxing icon-font"
 												:style="{color:isComment(merchantData.comment,storeIndex)?'#FFCD4D':'#eee',}"
 												style="font-size: 28rpx;" v-for="(store,storeIndex) in 5"></text>
-											<text>{{merchantData.comment}}分</text>
+											<text>{{storeMsg(merchantData.comment)}}分</text>
 										</view>
 										<view class="item-wrap-left-box-bottom">
 											<view class="item-wrap-left-box-bottom-text flex-center">
@@ -165,7 +165,7 @@
 										<view class="content-item-technician-wrap-list">
 											<view class="content-item-technician-wrap-list-li"
 												v-for="(item,index) in technicianList" :key="item.id"
-												@click="technicianDetails(item)">
+												@click="technicianDetails(item.id)">
 												<view class="technician-wrap-list-li-image">
 													<image src="../../static/images/shop-ico.png" mode="aspectFill">
 													</image>
@@ -183,9 +183,9 @@
 													</view>
 													<view class="technician-wrap-list-li-info-score">
 														<text class="iconfont iconwujiaoxing icon-font"
-															style="color: #FFCD4D;font-size: 28rpx;"
-															v-for="item in 5"></text>
-														<text>5分</text>
+															:style="{color:isComment(item.comment,storeIndex)?'#FFCD4D':'#eee',}"
+															style="font-size: 28rpx;" v-for="(store,storeIndex) in 5"></text>
+														<text>{{storeMsg(item.comment)}}分</text>
 													</view>
 													<view class="technician-wrap-list-li-info-introduce">
 														<view class="technician-list-li-info-introduce-text">
@@ -197,8 +197,8 @@
 													</view>
 													<view class="technician-wrap-list-li-info-category">
 														<view class="technician-list-li-info-category-item"
-															v-for="val in label(item.service)" v-if="item.service!=''">
-															{{val}}
+															v-for="val in item.reserve_info" v-if="item.reserve_info.length!=0">
+															{{val.name}}
 														</view>
 													</view>
 												</view>
@@ -450,9 +450,9 @@
 				})
 			},
 			// 商家详情里的项目列表点击进入技师详情
-			technicianDetails() {
+			technicianDetails(id) {
 				uni.navigateTo({
-					url: "../../pagesIndexThree/technicianDetails/technicianDetails"
+					url: "../../pagesIndexThree/technicianDetails/technicianDetails?id="+id
 				})
 			},
 
@@ -545,7 +545,10 @@
 							this.isDataComment = true
 							let list = res.data.comment
 							let totalSize = res.data.total_rows
-							// this.commentTypeList[0].num = res.data.comment
+							this.commentTypeList[0].num = res.data.all_comment
+							this.commentTypeList[1].num = res.data.Praise
+							this.commentTypeList[2].num = res.data.in_Review
+							this.commentTypeList[3].num = res.data.negative_comment
 
 							this.$refs.paging2.addData(list);
 						} else {
@@ -592,12 +595,41 @@
 
 			// 评分
 			isComment(comment, index) {
-				var score = parseInt(comment)
-				if (score > index) {
+				var store = parseInt(comment)
+				var str = 0
+				if (store <= 20) {
+					str = 1
+				} else if (store > 20 && store <= 40) {
+					str = 2
+				} else if (store > 40 && store <= 60) {
+					str = 3
+				} else if (store > 60 && store <= 80) {
+					str = 4
+				} else if (store > 80) {
+					str = 5
+				}
+				if (str > index) {
 					return true
 				} else {
 					return false
 				}
+			},
+			// 评分提示
+			storeMsg(comment) {
+				var store = parseInt(comment)
+				var str = 0
+				if (store <= 20) {
+					str = 1
+				} else if (store > 20 && store <= 40) {
+					str = 2
+				} else if (store > 40 && store <= 60) {
+					str = 3
+				} else if (store > 60 && store <= 80) {
+					str = 4
+				} else if (store > 80) {
+					str = 5
+				}
+				return str
 			},
 		}
 	}

@@ -11,25 +11,29 @@
 			<!-- <empty-view slot="empty"></empty-view> -->
 			<!-- 如果希望其他view跟着页面滚动，可以放在z-paging标签内 -->
 			<!-- list数据，建议像下方这样在item外层套一个view，而非直接for循环item，因为slot插入有数量限制 -->
-			<view class="sub-content-list">
+			<view class="sub-content-list" v-if="dataList.length>0">
 				<view class="sub-content-list-li" v-for="(item,index) in dataList" :key="item.id">
 					<view class="content-list-li-top">
 						<view class="list-li-top-title flex-center">
-							<image src="../../static/images/tool.jpg" mode="aspectFill"></image>
-							<text>罗约蓝池·温泉SPA</text>
+							<text class="iconfont iconshangjia"
+								style="font-size: 28rpx;color: #FF967D;margin-top: 4rpx;"></text>
+							<text>{{item.store_name}}</text>
 						</view>
 						<view class="list-li-top-state">
-							<text>待核销</text>
+							<text v-if="item.status==-1">待付款</text>
+							<text v-if="item.status==-2">订单已关闭</text>
+							<text v-if="item.status==1">待核销</text>
+							<text v-if="item.status==2">已退款</text>
 						</view>
 					</view>
 					<view class="list-li-wrap">
-						<view class="list-li-wrap-item" v-for="(j,idx) in 3">
+						<view class="list-li-wrap-item" v-for="(j,idx) in 1">
 							<view class="list-li-item-info-image">
-								<image src="../../static/images/001.png" mode="aspectFill"></image>
+								<image :src="item.member_img" mode="aspectFill"></image>
 							</view>
 							<view class="list-li-item-info">
 								<view class="list-li-info-top">
-									<view class="list-li-info-top-title">罗约蓝池·温泉SPA</view>
+									<view class="list-li-info-top-title">{{item.reserve_name}}</view>
 									<view class="list-li-info-top-text">￥298.00</view>
 								</view>
 								<view class="list-li-info-center-box">
@@ -59,14 +63,16 @@
 							</view>
 						</view>
 						<view class="content-list-li-all-btns">
-							<view class="more-list-li-btn flex-center more-list-li-btn-border" v-if="index==0">取消订单
+							<view class="more-list-li-btn flex-center more-list-li-btn-border" v-if="item.status==-1">
+								取消订单
 							</view>
-							<view class="more-list-li-btn flex-center" v-if="index==3">去付款</view>
-							<view class="more-list-li-btn flex-center more-list-li-btn-border-red" v-if="index==1"
+							<view class="more-list-li-btn flex-center" v-if="item.status==-1">去付款</view>
+							<view class="more-list-li-btn flex-center more-list-li-btn-border-red" v-if="item.status==1"
 								@click="viewCouponCode(item)">查看券码</view>
-							<view class="more-list-li-btn flex-center more-list-li-btn-border" v-if="index==2"
-								@click="OrderEval">订单评价</view>
-							<view class="more-list-li-btn flex-center more-list-li-btn-border-red">取消申请</view>
+							<view class="more-list-li-btn flex-center more-list-li-btn-border"
+								v-if="item.status==1&&item.use_status==1" @click="OrderEval">订单评价</view>
+							<view class="more-list-li-btn flex-center more-list-li-btn-border-red"
+								v-if="item.refund_status==-1&&item.status==2">取消申请</view>
 						</view>
 					</view>
 				</view>
@@ -148,8 +154,6 @@
 							let totalSize = res.data.total_rows
 							this.$refs.paging.addData(list);
 							this.firstLoaded = true;
-						} else {
-
 						}
 						this.isLoad = false
 
@@ -182,13 +186,9 @@
 				justify-content: space-between;
 
 				.list-li-top-title {
-					image {
-						width: 28rpx;
-						height: 28rpx;
-					}
 
 					text {
-						margin-left: 8rpx;
+						margin-right: 8rpx;
 						font-size: 28rpx;
 						font-family: Source Han Sans CN;
 						font-weight: 400;

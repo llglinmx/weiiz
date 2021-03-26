@@ -18,23 +18,24 @@
 									<view class="available-coupons-list">
 										<view class="available-coupons-list-li"
 											v-for="(item,index) in availableCouponList" :key="index"
-											@click="checkCoupons(index)">
+											@click="checkCoupons(index,item.id,item.least_cost,item.reduce_cost)">
 											<view class="available-coupons-list-li-left"
-												:class="index%2!=0?'available-coupons-list-li-left-sky-blue':'available-coupons-list-li-left-yellow'">
+												:class="item.store==-1?'available-coupons-list-li-left-sky-blue':'available-coupons-list-li-left-yellow'">
 												<view class="coupons-list-li-left-money">
-													20 <text>元</text>
+													{{item.reduce_cost | rounding}} <text>元</text>
 												</view>
 												<view class="coupons-list-li-left-text">
-													满200元可用
+													满{{item.least_cost}}元可用
 												</view>
 											</view>
 											<view class="available-coupons-list-li-right">
 												<view class="list-li-right-content">
-													<view class="list-li-right-content-title">全平台通用券</view>
+													<view class="list-li-right-content-title">{{item.name}}</view>
 													<view class="list-li-right-content-text">
-														<view class="list-li-right-content-text-store">门店：全平台</view>
+														<view class="list-li-right-content-text-store">
+															门店：{{item.store_name}}</view>
 														<view class="list-li-right-content-text-limited-period">
-															有效期：2020.01.09-2020.01.18</view>
+															有效期：{{item.end_time}}</view>
 													</view>
 												</view>
 												<view class="list-li-right-check">
@@ -114,10 +115,15 @@
 				isCheckIco: -1, //是否选中
 				availableCouponList: [],
 				noAvailableCouponList: [],
+				couponList: [],
 				isData: false,
 				isLoad: true,
 				isDataNo: false,
-				isLoadNo: true
+				isLoadNo: true,
+				typeState: 1,
+				storeId: '',
+				couponId: -1,
+				money: 0, //从预约下单页面传递过来的金额 用于判断 是否达到使用优惠券资格
 			};
 		},
 		components: {
@@ -127,6 +133,13 @@
 			loading,
 			noData
 		},
+		filters: {
+			rounding(val) {
+				var arr = val.split('.')
+				// 字符串 切割金额 保留整数
+				return arr[0]
+			}
+		},
 		onReady() {
 			// 获取顶部电量状态栏高度
 			uni.getSystemInfo({
@@ -135,9 +148,16 @@
 				}
 			});
 		},
+		onLoad(options) {
+			var data = JSON.parse(options.data)
+			this.storeId = data.storeId
+			this.money = data.money
+		},
+		onShow() {
+			this.couponId = this.$store.state.checkCouponId
+			console.log(this.$store.state.checkCouponId)
+		},
 		methods: {
-
-
 			// 可用优惠券 上拉 下拉 
 			queryList(pageNo, pageSize) {
 				this.getAvailableCoupon(pageNo, pageSize)
@@ -149,8 +169,8 @@
 				var vuedata = {
 					page_index: num, // 请求页数，
 					each_page: size, // 请求条数
-					type: -1,
-					status: -1,
+					store: this.storeId,
+					use_status: this.typeState,
 				}
 				this.apiget('api/v1/members/coupon', vuedata).then(res => {
 					if (res.status == 200) {
@@ -158,6 +178,23 @@
 							this.isData = true
 							let list = res.data.data
 							this.$refs.paging.addData(list);
+
+
+							this.couponList = this.couponList.concat(list)
+							var obj = {};
+							this.couponList = this.couponList.reduce(function(item, next) {
+								obj[next.id] ? '' : obj[next.id] = true && item.push(next);
+								return item;
+							}, []);
+
+
+							this.couponList.forEach((item, index) => {
+								if (item.id == this.couponId) {
+									this.isCheckIco = index;
+								}
+							})
+
+
 						} else {
 							this.isData = false
 							this.isLoad = false
@@ -176,16 +213,41 @@
 			tabChange(e) {
 				this.$refs.boxTabs.tabToIndex(e.detail.current)
 				this.defaultIndex = e.detail.current
+				this.tabIndex(this.defaultIndex)
+			},
+
+			tabIndex(e) {
+				switch (e) {
+					case 0:
+						this.typeState = 1
+						break;
+					case 1:
+						this.typeState = 2
+						break;
+				}
+				this.getAvailableCoupon(1, 10)
 			},
 
 			// 选中优惠券点击
-			checkCoupons(index) {
-				if (index != this.isCheckIco) {
-					this.isCheckIco = index;
-				} else {
-					this.isCheckIco = -1;
+			checkCoupons(index, id, least_cost, reduce_cost) {
+				if (Number(this.money) >= Number(least_cost)) {
+					if (index != this.isCheckIco) {
+						this.isCheckIco = index;
+						this.$store.commit("upCheckCouponId", id)
+						this.$store.commit("upPreferentialAmount", reduce_cost)
+					} else {
+						this.isCheckIco = -1;
+						this.$store.commit("upCheckCouponId", -1)
+						this.$store.commit("upPreferentialAmount", 0)
+					}
+					return false
 				}
+				uni.showToast({
+					title: '对不起，不能使用该优惠券，消费金额小于优惠券满减金额',
+					icon: "none"
+				})
 			},
+
 
 			// 确认按钮
 			confirmBtn() {

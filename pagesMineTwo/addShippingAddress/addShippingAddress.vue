@@ -31,7 +31,7 @@
 							placeholder="请输入手机号码" />
 					</view>
 				</view>
-				<view class="box-content-list-li">
+				<view class="box-content-list-li" @click="showAddress">
 					<view class="box-content-list-li-title">国家</view>
 					<view class="box-content-list-li-info" style="justify-content: space-between;">
 						<view class="box-content-list-li-info-title">{{country}}</view>
@@ -114,6 +114,7 @@
 				确认修改
 			</view>
 		</view>
+		<!-- <s-picker :visible='visible' :list="addressList" /> -->
 	</view>
 </template>
 
@@ -122,6 +123,7 @@
 	export default {
 		data() {
 			return {
+				level: 1,
 				barHeight: 0, //顶部电量导航栏高度
 				lastname: '', //姓
 				name: '', //名
@@ -137,6 +139,9 @@
 				isEdit: false, //是否编辑
 				id: '', //地址id
 				title: "添加地址", //标题名称
+				addressList: [],
+				visible: false,
+				 oneIndexList: [0],
 			};
 		},
 		components: {
@@ -174,11 +179,33 @@
 				return bool;
 			},
 		},
+		onLoad() {
+			this.getProvince()
+		},
 		methods: {
-			//确定按钮
+			change(data) {
+				console.log(data)
+			},
+			showAddress() {
+				this.visible = true;
+			},
+			popClose() {
+				this.visible = false
+			},
+
+			// 获取省份
+			getProvince() {
+				var vuedata = {
+					// parent_id: 95
+				}
+				this.apiget('region/regions', vuedata).then(res => {
+					if (res.status == 200) {
+						this.addressList = res.data
+					}
+				})
+			},
 
 			determine() {
-
 				if (this.checkAll) {
 					// 判断是否为编辑
 					if (!this.isEdit) {
@@ -235,6 +262,7 @@
 
 				this.apiput('api/v1/members/address/edit/' + this.id, vuedata).then(res => {
 					if (res.status == 200) {
+						this.$store.commit("upAdd", true)
 						uni.navigateBack({
 							delta: 1
 						})
@@ -264,11 +292,11 @@
 				}
 				this.apipost('api/v1/members/address/add', vuedata).then(res => {
 					if (res.status == 200) {
+						this.$store.commit("upAdd", true)
 						uni.navigateBack({
 							delta: 1
 						})
-						this.$store.commit("upAdd",true)
-						
+
 						// this.$store.state.isAdd = true
 					}
 				});

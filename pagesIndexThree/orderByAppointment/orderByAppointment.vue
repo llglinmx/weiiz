@@ -23,9 +23,7 @@ ss<template>
 						<view class="content-wrap-top-list-li-info">
 							<view class="content-wrap-top-list-li-info-top">
 								<view class="content-wrap-top-list-li-info-top-text">{{dataList.name}}</view>
-								<view class="content-wrap-top-list-li-info-top-price">
-									￥{{dataList.price}}
-								</view>
+								<view class="content-wrap-top-list-li-info-top-price">￥{{dataList.price}}</view>
 							</view>
 							<view class="content-wrap-top-list-li-info-type">
 								<!-- <view class="list-li-info-type-item flex-center" v-for="item in label(dataList.service_effectiveness)">{{item}}</view> -->
@@ -144,9 +142,12 @@ ss<template>
 				<view class="box-content-coupon-top" @click="checkCoupons">
 					<view class="box-content-coupon-top-title">优惠券</view>
 					<view class="box-content-coupon-top-more">
-						<text>-￥{{preferentiaAmount |toFixed}}</text>
+						<text v-if="couponId!=-1">-￥{{preferentiaAmount |toFixed}}</text>
+						<text v-if="couponId==-1" style="color: #999;">请选择</text>
 						<text class="iconfont icongengduo icon-font"
-							style="color: #FF8366;font-size: 32rpx;margin-top: 4rpx;"></text>
+							style="color: #FF8366;font-size: 32rpx;margin-top: 4rpx;" v-if="couponId !==-1"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #999;font-size: 32rpx;margin-top: 4rpx;" v-else></text>
 					</view>
 				</view>
 				<view class="box-content-coupon-bottom">
@@ -194,6 +195,7 @@ ss<template>
 				dataList: {},
 				sotreId: '', //门店id
 				technicianId: -1, //初始技师id
+				couponId: -1, //初始优惠券id
 				startIndex: -1,
 				endIndex: -1,
 				serviceData: '', //服务日期
@@ -203,7 +205,8 @@ ss<template>
 				valName: '', //预约人姓名
 				valPhone: '', //预约人电话
 				remarks: '', //备注
-				preferentiaAmount: 120, //优惠金额
+				preferentiaAmount: 0, //优惠金额
+				servicePrice: 0, //服务费
 			};
 		},
 		components: {
@@ -229,15 +232,24 @@ ss<template>
 		},
 		onShow() {
 			this.technicianId = this.$store.state.checkId
-			if (this.technicianId != -1) {
+			this.couponId = this.$store.state.checkCouponId
+
+			if (this.technicianId != -1) { //判读是否选则了技师
 				this.getTechnician(1, 30)
 			}
+			if (this.couponId != -1) { // 是否选了优惠券
+				this.preferentiaAmount = Number(this.$store.state.preferentialAmount)
+			} else {
+				this.preferentiaAmount = 0
+			}
+
+
 			// console.log("预约下单：" + this.technicianId)
 			this.getTimeandWeek()
 		},
 		computed: {
 			totalPrice() {
-				var price = Number(this.dataList.price) - Number(this.preferentiaAmount)
+				var price = Number(this.servicePrice) + Number(this.dataList.price) - Number(this.preferentiaAmount)
 				return price.toFixed(2)
 			},
 		},
@@ -431,15 +443,16 @@ ss<template>
 					week: this.serviceWeek, //当天星期：值为（0，1，2，3，4，5，6）
 					name: this.valName, //用户名称
 					mobile: this.valPhone, //用户手机号
-					coupon_gift: 0, //优惠券ID
+					coupon_gift: this.couponId, //优惠券ID
 					group: 0, //是否团购产品：1是，0否
 					group_id: 0, //团购ID
+					remarks: this.remarks //订单备注
 				}
 
 				this.apipost('api/v1/order/service/create', vuedata).then(res => {
 					if (res.status == 200) {
 						uni.navigateTo({
-							url: "../../pagesIndexFour/paymentOrder/paymentOrder?id="+res.data
+							url: "../../pagesIndexFour/paymentOrder/paymentOrder?id=" + res.data
 						})
 					}
 				})
@@ -462,9 +475,24 @@ ss<template>
 
 			// 点击选择优惠券
 			checkCoupons() {
-				uni.navigateTo({
-					url: "../../pagesCommon/selectCoupons/selectCoupons"
+				var data = {
+					storeId: this.storeId,
+					money: Number(this.servicePrice) + Number(this.dataList.price),
+				}
+
+				if (this.technicianId != -1) {
+					uni.navigateTo({
+						url: "../../pagesCommon/selectCoupons/selectCoupons?data=" + JSON.stringify(data)
+					})
+					this.$store.commit("upCheckCouponId", this.couponId)
+					return false;
+				}
+				uni.showToast({
+					title: "请先选择技师",
+					icon: "none"
 				})
+
+
 			},
 			// 星期日期tabs 点击
 			tabClick(e) {
@@ -536,6 +564,7 @@ ss<template>
 			// 服务费
 			serviceCharge(fee) {
 				var str = Number(fee / 100);
+				this.servicePrice = this.dataList.price * str
 				return (this.dataList.price * str).toFixed(2);
 			},
 		}

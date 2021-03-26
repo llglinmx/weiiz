@@ -44,7 +44,7 @@
 										<text class="iconfont iconwujiaoxing icon-font"
 											:style="{color:isComment(item.comment,storeIndex)?'#FFCD4D':'#eee',}"
 											style="font-size: 28rpx;" v-for="(store,storeIndex) in 5"></text>
-										<text>{{storeMsg(item.comment,index)}}分</text>
+										<text>{{storeMsg(item.comment)}}分</text>
 									</view>
 									<view class="technician-wrap-list-li-info-introduce">
 										<view class="technician-list-li-info-introduce-text">
@@ -135,7 +135,14 @@
 						this.$refs.paging.addData(list);
 
 						this.dataList = this.dataList.concat(list)
-						this.dataList = [...new Set(this.dataList)] //数组去重
+
+
+						var obj = {};
+						this.dataList = this.dataList.reduce(function(item, next) {
+							obj[next.id] ? '' : obj[next.id] = true && item.push(next);
+							return item;
+						}, []);
+
 
 						this.dataList.forEach((item, index) => {
 							if (item.id == this.technicianId) {
@@ -190,7 +197,7 @@
 				}
 			},
 			// 评分提示
-			storeMsg(comment, index) {
+			storeMsg(comment) {
 				var store = parseInt(comment)
 				var str = 0
 				if (store <= 20) {

@@ -4,8 +4,9 @@
 			<navTitle navTitle="地址管理"></navTitle>
 		</view>
 		<view class="box-content" :style="{display:isData?'block':'none'}">
-			<mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption"
-				:height="mesHeight">
+			<z-paging ref="paging" @query="queryList" :list.sync="addressList" loading-more-no-more-text="已经到底了"
+				:refresher-angle-enable-change-continued="false" :touchmove-propagation-enabled="true"
+				:use-custom-refresher="true">
 				<view class="box-content-list">
 					<view class="box-content-list-li" v-for="(item,index) in addressList" :key="item.id"
 						@click="editAddress(item.id)">
@@ -38,7 +39,7 @@
 						</uni-swipe-action>
 					</view>
 				</view>
-			</mescroll-uni>
+			</z-paging>
 		</view>
 		<view class="box-content-login flex-center" :style="{display:!isData?'block':'none'}">
 			<loading v-if="isLoad" />
@@ -75,6 +76,7 @@
 	import UniPopup from "../../components/uni-popup/uni-popup.vue"
 	import UniPopupDialog from "../../components/uni-popup/uni-popup-dialog.vue"
 	import loading from '../../components/loading/loading.vue'
+	import zPaging from '../../uni_modules/z-paging/components/z-paging/z-paging.vue'
 
 	export default {
 		mixins: [MescrollMixin], // 使用mixin
@@ -84,10 +86,6 @@
 				isData: false, //是否有数据
 				isLoad: true, //加载状态   true 为加载中 false 为无数据
 				addressList: [],
-				mesHeight: 0,
-				downOption: { // 下拉刷新配置
-					auto: false,
-				},
 				upOption: { // 上拉加载配置
 					noMoreSize: 6,
 					textLoading: "正在加载更多数据",
@@ -113,22 +111,18 @@
 			uniSwipeActionItem,
 			UniPopup,
 			UniPopupDialog,
-			loading
+			loading,
+			zPaging
 		},
 		onShow() {
-			const sys = uni.getSystemInfoSync();
-			var Height = sys.windowHeight
-			this.mesHeight = (Height - 100) * 2
 			console.log(this.$store.state.isAdd)
 
-			if (this.$store.state.isAdd) { //是否有添加地址
-				var page = {
-					num: 1,
-					size: 10
-				}
-				this.upCallback(page);
+			if (this.$store.state.isAdd) { //是否有添加地址 或者编辑修改地址
+				this.getPointsDetails(1, 10)
 			}
 
+		},
+		onLoad() {
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -140,21 +134,16 @@
 		},
 		methods: {
 
-			/*下拉刷新的回调*/
-			downCallback() {
-				this.mescroll.resetUpScroll()
-				this.goodsList = []
+			// 上拉 下拉
+			queryList(pageNo, pageSize) {
+				this.getPointsDetails(pageNo, pageSize)
 			},
 
-			/*上拉加载的回调*/
-			upCallback(page) {
-				this.getPointsDetails(page)
-			},
 			// 获取地址列表
-			getPointsDetails(page) {
+			getPointsDetails(num, size) {
 				var vuedata = {
-					page_index: page.num, // 请求页数，
-					each_page: page.size, // 请求条数
+					page_index: num, // 请求页数，
+					each_page: size, // 请求条数
 					select_sort: 1
 				}
 				this.apiget('api/v1/members/address', vuedata).then(res => {
@@ -164,27 +153,33 @@
 							this.isData = true;
 							let list = res.data.data
 							let totalSize = res.data.total_rows
-							//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
-							// this.mescroll.endSuccess(list.length);
-							this.mescroll.endBySize(list.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
-							//设置列表数据
-							if (page.num == 1) this.addressList = []; //如果是第一页需手动制空列表
-							this.addressList = this.addressList.concat(list); //追加新数据
-							var arr = []
-							// 此处循环的作用是 把设置为默认地址的  地址 变为第一行显示
-							this.addressList.forEach(item => {
-								if (item.is_default == '0') {
-									arr.splice(arr.length, 1, item)
-								} else {
-									arr.splice(0, 0, item)
-								}
-							})
-							this.addressList = arr
+							this.$refs.paging.addData(list);
+
+							this.addressList = this.addressList.concat(list)
+
+
+							// var obj = {};
+							// var arr = []
+							// // 去重
+							// this.addressList = this.addressList.reduce(function(item, next) {
+							// 	obj[next.id] ? '' : obj[next.id] = true && item.push(next);
+							// 	return item;
+							// }, []);
+
+							// // 此处循环的作用是 把设置为默认地址的  地址 变为第一行显示
+							// this.addressList.forEach(item => {
+							// 	if (item.is_default == '0') {
+							// 		arr.splice(arr.length, 1, item)
+							// 		return false;
+							// 	}
+							// 	arr.splice(0, 0, item)
+							// })
+							// this.addressList = arr
+
 						} else {
 							// 显示无数据背景
 							this.isData = false;
 							this.isLoad = false;
-							this.mescroll.endErr()
 						}
 
 					}
@@ -215,6 +210,8 @@
 				})
 				this.$store.commit("upAdd", false)
 			},
+
+
 
 			onClick(e) {
 				if (e.content.text == '删除') {

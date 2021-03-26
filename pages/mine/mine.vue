@@ -389,7 +389,9 @@
 						this.list[0].number = res.data.money //余额
 						this.list[1].number = res.data.score //积分
 						this.list[2].number = res.data.coupon_num //卡券
-						this.list[3].number = res.data.coupon_num //关注
+						this.list[3].number = res.data.all_collection //关注
+						// 更新余额
+						this.$store.commit("upBalance", res.data.money)
 					}
 				});
 			},

@@ -4,7 +4,8 @@
 			<navTitle navTitle="按摩商家"></navTitle>
 		</view>
 		<view class="box-content">
-			<view class="box-content-map-wrap box-content-public" :style="{width:mapWidth+'px'}">
+			<view class="box-content-map-wrap box-content-public"
+				:style="{width:mapWidth+'px',left:!isFlag?'0':'-100%'}">
 				<view class="box-wrap-tabs">
 					<view class="box-wrap-tabs-li" v-for="(item,index) in tabsList" :key="index"
 						@click="tabsShowList(item,index)">
@@ -22,6 +23,9 @@
 				<view class="box-map-wrap-main">
 					<view class="map-wrap-main-view">
 						<button type="primary" @click="shrinkShow">点击打开单个商家</button>
+						<!-- <map style="width: 100%;" :style="{height:mesHeight+'rpx'}" :latitude="latitude"
+							:longitude="longitude" :markers="covers">
+						</map> -->
 					</view>
 					<view class="map-wrap-main-list" :style="{bottom:bottomDistance+'px'}">
 						<view class="map-wrap-list-icon" @click="shrinkHidden">
@@ -68,8 +72,10 @@
 					<view class="box-wrap-tabs-li" v-for="(item,index) in tabsList2" :key="index">
 						<view class="box-tabs-li-text">{{item.title}}</view>
 						<view class="box-tabs-li-icon" v-if="index!==2&&index!==3">
-							<image :src="item.icon" mode="aspectFill" v-if="idx!=index"></image>
-							<image :src="item.iconActive" mode="aspectFill" v-else></image>
+							<text class="iconfont iconxiangxiajiantou icon-font" style="color: #ccc;font-size: 28rpx;"
+								v-if="idx!=index"></text>
+							<text class="iconfont iconxiangxiajiantou icon-font"
+								style="color: #FF8366;font-size: 28rpx;" v-else></text>
 						</view>
 						<view class="box-tabs-li-icon-max" v-else>
 							<image :src="item.icon" mode="aspectFill" v-if="idx!=index"></image>
@@ -162,7 +168,7 @@
 				isFlag: false, // 用于切换商家显示界面
 				isData: false, //是否有数据
 				isLoad: true, //加载状态   true 为加载中 false 为无数据
-
+				mesHeight: 0,
 				storeList: [],
 				tabsList: [{
 						title: "全部",
@@ -205,6 +211,17 @@
 				isTabsShow: false, // 是否有显示下拉
 				isTabsType: "all", // 用于判断 tabs  下拉属于哪个
 				tabsShowIndex: -1,
+				latitude: 24.613838,
+				longitude: 118.037733,
+				covers: [{
+					latitude: 24.613838,
+					longitude: 118.037733,
+					iconPath: '../../static/address-icon.png'
+				}, {
+					latitude: 24.613838,
+					longitude: 118.037733,
+					iconPath: '../../static/address-icon.png'
+				}]
 			};
 		},
 		components: {
@@ -387,10 +404,8 @@
 						}
 
 						.box-tabs-li-icon {
-							image {
-								width: 13rpx;
-								height: 28rpx;
-								transform: rotate(90deg);
+							.icon-font {
+								margin-top: 4rpx;
 							}
 						}
 
@@ -408,11 +423,11 @@
 			.box-content-map-wrap {
 				position: absolute;
 				top: 0;
-				left: 0;
 				height: 100%;
 				z-index: 1;
 				display: flex;
 				flex-direction: column;
+				transition: 0.3s;
 
 
 				.box-map-wrap-main {
@@ -527,18 +542,11 @@
 										font-size: 22rpx;
 										color: 666;
 									}
-
-
 								}
 							}
 						}
-
-
 					}
-
 				}
-
-
 			}
 
 			.box-content-list-wrap {

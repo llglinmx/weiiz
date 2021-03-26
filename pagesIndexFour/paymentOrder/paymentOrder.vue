@@ -13,30 +13,36 @@
 				</view>
 				<view class="box-content-wrap-text">{{dataInfo.store_name}}</view>
 			</view>
-			<view class="box-content-info">
+			<view class="box-content-info" @click="payClick(-1)">
 				<view class="box-content-info-left">
 					<view class="box-content-info-text">
 						余额支付
 					</view>
 					<view class="box-content-info-msg">
-						当前余额:￥50.00
+						当前余额:￥{{balance}}
 					</view>
 				</view>
 				<view class="box-content-info-check">
-					<text class="iconfont iconxuanzhong icon-font" style="color: #FF967D;font-size: 36rpx;"></text>
-					<!-- <text class="iconfont iconweixuanzhong1 icon-font" style="color: #ccc;font-size: 36rpx;"></text> -->
+					<text class="iconfont iconxuanzhong icon-font" v-if="defaultIndex==-1"
+						style="color: #FF967D;font-size: 36rpx;"></text>
+					<text class="iconfont iconweixuanzhong1 icon-font" v-else
+						style="color: #ccc;font-size: 36rpx;"></text>
 				</view>
 			</view>
 
 			<view class="box-content-list">
-				<view class="box-content-list-li" v-for="(item,index) in 3">
+				<view class="box-content-list-li" v-for="(item,index) in payType" :key="index" @click="payClick(index)">
 					<view class="box-content-list-li-all">
-						<view class="box-content-list-li-all-image"></view>
-						<view class="box-content-list-li-all-title">微信</view>
+						<view class="box-content-list-li-all-image" :style="{width:index==2?'190rpx':''}">
+							<image :src="item.image" mode=""></image>
+						</view>
+						<view class="box-content-list-li-all-title" v-if="index!=2">{{item.title}}</view>
 					</view>
 					<view class="box-content-list-li-check">
-						<text class="iconfont iconweixuanzhong1 icon-font" style="color: #ccc;font-size: 36rpx;"></text>
-						<!-- <text class="iconfont iconxuanzhong icon-font" style="color: #FF967D;font-size: 36rpx;"></text> -->
+						<text class="iconfont iconweixuanzhong1 icon-font" v-if="defaultIndex!=index"
+							style="color: #ccc;font-size: 36rpx;"></text>
+						<text class="iconfont iconxuanzhong icon-font" v-else
+							style="color: #FF967D;font-size: 36rpx;"></text>
 					</view>
 				</view>
 			</view>
@@ -55,8 +61,26 @@
 			return {
 				barHeight: 0, //顶部电量导航栏高度
 				rocallTime: '',
-				dataInfo:{}
+				dataInfo: {},
+				defaultIndex: -1,
+				payType: [{
+						title: '支付宝支付',
+						image: '../../static/images/zfb-ico.png'
+					},
+					{
+						title: '微信支付',
+						image: '../../static/images/wx-ico.png'
+					},
+					{
+						title: '',
+						image: '../../static/images/paypal.png'
+					},
+				],
+				balance: 0
 			};
+		},
+		filters: {
+
 		},
 		components: {
 			navTitle,
@@ -73,11 +97,40 @@
 		onLoad(options) {
 			let id = options.id
 			this.getOrderInfo(id)
-			
+		},
+		onShow() {
+			this.balance = this.$store.state.balance
 		},
 		methods: {
+
+			// 选择支付方式
+			payClick(index) {
+				this.defaultIndex = index
+			},
+
+
 			// 确认支付按钮
 			confirmPay() {
+				var title = ''
+				switch (this.defaultIndex) {
+					case -1:
+						title = "余额支付"
+						break;
+					case 0:
+						title = "支付宝支付"
+						break;
+					case 1:
+						title = "微信支付"
+						break;
+					case 2:
+						title = "银行卡支付"
+						break;
+				}
+				uni.showToast({
+					title: title,
+					icon: "none"
+				})
+				return false
 				uni.navigateTo({
 					url: "../paymentSuccessful/paymentSuccessful"
 				})
@@ -179,7 +232,7 @@
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				margin-top: 80rpx;
+				padding: 80rpx 0 40rpx;
 
 				.box-content-info-left {
 					display: flex;
@@ -214,7 +267,7 @@
 					display: flex;
 					align-items: center;
 					justify-content: space-between;
-					height: 180rpx;
+					height: 120rpx;
 
 					.box-content-list-li-all {
 						display: flex;
@@ -223,11 +276,10 @@
 						.box-content-list-li-all-image {
 							width: 48rpx;
 							height: 48rpx;
-							background: purple;
 
 							image {
-								width: 48rpx;
-								height: 48rpx;
+								width: 100%;
+								height: 100%;
 							}
 						}
 

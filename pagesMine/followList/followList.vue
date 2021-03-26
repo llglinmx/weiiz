@@ -27,7 +27,7 @@
 														:style="{color:isComment(item.store_items.comment,storeIndex)?'#FFCD4D':'#eee',}"
 														style="font-size: 28rpx;"
 														v-for="(store,storeIndex) in 5"></text>
-													<text>{{item.store_items.comment}}分</text>
+													<text>{{storeMsg(item.store_items.comment)}}分</text>
 												</view>
 												<view class="store-list-li-content-info-wrap">
 													<view class="info-wrap-text">{{item.store_items.address}}</view>
@@ -257,15 +257,6 @@
 				});
 			},
 
-			// 评分
-			isComment(comment, index) {
-				var score = parseInt(comment)
-				if (score > index) {
-					return true
-				} else {
-					return false
-				}
-			},
 			// 切割字符
 			label(str) {
 				return str.split(',')
@@ -317,7 +308,44 @@
 
 				});
 			},
-
+// 评分
+			isComment(comment, index) {
+				var store = parseInt(comment)
+				var str = 0
+				if (store <= 20) {
+					str = 1
+				} else if (store > 20 && store <= 40) {
+					str = 2
+				} else if (store > 40 && store <= 60) {
+					str = 3
+				} else if (store > 60 && store <= 80) {
+					str = 4
+				} else if (store > 80) {
+					str = 5
+				}
+				if (str > index) {
+					return true
+				} else {
+					return false
+				}
+			},
+			// 评分提示
+			storeMsg(comment) {
+				var store = parseInt(comment)
+				var str = 0
+				if (store <= 20) {
+					str = 1
+				} else if (store > 20 && store <= 40) {
+					str = 2
+				} else if (store > 40 && store <= 60) {
+					str = 3
+				} else if (store > 60 && store <= 80) {
+					str = 4
+				} else if (store > 80) {
+					str = 5
+				}
+				return str
+			},
 		}
 	}
 </script>
