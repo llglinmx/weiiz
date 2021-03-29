@@ -153,13 +153,10 @@
 <script>
 	import navTitle from "../../components/navTitle/navTitle.vue"
 	import UniPopup from "../../components/uni-popup/uni-popup.vue"
-	import MescrollMixin from "../../components/mescroll-uni/mescroll-mixins.js";
-	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue"
 	import loading from '../../components/loading/loading.vue'
 	import noData from '../../components/no-data/no-data.vue'
 	import zPaging from '../../uni_modules/z-paging/components/z-paging/z-paging.vue'
 	export default {
-		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
@@ -227,7 +224,6 @@
 		components: {
 			navTitle,
 			UniPopup,
-			MescrollUni,
 			zPaging,
 			loading,
 			noData

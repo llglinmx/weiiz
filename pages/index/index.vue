@@ -12,7 +12,6 @@
 				</view>
 				<view class="index-head-language flex-center" @click="clickLanguage">
 					<text class="iconfont iconyuyan icon-font" style="color: #fff;font-size: 32rpx;"></text>
-
 					<text>EN</text>
 				</view>
 			</view>
@@ -40,47 +39,51 @@
 			<view class="index-content-banner">
 				<swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval"
 					:duration="duration" :circular="circular">
-					<swiper-item v-for="(item,index) in imageList">
-						<image :src="item.url" mode="" class="swiper-item"></image>
+					<swiper-item v-for="(item,index) in bannerList">
+						<image :src="item.bimg" mode="aspectFill" class="swiper-item"></image>
 					</swiper-item>
-
 				</swiper>
 			</view>
 			<!-- 公告 -->
 			<view class="index-content-notice">
 				<view class="index-content-notice-box">
 					<view class="content-notice-wrap">
-						<image src="" mode=""></image>
-						<text>新时代好商机，你来不来？海量商家入驻</text>
+						<view class="content-notice-wrap-text">公告</view>
+						<view class="content-notice-wrap-swiper">
+							<swiper class="swiper" :autoplay="autoplay" :vertical="true" :interval="5000"
+								:duration="duration" :circular="circular">
+								<swiper-item v-for="(item,index) in noticeList">
+									<text>{{item.title}}</text>
+								</swiper-item>
+							</swiper>
+						</view>
 					</view>
 					<view class="content-notice-more">
-						<text class="iconfont icongengduo icon-font"
-							style="color: #333;font-size: 24rpx;font-weight: 500;"></text>
-						<!-- <image src="../../static/images/more.png" mode="aspectFill"></image> -->
+						<text class="iconfont icongengduo icon-font"></text>
 					</view>
 				</view>
 			</view>
 			<!-- 列表 -->
 			<view class="index-content-list">
-				<view class="index-content-list-li" v-for="item in arrList" @click="moreClick(item)">
+				<view class="index-content-list-li" v-for="item in arrList" @click="moreClick(item.name)">
 					<view class="content-list-li-ico">
-						<image src="../../static/images/code.png" mode=""></image>
+						<image :src="item.icon" mode="aspectFill"></image>
 					</view>
-					<view class="content-list-li-text">{{item}}</view>
+					<view class="content-list-li-text">{{item.name}}</view>
 				</view>
 			</view>
 			<!-- 更多服务列表 -->
 			<view class="more-services-box">
 				<view class="more-services-title">更多服务</view>
 				<view class="more-services-list">
-					<view class="more-services-list-li" v-for="(item,index) in serviceList" @click="serviceClick(item)">
-						<view class="more-services-list-li-title">{{item}}</view>
-						<view class="more-services-list-li-text">
-							每天签到领积分
-						</view>
+					<view class="more-services-list-li" v-for="(item,index) in serviceList" @click="serviceClick(item)"
+						 :style="{backgroundImage: 'url('+item.bg+')',backgroundSize: 'contain'}">
+						<view class="more-services-list-li-title">{{item.title}}</view>
+						<view class="more-services-list-li-text">{{item.text}}</view>
 						<view class="more-list-li-btn">
 							<text>点击签到</text>
-							<image src="../../static/images/more.png" mode=""></image>
+							<text class="iconfont icongengduo icon-font"
+								style="color: #fff;font-size: 18rpx;margin-top: 4rpx;"></text>
 						</view>
 					</view>
 				</view>
@@ -89,7 +92,7 @@
 		</view>
 		<!-- tabbar导航栏 -->
 		<view class="index-footer">
-			<Tabbar></Tabbar>
+			<Tabbar @tabbarClick="tabbarClick" :activeIndex="activeIndex"></Tabbar>
 		</view>
 		<!-- 选择语言弹出层 -->
 		<uni-popup ref="popup" type="center" :maskClick="false">
@@ -106,9 +109,7 @@
 								v-if="item.default==1"></text>
 						</view>
 					</view>
-					<view class="popup-btn" @click="confirmBtn">
-						确定
-					</view>
+					<view class="popup-btn" @click="confirmBtn">确定</view>
 				</view>
 				<view class="popup-close flex-center" @click="closeLanguage">
 					<text class="iconfont iconcuowu icon-font" style="color:#fff;font-size: 48rpx;"></text>
@@ -129,26 +130,36 @@
 				interval: 2000,
 				duration: 500,
 				circular: true,
-				arrList: ['商城', "按摩", "教程", "技师", "活动", '快速预约', "礼品卡", "买单", "领券中心", "拼团"],
+				arrList: [],
 				textList: ['中文', "英语", "俄语", "法语", "德语"],
-				serviceList: ['商城礼品卡', "商城套餐卡", '商城礼品卡', "商城套餐卡"],
-				imageList: [{
-						url: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.pconline.com.cn%2Fimages%2Fupload%2Fupc%2Ftx%2Fwallpaper%2F1212%2F10%2Fc1%2F16491670_1355126816487.jpg&refer=http%3A%2F%2Fimg.pconline.com.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1617169230&t=15c6d87792f9fe60a66efcc066e816d5",
-						link: ""
+				serviceList: [{
+						title: '商城礼品卡',
+						bg: '../../static/images/card-bg1.png',
+						text: '领取精美礼品一份'
 					},
 					{
-						url: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fattachments.gfan.com%2Fforum%2Fattachments2%2F201304%2F18%2F001339jv88x0qs06vo3qq6.jpg&refer=http%3A%2F%2Fattachments.gfan.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1617169230&t=cee66d4129e14994e31b7f0f370b0c39",
-						link: ""
+						title: '商城套餐卡',
+						bg: '../../static/images/card-bg2.png',
+						text: '领取精美套餐卡一份'
 					},
 					{
-						url: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201312%2F31%2F111859myvyiivetyftfz2n.jpg&refer=http%3A%2F%2Fattach.bbs.miui.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1617169230&t=91b7765aa0a2234b14fc7dbf31cc2bf8",
-						link: ""
-					}
+						title: '积分',
+						bg: '../../static/images/card-bg3.png',
+						text: ' 积分商城兑换好物'
+					},
+					{
+						title: '折扣券',
+						bg: '../../static/images/card-bg4.png',
+						text: ' 领券下单更优惠'
+					},
 				],
+				bannerList: [], //轮播图
+				noticeList: [], //公告
 				barHeight: 0, //顶部电量导航栏高度
 				isLangShow: false,
 				isPopup: false,
 				selectIndex: 0, //当前选择的语言
+				activeIndex: 0, //当前tabbar所在页面
 			}
 		},
 		components: {
@@ -156,8 +167,8 @@
 			UniPopup
 		},
 		onLoad() {
-
 			this.languageList();
+			this.getInfo()
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -169,6 +180,25 @@
 			});
 		},
 		methods: {
+
+			// 获取首页信息
+			getInfo() {
+				var vuedata = {
+
+				}
+				this.apiget('pc/index', vuedata).then(res => {
+					if (res.status == 200) {
+						this.bannerList = res.data.bannerList
+						this.arrList = res.data.classList
+						this.noticeList = res.data.noticeList
+						console.log(res.datas)
+
+					}
+				});
+			},
+
+
+
 			// 打开切换语言
 			clickLanguage() {
 				this.$refs.popup.open()
@@ -227,7 +257,7 @@
 
 			// 更多服务列表点击
 			serviceClick(item) {
-				switch (item) {
+				switch (item.title) {
 					case "商城套餐卡":
 						uni.navigateTo({
 							url: "../../pagesIndex/packageCardList/packageCardList"
@@ -236,6 +266,35 @@
 					case "商城礼品卡":
 						uni.navigateTo({
 							url: "../../pagesIndex/giftCardShopping/giftCardShopping"
+						})
+						break;
+				}
+			},
+
+			// tabbar点击
+			tabbarClick(index) {
+				this.activeIndex = index
+				switch (index) {
+					case 0: //首页
+						break;
+					case 1: //我的预约
+						uni.redirectTo({
+							url: "../subscribe/subscribe"
+						})
+						break;
+					case 2: //地图
+						uni.redirectTo({
+							url: "../map/map"
+						})
+						break;
+					case 3: //商城
+						uni.redirectTo({
+							url: "../mall/mall"
+						})
+						break;
+					case 4: //我的
+						uni.redirectTo({
+							url: "../mine/mine"
 						})
 						break;
 				}
@@ -401,27 +460,54 @@
 					border-radius: 10rpx;
 
 					.content-notice-wrap {
-						image {
-							width: 58rpx;
-							height: 24rpx;
+						display: flex;
+						align-items: center;
+						flex: 1;
+
+						.content-notice-wrap-text {
+							font-weight: bold;
+							font-size: 32rpx;
+							color: #FF967D;
 						}
 
-						text {
-							margin-left: 20rpx;
-							font-size: 24rpx;
-							font-family: Source Han Sans CN;
-							font-weight: 400;
-							color: #333333;
+						.content-notice-wrap-swiper {
+							flex: 1;
+							height: 40rpx;
+
+							.swiper {
+								height: 100%;
+								width: 100%;
+
+								swiper-item {
+									height: 100%;
+									width: 100%;
+
+									text {
+										height: 100%;
+										display: block;
+										line-height: 40rpx;
+										margin-left: 20rpx;
+										font-size: 24rpx;
+										font-family: Source Han Sans CN;
+										font-weight: 400;
+										color: #333333;
+										overflow: hidden;
+										text-overflow: ellipsis;
+										white-space: nowrap;
+									}
+								}
+							}
 						}
+
 					}
 
 					.content-notice-more {
-						width: 12rpx;
-						height: 20rpx;
+						width: 20rpx;
 
-						image {
-							width: 12rpx;
-							height: 20rpx;
+						.icon-font {
+							font-weight: bold;
+							color: #333;
+							font-size: 28rpx;
 						}
 					}
 				}
@@ -450,8 +536,8 @@
 						border-radius: 20rpx;
 
 						image {
-							width: 51rpx;
-							height: 51rpx;
+							width: 72rpx;
+							height: 72rpx;
 						}
 					}
 
@@ -495,7 +581,9 @@
 						margin-right: 30rpx;
 						border-radius: 10rpx;
 						box-sizing: border-box;
-						background: rgb(247, 247, 247);
+						background: rgb(247, 247, 247) no-repeat;
+						background-position: bottom;
+						background-size: contain;
 
 						.more-services-list-li-title {
 							font-size: 26rpx;
@@ -515,9 +603,11 @@
 						.more-list-li-btn {
 							display: flex;
 							align-items: center;
-							justify-content: center;
+							justify-content: space-around;
 							width: 122rpx;
 							height: 36rpx;
+							padding: 0 10rpx;
+							box-sizing: border-box;
 							margin-top: 16rpx;
 							background: linear-gradient(90deg, #FFB5A4 0%, #FF714F 100%);
 							border-radius: 30rpx;
@@ -529,10 +619,9 @@
 								color: #FFFFFF;
 							}
 
-							image {
-								width: 6rpx;
-								height: 10rpx;
-							}
+							.icon-font {}
+
+
 						}
 					}
 				}

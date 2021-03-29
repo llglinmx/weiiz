@@ -8,26 +8,16 @@
 				<view class="box-content-list-li">
 					<view class="box-content-list-li-top">
 						<view class="box-content-list-li-top-image">
-							<image src="../../static/images/card-002.png" mode="aspectFill"></image>
+							<image :src="dataInfo.simg" mode="aspectFill"></image>
 						</view>
 						<view class="box-content-list-li-top-info">
-							<view class="box-content-list-li-top-info-title">超值SPA套餐</view>
-							<view class="box-content-list-li-top-info-price">￥489.00</view>
+							<view class="box-content-list-li-top-info-title">{{dataInfo.name}}</view>
+							<view class="box-content-list-li-top-info-price">￥{{dataInfo.price}}</view>
 						</view>
 					</view>
 					<view class="box-content-list-li-bottom">
 						<view class="box-content-list-li-bottom-text">数量</view>
-						<view class="box-content-list-li-bottom-stepper">
-							<view class="reduce" @click="stepperClick('reduce')">
-								<image src="../../static/images/reduce-icon.png" mode="aspectFill"></image>
-							</view>
-							<view class="num flex-center">
-								{{num}}
-							</view>
-							<view class="add" @click="stepperClick('add')">
-								<image src="../../static/images/add-icon.png" mode="aspectFill"></image>
-							</view>
-						</view>
+						<stepper :num="num" @add="stepperClick('add')" @reduce="stepperClick('reduce')"></stepper>
 					</view>
 				</view>
 			</view>
@@ -41,17 +31,17 @@
 				</view>
 				<view class="box-content-coupon-bottom">
 					<view class="box-content-coupon-bottom-text">
-						已优惠￥0
+						已优惠￥{{discount}}
 					</view>
 					<view class="box-content-coupon-bottom-price">
-						小计￥<text>589.00</text>
+						小计￥<text>{{subtotal}}</text>
 					</view>
 				</view>
 			</view>
 		</view>
 		<view class="box-footer">
 			<view class="box-footer-text">
-				合计￥<text>489.00</text>
+				合计￥<text>{{totalPrice}}</text>
 			</view>
 			<view class="box-footer-btn flex-center" @click="payment">立即付款</view>
 		</view>
@@ -60,15 +50,23 @@
 
 <script>
 	import navTitle from "../../components/navTitle/navTitle.vue"
+	import stepper from "../../components/stepper/stepper.vue"
 	export default {
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
 				num: 1, //数量
+				dataInfo: {
+					name: '',
+					simg: '',
+					price: 0
+				},
+				discount: 50, //优惠金额
 			};
 		},
 		components: {
-			navTitle
+			navTitle,
+			stepper
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -78,7 +76,37 @@
 				}
 			});
 		},
+		onLoad(options) {
+			var data = JSON.parse(options.data)
+			this.getPackageCard(data.id)
+		},
+		computed: {
+			subtotal() {
+				var price = this.dataInfo.price * this.num
+				return price.toFixed(2)
+			},
+
+			totalPrice() {
+				var price = this.dataInfo.price * this.num - this.discount
+				return price.toFixed(2)
+			}
+		},
 		methods: {
+
+
+			// 获取礼品卡
+			getPackageCard(id) {
+				let vuedata = {
+					id: id
+				}
+				this.apiget('pc/card/index', vuedata).then(res => {
+					if (res.status == 200) {
+						this.dataInfo = res.data.cardList
+					}
+				});
+			},
+
+
 			// 步进器
 			stepperClick(type) {
 				switch (type) {
@@ -244,7 +272,7 @@
 							color: #999;
 						}
 
-						.icon-font{
+						.icon-font {
 							margin-top: 4rpx;
 						}
 					}

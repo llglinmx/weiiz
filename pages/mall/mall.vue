@@ -71,7 +71,7 @@
 		</view>
 		<!-- tabbar导航栏 -->
 		<view class="mall-footer">
-			<Tabbar></Tabbar>
+			<Tabbar @tabbarClick="tabbarClick" :activeIndex="activeIndex"></Tabbar>
 		</view>
 	</view>
 </template>
@@ -86,6 +86,7 @@
 			return {
 				barHeight: 0, //顶部电量导航栏高度
 				mesHeight: 0,
+				activeIndex: 3, //当前tabbar所在页面
 				downOption: { // 下拉刷新配置
 					auto: false,
 				},
@@ -235,6 +236,35 @@
 					// }
 				}, 1500)
 				console.log("上拉加载")
+			},
+			// tabbar点击
+			tabbarClick(index) {
+				this.activeIndex = index
+				switch (index) {
+					case 0: //首页
+						uni.reLaunch({
+							url: '../index/index'
+						})
+						break;
+					case 1: //我的预约
+						uni.reLaunch({
+							url: "../subscribe/subscribe"
+						})
+						break;
+					case 2: //地图
+						uni.reLaunch({
+							url: "../map/map"
+						})
+						break;
+					case 3: //商城
+
+						break;
+					case 4: //我的
+						uni.reLaunch({
+							url: "../mine/mine"
+						})
+						break;
+				}
 			},
 		}
 	}

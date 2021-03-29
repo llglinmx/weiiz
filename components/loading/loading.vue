@@ -2,6 +2,7 @@
 	<view class="loading flex-center">
 		<view class="loading-box flex-center">
 			<text class="iconfont iconjiazaizhong icon-font" style="font-size:120rpx;color: #FF8366;"></text>
+			<text style="margin-top: 20rpx;">加载中...</text>
 		</view>
 	</view>
 </template>
@@ -24,12 +25,18 @@
 		background: #fff;
 
 		.loading-box {
+			display: flex;
+			flex-direction: column;
+			color: #666;
+			font-size: 28rpx;
 			width: 120rpx;
-			height: 120rpx;
+			// height: 120rpx;
 		}
 
 		.icon-font {
-			padding-top: 4rpx;
+			width: 120rpx;
+			height: 120rpx;
+			padding-top: 2rpx;
 			animation: changeright 0.8s linear infinite;
 		}
 

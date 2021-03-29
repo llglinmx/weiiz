@@ -1,0 +1,8 @@
+/**
+ * @name: 添加ossHost域名
+ * @param {String} url
+ * @return {String}
+ */
+@function addOssHost($url:'') {
+  @return $ossHost+$url;
+}

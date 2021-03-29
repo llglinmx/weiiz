@@ -12,69 +12,68 @@
 			</view>
 		</view>
 		<view class="box-content">
-			<view class="box-content-wrap">
-				<mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption" :height="mesHeight">
+			<view class="box-content-wrap" :style="{display:isData?'block':'none'}">
+				<z-paging ref="paging" @query="queryList" :list.sync="packageCardList" loading-more-no-more-text="已经到底了"
+					:refresher-angle-enable-change-continued="false" :touchmove-propagation-enabled="true"
+					:use-custom-refresher="true">
 					<view class="box-content-wrap-list">
-						<view class="wrap-list-li" v-for="(item,index) in 30" :key="index" @click="cardDetails(item)">
+						<view class="wrap-list-li" v-for="(item,index) in packageCardList" :key="item.id"
+							@click="cardDetails(item)">
 							<view class="wrap-list-li-top">
 								<view class="wrap-list-li-top-image">
-									<image src="../../static/images/card-001.png" mode="aspectFill"></image>
+									<image :src="item.simg" mode="aspectFill"></image>
 								</view>
 								<view class="wrap-list-li-top-info">
-									<view class="wrap-list-li-top-info-title">超值SPA套餐</view>
-									<view class="wrap-list-li-top-info-price">￥489.00</view>
+									<view class="wrap-list-li-top-info-title">{{item.name}}</view>
+									<view class="wrap-list-li-top-info-price">￥{{item.price}}</view>
 									<view class="wrap-list-li-top-info-box">
 										<view class="list-li-top-info-box-item flex-center">足底按摩x3次</view>
 										<view class="list-li-top-info-box-item flex-center">足底按摩x1次</view>
 									</view>
 									<view class="wrap-list-li-top-info-bottom">
 										<view class="list-li-top-info-bottom-title">
-											<image src="../../static/images/tool.jpg" mode="aspectFill"></image>
-											<text>罗约蓝池·温泉SPA</text>
+											<text class="iconfont iconshangjia"
+												style="font-size: 28rpx;color: #FF967D;"></text>
+											<text>{{item.common_store_name}}</text>
 										</view>
-										<view class="list-li-top-info-bottom-btn flex-center" @click.stop="payment">去付款</view>
+										<view class="list-li-top-info-bottom-btn flex-center"
+											@click.stop="payment(item)">去付款</view>
 									</view>
 								</view>
 							</view>
 
 						</view>
 					</view>
-				</mescroll-uni>
+				</z-paging>
+			</view>
+			<view class="box-content-wrap" :style="{display:!isData?'block':'none'}">
+				<loading v-if="isLoad" />
+				<no-data v-if="!isLoad" />
 			</view>
 		</view>
-		<view class="box-footer">
 
-		</view>
 	</view>
 </template>
 
 <script>
 	import navTitle from "../../components/navTitle/navTitle.vue"
-	import MescrollMixin from "../../components/mescroll-uni/mescroll-mixins.js";
-	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue"
+	import loading from '../../components/loading/loading.vue'
+	import noData from '../../components/no-data/no-data.vue'
+	import zPaging from '../../uni_modules/z-paging/components/z-paging/z-paging.vue'
 	export default {
-		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
-				mesHeight: 0,
-				downOption: { // 下拉刷新配置
-					auto: false,
-				},
-				upOption: { // 上拉加载配置
-					noMoreSize: 5,
-					textLoading: "正在加载更多数据",
-					textNoMore: "——  已经到底了  ——",
-					isBounce: true,
-					auto: false,
-				},
-				PageNumber: 1, // 请求页数，
-				PageLimt: 10, // 请求条数
+				packageCardList: [],
+				isData: false,
+				isLoad: true,
 			};
 		},
 		components: {
 			navTitle,
-			MescrollUni
+			zPaging,
+			loading,
+			noData
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -96,6 +95,33 @@
 					delta: 1
 				})
 			},
+
+			// 上拉 下拉
+			queryList(pageNo, pageSize) {
+				this.getPackageCard(pageNo, pageSize)
+			},
+
+			// 获取礼品卡
+			getPackageCard(num, size) {
+				let vuedata = {
+					page_index: num, // 请求页数，
+					each_page: size, // 请求条数
+				}
+				this.apiget('pc/card/index', vuedata).then(res => {
+					if (res.status == 200) {
+						let list = res.data.cardList
+						if (list.length != 0) {
+							this.isData = true
+							this.$refs.paging.addData(list);
+							// this.$refs.paging.complete(list);
+						} else {
+							this.isData = false
+							this.isLoad = false
+						}
+					}
+				});
+			},
+
 			// 点击顶部我的套餐卡
 			cardList() {
 				uni.navigateTo({
@@ -105,42 +131,21 @@
 			// 点击进入套餐卡详情
 			cardDetails(item) {
 				uni.navigateTo({
-					url: "../../pagesIndexTwo/shoppingCardDetails/shoppingCardDetails"
+					url: "../../pagesIndexTwo/shoppingCardDetails/shoppingCardDetails?id=" + item.id
 				})
 			},
 
 			// 去付款
-			payment() {
+			payment(item) {
+				var str = {
+					id: item.id,
+					num: 1
+				}
 				uni.navigateTo({
-					url: "../../pagesIndexThree/confirmOrder/confirmOrder"
+					url: "../../pagesIndexThree/confirmOrder/confirmOrder?data=" + JSON.stringify(str)
 				})
 			},
 
-
-
-			/*下拉刷新的回调*/
-			downCallback() {
-				this.PageNumber = 1
-				setTimeout(() => {
-					this.mescroll.endSuccess() // 请求成功 隐藏加载状态
-
-					// this.mescroll.showNoMore()
-
-				}, 1500)
-			},
-
-			/*上拉加载的回调*/
-			upCallback(page) {
-				this.PageNumber++
-				console.log(this.PageNumber)
-				setTimeout(() => {
-					this.mescroll.endSuccess() // 请求成功 隐藏加载状态
-					// if (this.PageNumber > 3) {
-					this.mescroll.showNoMore()
-					// }
-				}, 1500)
-				console.log("上拉加载")
-			},
 		}
 	}
 </script>
@@ -204,6 +209,8 @@
 			font-weight: 400;
 
 			.box-content-wrap {
+				height: 100%;
+
 				.box-content-wrap-list {
 					padding-left: 40rpx;
 					box-sizing: border-box;
@@ -285,8 +292,8 @@
 									}
 
 									.list-li-top-info-bottom-btn {
-										width: 148rpx;
-										height: 60rpx;
+										width: 146rpx;
+										height: 58rpx;
 										border: 1rpx solid #FF6F4D;
 										border-radius: 3rpx;
 										color: #FF6F4D;

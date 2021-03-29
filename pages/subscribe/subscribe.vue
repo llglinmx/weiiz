@@ -8,15 +8,16 @@
 		<view class="sub-content">
 			<view class="sub-content-wrap">
 				<swiper class="swiper-box" :current="idx" @change="tabChange">
-					<swiper-item class="swiper-box-item-list" v-for="(item, index) in TabsList" :key="index" >
-						<scroll-tab-swiper-item :tabIndex="index" :currentIndex="idx" :orderType='orderType' ></scroll-tab-swiper-item>
+					<swiper-item class="swiper-box-item-list" v-for="(item, index) in TabsList" :key="index">
+						<scroll-tab-swiper-item :tabIndex="index" :currentIndex="idx" :orderType='orderType'>
+						</scroll-tab-swiper-item>
 					</swiper-item>
 				</swiper>
 			</view>
 		</view>
 		<!-- tabbar导航栏 -->
 		<view class="sub-footer">
-			<Tabbar></Tabbar>
+			<Tabbar @tabbarClick="tabbarClick" :activeIndex="activeIndex"></Tabbar>
 		</view>
 	</view>
 </template>
@@ -31,6 +32,7 @@
 				idx: 0,
 				barHeight: 0, //顶部电量导航栏高度
 				orderType: 1, //当前加载订单类型
+				activeIndex: 1, //当前tabbar所在页面
 			}
 		},
 		components: {
@@ -75,9 +77,38 @@
 						this.orderType = 3
 						break;
 				}
-			
+
 			},
-			
+			// tabbar点击
+			tabbarClick(index) {
+				this.activeIndex = index
+				switch (index) {
+					case 0: //首页
+						uni.reLaunch({
+							url: '../index/index'
+						})
+						break;
+					case 1: //我的预约
+
+						break;
+					case 2: //地图
+						uni.reLaunch({
+							url: "../map/map"
+						})
+						break;
+					case 3: //商城
+						uni.reLaunch({
+							url: "../mall/mall"
+						})
+						break;
+					case 4: //我的
+						uni.reLaunch({
+							url: "../mine/mine"
+						})
+						break;
+				}
+			},
+
 		}
 	}
 </script>

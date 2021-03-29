@@ -12,62 +12,55 @@
 			</view>
 		</view>
 		<view class="box-content">
-			<view class="box-content-wrap">
-				<mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption" :height="mesHeight">
+			<view class="box-content-wrap" :style="{display:isData?'block':'none'}">
+				<z-paging ref="paging" @query="queryList" :list.sync="giftList" loading-more-no-more-text="已经到底了"
+					:refresher-angle-enable-change-continued="false" :touchmove-propagation-enabled="true"
+					:use-custom-refresher="true">
 					<view class="box-content-wrap-list">
-						<view class="wrap-list-li" v-for="(item,index) in 30" :key="index" @click="cardDetails(item)">
+						<view class="wrap-list-li" v-for="(item,index) in giftList" :key="item.id"
+							@click="cardDetails(item.id)">
 							<view class="wrap-list-li-image">
-								<image src="../../static/images/gift.png" mode="aspectFill"></image>
+								<image :src="item.simg" mode="aspectFill"></image>
 							</view>
 							<view class="wrap-list-li-info">
-								<view class="wrap-list-li-info-title">
-									春节礼品卡
-								</view>
-								<view class="wrap-list-li-info-price">
-									￥89.99
-								</view>
+								<view class="wrap-list-li-info-title">{{item.name}}</view>
+								<view class="wrap-list-li-info-price">￥{{item.price}}</view>
 								<view class="wrap-list-li-info-text">
 									包含了全身按摩、背部按摩产品以及2张优惠券
 								</view>
 							</view>
 						</view>
 					</view>
-				</mescroll-uni>
+				</z-paging>
 			</view>
-		</view>
-		<view class="box-footer">
-
+			<view class="box-content-wrap" :style="{display:!isData?'block':'none'}">
+				<loading v-if="isLoad" />
+				<no-data v-if="!isLoad" />
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
 	import navTitle from "../../components/navTitle/navTitle.vue"
-	import MescrollMixin from "../../components/mescroll-uni/mescroll-mixins.js";
-	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue"
+	import loading from '../../components/loading/loading.vue'
+	import noData from '../../components/no-data/no-data.vue'
+	import zPaging from '../../uni_modules/z-paging/components/z-paging/z-paging.vue'
 	export default {
-		mixins: [MescrollMixin], // 使用mixin
+
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
-				mesHeight: 0,
-				downOption: { // 下拉刷新配置
-					auto: false,
-				},
-				upOption: { // 上拉加载配置
-					noMoreSize: 5,
-					textLoading: "正在加载更多数据",
-					textNoMore: "——  已经到底了  ——",
-					isBounce: true,
-					auto: false,
-				},
-				PageNumber: 1, // 请求页数，
-				PageLimt: 10, // 请求条数
+				giftList: [],
+				isData: false,
+				isLoad: true,
 			};
 		},
 		components: {
 			navTitle,
-			MescrollUni
+			zPaging,
+			loading,
+			noData
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -82,6 +75,9 @@
 			var Heigh = sys.windowHeight
 			this.mesHeight = (Heigh - 44) * 2
 		},
+		onLoad() {
+
+		},
 		methods: {
 			// 返回
 			Gback() {
@@ -89,44 +85,46 @@
 					delta: 1
 				})
 			},
+
+			// 上拉 下拉 
+			queryList(pageNo, pageSize) {
+				this.getGift(pageNo, pageSize)
+			},
+			// 获取礼品卡
+			getGift(num, size) {
+				let vuedata = {
+					page_index: num, // 请求页数，
+					each_page: size, // 请求条数
+				}
+				this.apiget('pc/card/gift', vuedata).then(res => {
+					if (res.status == 200) {
+						let list = res.data.giftList
+						if (list.length != 0) {
+							this.isData = true
+							this.$refs.paging.addData(list);
+							// this.$refs.paging.complete(list);
+						} else {
+							this.isData = false
+							this.isLoad = false
+						}
+					}
+				});
+			},
+
 			// 点击顶部我的礼品卡
 			cardList() {
 				uni.navigateTo({
-					url:"../../pagesMine/giftCard/giftCard"
+					url: "../../pagesMine/giftCard/giftCard"
 				})
 			},
 			// 点击进入套餐卡详情
-			cardDetails(item) {
+			cardDetails(id) {
 				uni.navigateTo({
-					url: "../../pagesIndexTwo/mallGiftCardDetails/mallGiftCardDetails"
+					url: "../../pagesIndexTwo/mallGiftCardDetails/mallGiftCardDetails?id=" + id
 				})
 			},
 
 
-
-			/*下拉刷新的回调*/
-			downCallback() {
-				this.PageNumber = 1
-				setTimeout(() => {
-					this.mescroll.endSuccess() // 请求成功 隐藏加载状态
-
-					// this.mescroll.showNoMore()
-
-				}, 1500)
-			},
-
-			/*上拉加载的回调*/
-			upCallback(page) {
-				this.PageNumber++
-				console.log(this.PageNumber)
-				setTimeout(() => {
-					this.mescroll.endSuccess() // 请求成功 隐藏加载状态
-					// if (this.PageNumber > 3) {
-					this.mescroll.showNoMore()
-					// }
-				}, 1500)
-				console.log("上拉加载")
-			},
 		}
 	}
 </script>
@@ -190,6 +188,8 @@
 			font-weight: 400;
 
 			.box-content-wrap {
+				height: 100%;
+
 				.box-content-wrap-list {
 					padding-left: 40rpx;
 					box-sizing: border-box;
@@ -207,6 +207,7 @@
 							image {
 								width: 310rpx;
 								height: 174rpx;
+								border-radius: 10rpx;
 							}
 						}
 

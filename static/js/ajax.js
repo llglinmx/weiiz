@@ -40,13 +40,9 @@ const httpClient = {
 						uni.showToast({
 							icon: 'none',
 							duration: 1000,
-							title: "请求错误，请重新登录"
+							title: "请求错误"
 						});
-						setTimeout(function() {
-							uni.reLaunch({
-								url: '/pagesIndex/login/login'
-							});
-						}, 1000);
+						
 					} else {
 						if (res.data.error != null) {
 							uni.showToast({

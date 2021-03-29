@@ -6,28 +6,18 @@
 		<view class="box-content">
 			<view class="box-content-main">
 				<view class="box-content-main-image">
-					<image src="../../static/images/gift.png" mode="aspectFill"></image>
+					<image :src="dataInfo.simg" mode="aspectFill"></image>
 				</view>
 				<view class="box-content-main-center">
 					<view class="box-content-main-center-price">
-						<view class="present-price">580.00</view>
+						<view class="present-price">{{dataInfo.price}}</view>
 						<view class="original-price">1580.00</view>
 					</view>
-					<view class="box-content-main-center-stepper">
-						<view class="reduce" @click="stepperClick('reduce')">
-							<image src="../../static/images/reduce-icon.png" mode="aspectFill"></image>
-						</view>
-						<view class="num flex-center">
-							{{num}}
-						</view>
-						<view class="add" @click="stepperClick('add')">
-							<image src="../../static/images/add-icon.png" mode="aspectFill"></image>
-						</view>
-					</view>
+					<stepper :num="num" @add="stepperClick('add')" @reduce="stepperClick('reduce')"></stepper>
 				</view>
 				<view class="box-content-main-wrap-text">
-					<view class="box-content-main-wrap-text-title">春节礼品卡</view>
-					<view class="box-content-main-wrap-text-msg">已售45</view>
+					<view class="box-content-main-wrap-text-title">{{dataInfo.name}}</view>
+					<view class="box-content-main-wrap-text-msg">已售{{dataInfo.sold}}</view>
 				</view>
 				<view class="box-content-main-text">
 					包含了全身按摩、背部按摩产品以及2张优惠券
@@ -37,14 +27,14 @@
 			<view class="box-content-collect-gifts">
 				<view class="box-content-collect-gifts-title">卡内包含</view>
 				<view class="box-content-collect-gifts-list">
-					<view class="collect-gifts-list-li" v-for="(item,index) in 3" :key="index">
+					<view class="collect-gifts-list-li" v-for="(item,index) in dataInfo.coupon_list" :key="item.id">
 						<view class="collect-gifts-list-li-image">
-							<image src="../../static/images/001.png" mode="aspectFill"></image>
+							<image :src="item.simg" mode="aspectFill"></image>
 						</view>
 						<view class="collect-gifts-list-li-info">
 							<view class="collect-gifts-list-li-info-top">
-								<view class="collect-gifts-list-li-info-top-title">泰式古法按摩</view>
-								<view class="collect-gifts-list-li-info-top-msg">x20</view>
+								<view class="collect-gifts-list-li-info-top-title">{{item.name}}</view>
+								<view class="collect-gifts-list-li-info-top-msg">x{{item.times}}</view>
 							</view>
 							<view class="collect-gifts-list-li-info-center-list" v-if="index!=2">
 								<view class="collect-gifts-list-li-info-center-list-item">
@@ -64,7 +54,7 @@
 								</view>
 							</view>
 							<view class="collect-gifts-list-li-info-text" style="margin-top: 10rpx;">市场价值：￥298.00</view>
-							<view class="collect-gifts-list-li-info-text">适用门店：罗约蓝池·温泉SPA</view>
+							<view class="collect-gifts-list-li-info-text">{{item.store_name}}</view>
 						</view>
 					</view>
 				</view>
@@ -86,7 +76,7 @@
 		<view class="box-footer">
 			<view class="box-footer-main">
 				<view class="box-footer-main-price">
-					合计￥<text>300.00</text>
+					合计￥<text>{{totalPrice}}</text>
 				</view>
 				<view class="box-footer-btn flex-center" @click="receive">立即领取</view>
 			</view>
@@ -96,15 +86,29 @@
 
 <script>
 	import navTitle from "../../components/navTitle/navTitle.vue"
+	import stepper from "../../components/stepper/stepper.vue"
 	export default {
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
 				num: 1, //当前数量
+				id: '',
+				dataInfo: {
+					price:0,
+					name:'',
+					sold:0
+				}
 			};
 		},
 		components: {
-			navTitle
+			navTitle,
+			stepper
+		},
+		computed: {
+			totalPrice() {
+				var price = this.dataInfo.price * this.num
+				return price.toFixed(2)
+			}
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -114,11 +118,34 @@
 				}
 			});
 		},
+		onLoad(options) {
+			this.id = options.id
+			this.getGift(this.id)
+		},
 		methods: {
+			// 获取礼品卡
+			getGift(id) {
+				let vuedata = {
+					id: id
+				}
+				this.apiget('pc/card/gift', vuedata).then(res => {
+					if (res.status == 200) {
+						let list = res.data.giftList
+						this.dataInfo = res.data.giftList
+					}
+				});
+			},
+
+
+
 			// 立即领取
 			receive() {
+				var str={
+					num:this.num,
+					id:this.id
+				}
 				uni.navigateTo({
-					url: "../../pagesIndexThree/giftCardConfirmation/giftCardConfirmation"
+					url: "../../pagesIndexThree/giftCardConfirmation/giftCardConfirmation?data="+JSON.stringify(str)
 				})
 			},
 
@@ -175,6 +202,7 @@
 					image {
 						width: 100%;
 						height: 377rpx;
+						border-radius: 10rpx;
 					}
 				}
 

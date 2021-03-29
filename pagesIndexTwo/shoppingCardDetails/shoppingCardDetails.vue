@@ -6,16 +6,16 @@
 		<view class="box-content">
 			<view class="box-content-main">
 				<view class="box-content-main-image">
-					<image src="../../static/images/card-002.png" mode="aspectFit"></image>
+					<image :src="dataInfo.simg" mode="aspectFill"></image>
 				</view>
 				<view class="box-content-main-wrap">
 					<view class="box-content-main-wrap-price">
-						<view class="box-content-main-wrap-present-price">￥580.00</view>
+						<view class="box-content-main-wrap-present-price">￥{{dataInfo.price}}</view>
 						<view class="box-content-main-wrap-original-price">￥1580.00</view>
 					</view>
-					<view class="box-content-main-wrap-sold">已售280</view>
+					<view class="box-content-main-wrap-sold">已售{{dataInfo.sold}}</view>
 				</view>
-				<view class="box-content-main-text">超值SPA套餐</view>
+				<view class="box-content-main-text">{{dataInfo.name}}</view>
 			</view>
 
 
@@ -50,24 +50,26 @@
 					<view class="box-content-applicable-stores-title-more">
 						<text>共6家可用</text>
 						<text class="iconfont icongengduo icon-font" style="color: #999;font-size: 28rpx;"></text>
-					<!-- 	<image src="../../static/images/more-gray.png" mode="aspectFill"></image> -->
 					</view>
 				</view>
 				<view class="box-content-applicable-stores-list">
-					<view class="box-content-applicable-stores-list-li" v-for="(item,index) in 3" :key="index">
+					<view class="box-content-applicable-stores-list-li"
+						v-for="(item,index) in dataInfo.comment_store_info" :key="index">
 						<view class="applicable-stores-list-li-image">
 							<image src="../../static/images/shop-ico.png" mode="aspectFill"></image>
 						</view>
 						<view class="applicable-stores-list-li-info">
-							<view class="applicable-stores-list-li-info-title">印象诗意·悠然SPA</view>
+							<view class="applicable-stores-list-li-info-title">{{item.name}}</view>
 							<view class="applicable-stores-list-li-info-score">
-								<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
+								<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;"
+									v-for="item in 5"></text>
 								<text>5分</text>
 							</view>
 							<view class="applicable-stores-list-li-info-address">
 								<view class="applicable-stores-list-li-info-address-name">明发商业广场</view>
 								<view class="applicable-stores-list-li-info-address-text">
-									<text class="iconfont icondingwei1 icon-font" style="color: #ccc;font-size: 24rpx;"></text>
+									<text class="iconfont icondingwei1 icon-font"
+										style="color: #ccc;font-size: 24rpx;"></text>
 									<text>6.1km</text>
 								</view>
 							</view>
@@ -120,6 +122,13 @@
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
+				id: '',
+				dataInfo: {
+					name: '',
+					simg: '',
+					price: 0,
+					sold: 0
+				},
 			};
 		},
 		components: {
@@ -134,11 +143,33 @@
 				}
 			});
 		},
+		onLoad(options) {
+			this.id = options.id
+			this.getPackageCard(options.id)
+		},
 		methods: {
+			// 获取礼品卡
+			getPackageCard(id) {
+				let vuedata = {
+					id: id
+				}
+				this.apiget('pc/card/index', vuedata).then(res => {
+					if (res.status == 200) {
+						this.dataInfo = res.data.cardList
+					}
+				});
+			},
+
+
+
 			// 立即支付
 			pay() {
+				var str = {
+					id: this.id,
+					num: 1
+				}
 				uni.navigateTo({
-					url: "../../pagesIndexThree/confirmOrder/confirmOrder"
+					url: "../../pagesIndexThree/confirmOrder/confirmOrder?data=" + JSON.stringify(str)
 				})
 			},
 		}
@@ -163,7 +194,7 @@
 			font-weight: 400;
 
 			.box-content-main {
-				
+
 				padding: 30rpx 40rpx;
 				box-sizing: border-box;
 				background: #fff;
@@ -176,6 +207,7 @@
 					image {
 						width: 670rpx;
 						height: 443rpx;
+						border-radius: 10rpx;
 					}
 				}
 
@@ -321,7 +353,7 @@
 							color: #999;
 						}
 
-						.icon-font{
+						.icon-font {
 							margin-top: 4rpx;
 						}
 					}
@@ -386,10 +418,11 @@
 									align-items: center;
 
 
-									.icon-font{
+									.icon-font {
 										margin-top: 4rpx;
 										margin-right: 8rpx;
 									}
+
 									text {
 										font-size: 24rpx;
 										color: #999;

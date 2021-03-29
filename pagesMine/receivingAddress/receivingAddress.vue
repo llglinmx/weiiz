@@ -18,14 +18,11 @@
 									<view class="list-li-top-phone">{{item.mobile}}</view>
 								</view>
 								<view class="box-content-list-li-address">
-									<text>{{item.country}} {{item.province}} {{item.city}} {{item.area}} {{item.street}}
-										{{item.address}}</text>
+									<text class="address-text">{{item.country}} {{item.province}} {{item.city}} {{item.area}} {{item.address}}</text>
 									<text class="iconfont icongengduo icon-font"
 										style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 								</view>
-								<view class="box-content-list-li-postcode">
-									{{item.postcode}}
-								</view>
+								<view class="box-content-list-li-postcode">{{item.postcode}}</view>
 								<view class="box-content-list-li-default">
 									<text class="iconfont iconxuanzhong icon-font"
 										style="color:#FF967D;font-size: 36rpx;margin-top: 4rpx;"
@@ -293,7 +290,9 @@
 						justify-content: space-between;
 						margin: 10rpx 0;
 
-						text {}
+						.address-text {
+							flex: 1;
+						}
 
 						.icon-font {
 							margin-left: 20rpx;

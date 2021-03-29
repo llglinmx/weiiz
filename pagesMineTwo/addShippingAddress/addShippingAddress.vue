@@ -22,8 +22,8 @@
 				<view class="box-content-list-li">
 					<view class="box-content-list-li-title">手机号码</view>
 					<view class="box-content-list-li-info">
-						<view class="box-content-list-li-info-area-code flex-center">
-							<text>+86</text>
+						<view class="box-content-list-li-info-area-code flex-center" @click="areaCodeClick">
+							<text>+{{areaCode}}</text>
 							<text class="iconfont iconxiangxiajiantou icon-font"
 								style="color: #000;font-size: 28rpx;margin-top: 4rpx;"></text>
 						</view>
@@ -31,7 +31,7 @@
 							placeholder="请输入手机号码" />
 					</view>
 				</view>
-				<view class="box-content-list-li" @click="showAddress">
+				<view class="box-content-list-li" @click="showAddress('country')">
 					<view class="box-content-list-li-title">国家</view>
 					<view class="box-content-list-li-info" style="justify-content: space-between;">
 						<view class="box-content-list-li-info-title">{{country}}</view>
@@ -41,7 +41,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="box-content-list-li">
+				<view class="box-content-list-li" @click="showAddress('province')">
 					<view class="box-content-list-li-title">省</view>
 					<view class="box-content-list-li-info" style="justify-content: space-between;">
 						<view class="box-content-list-li-info-title">{{province}}</view>
@@ -51,7 +51,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="box-content-list-li">
+				<view class="box-content-list-li" @click="showAddress('city')">
 					<view class="box-content-list-li-title">市</view>
 					<view class="box-content-list-li-info" style="justify-content: space-between;">
 						<view class="box-content-list-li-info-title">{{city}}</view>
@@ -61,20 +61,10 @@
 						</view>
 					</view>
 				</view>
-				<view class="box-content-list-li">
-					<view class="box-content-list-li-title">区</view>
+				<view class="box-content-list-li" @click="showAddress('area')">
+					<view class="box-content-list-li-title">区/县</view>
 					<view class="box-content-list-li-info" style="justify-content: space-between;">
 						<view class="box-content-list-li-info-title">{{area}}</view>
-						<view class="box-content-list-li-info-more">
-							<text class="iconfont icongengduo icon-font"
-								style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
-						</view>
-					</view>
-				</view>
-				<view class="box-content-list-li">
-					<view class="box-content-list-li-title">街道</view>
-					<view class="box-content-list-li-info" style="justify-content: space-between;">
-						<view class="box-content-list-li-info-title">{{street}}</view>
 						<view class="box-content-list-li-info-more">
 							<text class="iconfont icongengduo icon-font"
 								style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
@@ -114,12 +104,17 @@
 				确认修改
 			</view>
 		</view>
-		<!-- <s-picker :visible='visible' :list="addressList" /> -->
+		<s-picker :visible.sync="visible" :title="pickerTitle" :list="dataList" v-model="oneSelected"
+			@input="pickerInput"></s-picker>
+
+		<s-picker :visible.sync="isAreaCode" title="区号" :list="areaCodeList" v-model="areaCodeSelect"
+			@input="areaCodeInput"></s-picker>
 	</view>
 </template>
 
 <script>
 	import navTitle from "../../components/navTitle/navTitle.vue"
+	import sPicker from '../../components/s-ui/s-picker/index.vue'
 	export default {
 		data() {
 			return {
@@ -128,24 +123,39 @@
 				lastname: '', //姓
 				name: '', //名
 				phone: '', //手机号
-				country: '中国', //国家
-				province: '贵州省', //省
-				city: '铜仁市', //市
-				area: '松桃苗族自治县', //区
-				street: '黄板镇', //街道
+				pickerTitle: '',
+				country: '请选择', //国家
+				province: '请选择', //省
+				city: '请选择', //市
+				area: '请选择', //区
 				detailedAddress: '', //详细地址
 				postalCode: '', //邮编
 				isDefault: false, //是否默认地址
 				isEdit: false, //是否编辑
 				id: '', //地址id
 				title: "添加地址", //标题名称
-				addressList: [],
+				countryList: [],
+				provinceList: [],
+				cityList: [],
+				areaList: [],
+				dataList: [],
 				visible: false,
-				 oneIndexList: [0],
+				oneSelected: [0],
+				countryId: '', //国家id
+				provinceId: '', //省id
+				cityId: '', //市id
+				areaId: '', //区id
+				typeName: '',
+				areaCode: '86',
+				isAreaCode: false,
+				areaCodeList: [],
+				arrCodeList: [],
+				areaCodeSelect: [0],
 			};
 		},
 		components: {
-			navTitle
+			navTitle,
+			sPicker
 		},
 		onLoad(options) {
 			var data = JSON.parse(options.data)
@@ -156,6 +166,27 @@
 				this.title = "编辑地址"
 			}
 
+			var arr = [{
+					name: '81',
+				},
+				{
+					name: '82',
+				},
+				{
+					name: '83',
+				},
+				{
+					name: '84',
+				},
+				{
+					name: '85',
+				},
+				{
+					name: '86',
+				},
+			]
+			this.arrCodeList = arr
+			this.areaCodeList = [this.arrCodeList]
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -178,32 +209,155 @@
 				this.isAll = bool
 				return bool;
 			},
+
 		},
-		onLoad() {
-			this.getProvince()
-		},
+
 		methods: {
 			change(data) {
 				console.log(data)
 			},
-			showAddress() {
-				this.visible = true;
+			// 点击打开选择区号
+			areaCodeClick() {
+				this.isAreaCode = true
 			},
+			// 选择区号
+			areaCodeInput(e) {
+				var index = e[0]
+				this.areaCode = this.arrCodeList[index].name
+			},
+
+
+
+			// 打开选择地址
+			showAddress(type) {
+				this.typeName = type
+				switch (type) {
+					case 'country':
+						this.getProvince(type, '')
+						this.visible = true;
+						break;
+					case 'province':
+						if (this.countryId != '') {
+							this.getProvince(type, this.countryId)
+							this.visible = true;
+							return false;
+						}
+						uni.showToast({
+							title: "请先选择国家",
+							icon: 'none'
+						})
+						break;
+					case 'city':
+						if (this.countryId != '') {
+							if (this.provinceId != '') {
+								this.getProvince(type, this.provinceId)
+								this.visible = true;
+								return false;
+							}
+							uni.showToast({
+								title: "请先选择省份",
+								icon: 'none'
+							})
+							return false;
+						}
+						uni.showToast({
+							title: "请先选择国家",
+							icon: 'none'
+						})
+						break;
+					case 'area':
+						if (this.countryId != '') {
+							if (this.provinceId != '') {
+								if (this.cityId != '') {
+									this.getProvince(type, this.cityId)
+									this.visible = true;
+									return false;
+								}
+								uni.showToast({
+									title: "请先选择市/区",
+									icon: 'none'
+								})
+								return false;
+							}
+							uni.showToast({
+								title: "请先选择省份",
+								icon: 'none'
+							})
+							return false;
+						}
+						uni.showToast({
+							title: "请先选择国家",
+							icon: 'none'
+						})
+						break;
+				}
+			},
+			// 关闭弹出
 			popClose() {
 				this.visible = false
 			},
 
 			// 获取省份
-			getProvince() {
+			getProvince(type, id) {
 				var vuedata = {
-					// parent_id: 95
+					parent_id: id
 				}
 				this.apiget('region/regions', vuedata).then(res => {
 					if (res.status == 200) {
-						this.addressList = res.data
+						switch (type) {
+							case 'country':
+								this.countryList = res.data
+								this.dataList = [this.countryList]
+								this.pickerTitle = "国家"
+								break;
+							case 'province':
+								this.provinceList = res.data
+								this.dataList = [this.provinceList]
+								this.pickerTitle = "省份"
+								break;
+							case 'city':
+								this.cityList = res.data
+								this.dataList = [this.cityList]
+								this.pickerTitle = "市"
+								break;
+							case 'area':
+								this.areaList = res.data
+								this.dataList = [this.areaList]
+								this.pickerTitle = "区/县"
+								break;
+						}
 					}
 				})
 			},
+
+			// 选择地址确定按钮事件
+			pickerInput(e) {
+				var index = e[0]
+				switch (this.typeName) {
+					case 'country':
+						this.country = this.countryList[index].name
+						this.countryId = this.countryList[index].id
+						break;
+					case 'province':
+						this.province = this.provinceList[index].name
+						this.provinceId = this.provinceList[index].id
+						break;
+					case 'city':
+						this.city = this.cityList[index].name
+						this.cityId = this.cityList[index].id
+						break;
+					case 'area':
+						this.area = this.areaList[index].name
+						this.areaId = this.areaList[index].id
+						break;
+				}
+
+
+
+			},
+
+
+
 
 			determine() {
 				if (this.checkAll) {
@@ -250,7 +404,6 @@
 					province: this.province, //省份
 					city: this.city, //城市
 					area: this.area, //区域
-					street: this.street, //街道
 					address: this.detailedAddress, //详细地址
 					longitude: '', //经度
 					latitude: '', //纬度
@@ -280,7 +433,6 @@
 					province: this.province, //省份
 					city: this.city, //城市
 					area: this.area, //区域
-					street: this.street, //街道
 					address: this.detailedAddress, //详细地址
 					longitude: '', //经度
 					latitude: '', //纬度

@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "5060796",
+      "name": "地图",
+      "font_class": "map",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "18978465",
+      "name": "预约订单",
+      "font_class": "yuyuedingdan",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
       "icon_id": "1617810",
       "name": "1108加载中",
       "font_class": "jiazaizhong",

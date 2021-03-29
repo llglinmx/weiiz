@@ -35,17 +35,15 @@
 					套餐明细
 				</view>
 				<view class="box-content-wrap-list">
-					<view class="box-content-wrap-list-li" v-for="(item,index) in 5" :key="index">
+					<view class="box-content-wrap-list-li" v-for="(item,index) in dataInfo.order" :key="item.id">
 						<view class="box-content-wrap-list-li-image">
-							<image src="../../static/images/001.png" mode="aspectFill"></image>
+							<image :src="item.simg" mode="aspectFill"></image>
 						</view>
 						<view class="box-content-wrap-list-li-info">
 							<view class="list-li-info-top">
-								<view class="list-li-info-top-title">
-									泰式古法按摩
-								</view>
+								<view class="list-li-info-top-title">{{item.service_name}}</view>
 								<view class="list-li-info-top-price">
-									￥298.00
+									￥{{item.price}}
 								</view>
 							</view>
 							<view class="list-li-info-center">
@@ -93,11 +91,11 @@
 				</view>
 				<view class="box-content-order-all">
 					<text class="box-content-order-all-title">订单编号：</text>
-					<text class="box-content-order-all-number">400199110070101</text>
+					<text class="box-content-order-all-number">{{dataInfo.out_trade_no}}</text>
 				</view>
 				<view class="box-content-order-all">
 					<text class="box-content-order-all-title">下单时间：</text>
-					<text class="box-content-order-all-number">2021-01-13 10:35:11</text>
+					<text class="box-content-order-all-number">{{dataInfo.createtime}}</text>
 				</view>
 			</view>
 		</view>
@@ -111,6 +109,7 @@
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
+				dataInfo: {}
 			};
 		},
 		components: {
@@ -124,7 +123,21 @@
 				}
 			});
 		},
+		onLoad(options) {
+			this.getDetails(options.id)
+		},
 		methods: {
+
+			// 获取详情
+			getDetails(id) {
+				this.apiget('api/v1/members/set_meal/' + id, {}).then(res => {
+					if (res.status == 200) {
+						this.dataInfo = res.data
+					}
+				});
+			},
+
+
 			// 预约时间
 			appointmentTime() {
 				uni.showToast({

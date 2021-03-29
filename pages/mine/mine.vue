@@ -69,7 +69,7 @@
 				<view class="mine-content-integral-box-top" @click="pointsMall">
 					<view class="mine-integral-title-list">
 						<view class="integral-title-list-icon flex-center">
-							<image src="../../static/images/userImage.png" mode=""></image>
+							<text class="icon-font iconfont iconjifen1" style="font-size: 32rpx;color: #FF6F4D;"></text>
 						</view>
 						<view class="integral-title-list-text">
 							积分商城
@@ -83,15 +83,15 @@
 				</view>
 				<view class="mine-content-goods-list">
 					<view class="mine-content-goods-list-box">
-						<view class="mine-content-goods-list-li" v-for="(item,index) in goodsList" :key="index">
+						<view class="mine-content-goods-list-li" v-for="(item,index) in pointsList" :key="item.id">
 							<view class="content-goods-list-image">
-								<image :src="item.image" mode=""></image>
+								<image :src="item.simg" mode=""></image>
 							</view>
 							<view class="content-goods-list-title">
-								{{item.title}}
+								{{item.name}}
 							</view>
 							<view class="content-goods-list-number">
-								{{item.integralNumber}}积分
+								{{item.score}}积分
 							</view>
 						</view>
 					</view>
@@ -101,7 +101,7 @@
 				<view class="mine-content-commonly-top">
 					<view class="mine-content-commonly-top-box">
 						<view class="content-commonly-top-icon flex-center">
-							<image src="../../static/images/tool.jpg" mode=""></image>
+							<image src="../../static/images/tool.jpg" mode="aspectFill"></image>
 						</view>
 						<view class="content-commonly-title">
 							常用工具
@@ -132,7 +132,7 @@
 		</view>
 		<!-- tabbar导航栏 -->
 		<view class="mine-footer">
-			<Tabbar></Tabbar>
+			<Tabbar @tabbarClick="tabbarClick" :activeIndex="activeIndex"></Tabbar>
 		</view>
 	</view>
 </template>
@@ -147,6 +147,7 @@
 				idx: 0,
 				toolBarWidth: 0, //进度条长度
 				parWidth: 0, // 进度条父级长度度
+				activeIndex: 4, //当前tabbar所在页面
 				info: {},
 				list: [{
 						number: "0.00",
@@ -165,6 +166,7 @@
 						text: "关注",
 					}
 				],
+				pointsList: [],
 				stateList: [{
 						image: "../../static/images/icon-1.jpg",
 						title: "待付款"
@@ -363,6 +365,7 @@
 		},
 		onLoad() {
 			this.getInfo()
+			this.getPointsMall()
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -455,6 +458,15 @@
 				})
 			},
 
+			getPointsMall() {
+				this.apiget('api/v1/members/points_mall', {}).then(res => {
+					if (res.status == 200) {
+						this.pointsList = res.data.data
+					}
+				});
+			},
+
+
 			// 常用工具
 			menuList(type) {
 
@@ -510,6 +522,35 @@
 
 				}
 
+			},
+			// tabbar点击
+			tabbarClick(index) {
+				this.activeIndex = index
+				switch (index) {
+					case 0: //首页
+						uni.reLaunch({
+							url: '../index/index'
+						})
+						break;
+					case 1: //我的预约
+						uni.reLaunch({
+							url: '../subscribe/subscribe'
+						})
+						break;
+					case 2: //地图
+						uni.reLaunch({
+							url: "../map/map"
+						})
+						break;
+					case 3: //商城
+						uni.reLaunch({
+							url: "../mall/mall"
+						})
+						break;
+					case 4: //我的
+
+						break;
+				}
 			},
 
 		}
@@ -803,7 +844,7 @@
 
 							image {
 								width: 26rpx;
-								height: 24rpx;
+								height: 26rpx;
 							}
 						}
 
