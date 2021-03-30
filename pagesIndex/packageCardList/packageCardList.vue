@@ -27,8 +27,8 @@
 									<view class="wrap-list-li-top-info-title">{{item.name}}</view>
 									<view class="wrap-list-li-top-info-price">￥{{item.price}}</view>
 									<view class="wrap-list-li-top-info-box">
-										<view class="list-li-top-info-box-item flex-center">足底按摩x3次</view>
-										<view class="list-li-top-info-box-item flex-center">足底按摩x1次</view>
+										<view class="list-li-top-info-box-item flex-center"
+											v-for="(i,j) in item.service" :key="i.id">{{i.name}}x{{i.times}}次</view>
 									</view>
 									<view class="wrap-list-li-top-info-bottom">
 										<view class="list-li-top-info-bottom-title">

@@ -18,7 +18,7 @@
 			<view class="mine-head-info">
 				<view class="mine-head-info-left">
 					<view class="head-info-left-box">
-						<view class="head-info-box-image flex-center">
+						<view class="head-info-box-image flex-center" @click="userInfoClick">
 							<image src="../../static/images/userImage.png" mode=""></image>
 						</view>
 						<view class="head-info-right">
@@ -38,7 +38,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="mine-head-info-right flex-center">
+				<view class="mine-head-info-right flex-center" @click="scanCode">
 					<view class="head-info-right-scan flex-center">
 						<text class="iconfont iconsaoyisao icon-font"
 							style="color: #fff;font-size: 52rpx;font-weight: 500;"></text>
@@ -364,8 +364,10 @@
 			StateList
 		},
 		onLoad() {
-			this.getInfo()
 			this.getPointsMall()
+		},
+		onShow() {
+			this.getInfo()
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -395,6 +397,10 @@
 						this.list[3].number = res.data.all_collection //关注
 						// 更新余额
 						this.$store.commit("upBalance", res.data.money)
+
+						// 保存用户信息
+						this.$store.commit('upUserInfo', res.data)
+
 					}
 				});
 			},
@@ -415,6 +421,24 @@
 				uni.navigateTo({
 					url: "../../pagesMine/systemMessage/systemMessage"
 				})
+			},
+
+			// 头像区域
+			userInfoClick() {
+				uni.navigateTo({
+					url: "../../pagesMineTwo/personalInfo/personalInfo"
+				})
+			},
+
+			// 扫一扫
+			scanCode() {
+				// 允许从相机和相册扫码
+				uni.scanCode({
+					success: function(res) {
+						console.log('条码类型：' + res.scanType);
+						console.log('条码内容：' + res.result);
+					}
+				});
 			},
 
 			// 订单状态点击

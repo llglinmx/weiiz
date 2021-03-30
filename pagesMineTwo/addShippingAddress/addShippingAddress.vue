@@ -104,10 +104,10 @@
 				确认修改
 			</view>
 		</view>
-		<s-picker :visible.sync="visible" :title="pickerTitle" :list="dataList" v-model="oneSelected"
+		<s-picker @close="popClose" :visible.sync="visible" :title="pickerTitle" :list="dataList" v-model="oneSelected"
 			@input="pickerInput"></s-picker>
 
-		<s-picker :visible.sync="isAreaCode" title="区号" :list="areaCodeList" v-model="areaCodeSelect"
+		<s-picker @close="areaClose" :visible.sync="isAreaCode" title="区号" :list="areaCodeList" v-model="areaCodeSelect"
 			@input="areaCodeInput"></s-picker>
 	</view>
 </template>
@@ -219,6 +219,9 @@
 			// 点击打开选择区号
 			areaCodeClick() {
 				this.isAreaCode = true
+			},
+			areaClose() {
+				this.isAreaCode = false
 			},
 			// 选择区号
 			areaCodeInput(e) {
@@ -337,14 +340,29 @@
 					case 'country':
 						this.country = this.countryList[index].name
 						this.countryId = this.countryList[index].id
+
+						this.province = '请选择'
+						this.provinceId = ''
+						this.citye = '请选择'
+						this.cityId = ''
+						this.area = '请选择'
+						this.areaId = ''
+
 						break;
 					case 'province':
 						this.province = this.provinceList[index].name
 						this.provinceId = this.provinceList[index].id
+						this.city = '请选择'
+						this.cityId = ''
+						this.area = '请选择'
+						this.areaId = ''
 						break;
 					case 'city':
 						this.city = this.cityList[index].name
 						this.cityId = this.cityList[index].id
+						this.area = '请选择'
+						this.areaId = ''
+
 						break;
 					case 'area':
 						this.area = this.areaList[index].name
@@ -384,13 +402,19 @@
 						this.lastname = res.data.name.charAt(0) //截取第一个字符
 						this.name = res.data.name.slice(1, res.data.name.length)
 						this.phone = res.data.mobile
-						this.country = res.data.country
-						this.province = res.data.province
-						this.city = res.data.city
-						this.area = res.data.area
+						this.country = this.intercept(res.data.country)
+						this.province = this.intercept(res.data.province)
+						this.city = this.intercept(res.data.city)
+						this.area = this.intercept(res.data.area)
 						this.detailedAddress = res.data.address
 						this.postalCode = res.data.postcode
 						this.isDefault = res.data.is_default == '1' ? true : false
+
+						this.countryId = this.interceptId(res.data.country)
+						this.provinceId = this.interceptId(res.data.province)
+						this.cityId = this.interceptId(res.data.city)
+						this.areaId = this.interceptId(res.data.area)
+
 					}
 				});
 			},
@@ -400,10 +424,10 @@
 				var vuedata = {
 					name: this.lastname + '' + this.name, //姓名
 					mobile: this.phone, //手机号
-					country: this.country, //国家
-					province: this.province, //省份
-					city: this.city, //城市
-					area: this.area, //区域
+					country: this.country == '请选择' ? '' : this.country + ',' + this.countryId, //国家
+					province: this.province == '请选择' ? '' : this.province + ',' + this.provinceId, //省份
+					city: this.city == '请选择' ? '' : this.city + ',' + this.cityId, //城市
+					area: this.area == '请选择' ? '' : this.area + ',' + this.areaId, //区域
 					address: this.detailedAddress, //详细地址
 					longitude: '', //经度
 					latitude: '', //纬度
@@ -429,10 +453,10 @@
 				var vuedata = {
 					name: this.lastname + '' + this.name, //姓名
 					mobile: this.phone, //手机号
-					country: this.country, //国家
-					province: this.province, //省份
-					city: this.city, //城市
-					area: this.area, //区域
+					country: this.country == '请选择' ? '' : this.country + ',' + this.countryId, //国家
+					province: this.province == '请选择' ? '' : this.province + ',' + this.provinceId, //省份
+					city: this.city == '请选择' ? '' : this.city + ',' + this.cityId, //城市
+					area: this.area == '请选择' ? '' : this.area + ',' + this.areaId, //区域
 					address: this.detailedAddress, //详细地址
 					longitude: '', //经度
 					latitude: '', //纬度
@@ -457,6 +481,17 @@
 			// 是否默认地址开关
 			switch1Change: function(e) {
 				this.isDefault = e.target.value
+			},
+
+			// 字符截取
+			intercept(val) {
+				var str = val.split(',')
+				return str[0]
+			},
+			// 字符截取id
+			interceptId(val) {
+				var str = val.split(',')
+				return str[1]
 			},
 
 		}

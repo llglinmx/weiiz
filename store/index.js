@@ -27,6 +27,7 @@ const store = new Vuex.Store({
 		preferentialAmount: 0, //优惠券优惠金额
 		balance: 0, //余额
 		userInfo: {}, //用户信息
+		editText:'',//修改文本
 	},
 	mutations: {
 		//用于判断是否添加地址 等同于发送监听
@@ -55,6 +56,10 @@ const store = new Vuex.Store({
 		upUserInfo(state, item) {
 			state.userInfo = item
 		},
+		// 修改信息
+		upEditText(state,text){
+			state.editText = text
+		}
 	},
 	actions: {}
 })

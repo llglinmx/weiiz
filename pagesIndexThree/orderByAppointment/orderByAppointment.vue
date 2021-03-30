@@ -153,7 +153,7 @@ ss<template>
 				<view class="box-content-coupon-bottom">
 					<view class="box-content-coupon-bottom-text">已优惠￥{{preferentiaAmount|toFixed}}</view>
 					<view class="box-content-coupon-bottom-price">
-						小计￥<text>{{totalPrice}}</text>
+						小计￥<text>{{subtotal}}</text>
 					</view>
 				</view>
 			</view>
@@ -192,7 +192,9 @@ ss<template>
 				technicianList: [],
 				tabsList: [],
 				dataTop: {},
-				dataList: {},
+				dataList: {
+					price:0
+				},
 				sotreId: '', //门店id
 				technicianId: -1, //初始技师id
 				couponId: -1, //初始优惠券id
@@ -248,6 +250,10 @@ ss<template>
 			this.getTimeandWeek()
 		},
 		computed: {
+			subtotal(){
+				var price = Number(this.servicePrice) + Number(this.dataList.price)
+				return price.toFixed(2)
+			},
 			totalPrice() {
 				var price = Number(this.servicePrice) + Number(this.dataList.price) - Number(this.preferentiaAmount)
 				return price.toFixed(2)

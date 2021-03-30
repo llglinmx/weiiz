@@ -77,7 +77,7 @@
 				<view class="more-services-title">更多服务</view>
 				<view class="more-services-list">
 					<view class="more-services-list-li" v-for="(item,index) in serviceList" @click="serviceClick(item)"
-						 :style="{backgroundImage: 'url('+item.bg+')',backgroundSize: 'contain'}">
+						:style="{backgroundImage: 'url('+item.bg+')',backgroundSize: 'contain'}">
 						<view class="more-services-list-li-title">{{item.title}}</view>
 						<view class="more-services-list-li-text">{{item.text}}</view>
 						<view class="more-list-li-btn">
@@ -105,7 +105,7 @@
 						<view class="popup-list-li" v-for="(item,index) in textList"
 							@click="selectLanguage(item.id,index)" :class="item.default==1?'popup-list-li-active':''">
 							<text>{{item.name}}</text>
-							<text class="iconfont icondagou icon-font" style="color:#26BF82;font-size: 40rpx;"
+							<text class="iconfont icondagou icon-font" style="color:#FF967D;font-size: 40rpx;"
 								v-if="item.default==1"></text>
 						</view>
 					</view>
@@ -426,6 +426,8 @@
 				padding: 0 30rpx;
 				box-sizing: border-box;
 				border-radius: 15rpx;
+				border-radius: 15rpx;
+				overflow: hidden;
 
 				swiper {
 					border-radius: 15rpx;
@@ -436,6 +438,8 @@
 						.swiper-item {
 							width: 100%;
 							height: 300rpx;
+							border-radius: 15rpx;
+							overflow: hidden;
 
 							image {}
 						}

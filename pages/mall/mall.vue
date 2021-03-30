@@ -49,7 +49,7 @@
 							@click="clickGoodsDtails(item)">
 							<view class="mall-list-li-item">
 								<view class="mall-list-li-image">
-									<image :src="item.image" mode=""></image>
+									<image :src="item.simg" mode="aspectFill"></image>
 								</view>
 								<view class="mall-list-li-collect flex-center">
 									<text class="iconfont iconguanzhu-xuanzhong icon-font"
@@ -59,7 +59,7 @@
 								</view>
 							</view>
 							<view class="mall-list-li-goods-name">
-								{{item.goodsName}}
+								{{item.name}}
 							</view>
 							<view class="mall-list-li-price">
 								{{item.price}}
@@ -99,62 +99,7 @@
 				},
 
 				typeList: [],
-				goodsList: [{
-						image: "../../static/images/001.png",
-						goodsName: "玻尿酸深层补水面膜",
-						price: "356.00",
-						isStore: false
-					},
-
-					{
-						image: "../../static/images/004.png",
-						goodsName: "玻尿酸深层补水面膜",
-						price: "356.00",
-						isStore: false
-					},
-					{
-						image: "../../static/images/003.png",
-						goodsName: "玻尿酸深层补水面膜",
-						price: "356.00",
-						isStore: true
-					},
-					{
-						image: "../../static/images/002.png",
-						goodsName: "玻尿酸深层补水面膜",
-						price: "356.00",
-						isStore: false
-					},
-					{
-						image: "../../static/images/003.png",
-						goodsName: "玻尿酸深层补水面膜",
-						price: "356.00",
-						isStore: true
-					},
-					{
-						image: "../../static/images/001.png",
-						goodsName: "玻尿酸深层补水面膜",
-						price: "356.00",
-						isStore: false
-					},
-					{
-						image: "../../static/images/004.png",
-						goodsName: "玻尿酸深层补水面膜",
-						price: "356.00",
-						isStore: false
-					},
-					{
-						image: "../../static/images/003.png",
-						goodsName: "玻尿酸深层补水面膜",
-						price: "356.00",
-						isStore: true
-					},
-					{
-						image: "../../static/images/002.png",
-						goodsName: "玻尿酸深层补水面膜",
-						price: "356.00",
-						isStore: false
-					},
-				]
+				goodsList: []
 			}
 		},
 		components: {
@@ -177,6 +122,7 @@
 		},
 		onLoad() {
 			this.getData()
+			this.getGoods()
 		},
 		methods: {
 			clickList(e) {
@@ -190,12 +136,20 @@
 			},
 
 			getData() {
-				var vuedata = {
-
-				}
-				this.apiget('pc/index', vuedata).then(res => {
+				this.apiget('pc/index', {}).then(res => {
 					if (res.status == 200) {
 						this.typeList = res.data.classList
+					}
+				});
+			},
+
+
+
+			// 
+			getGoods() {
+				this.apiget('pc/index/mall_home', {}).then(res => {
+					if (res.status == 200) {
+						this.goodsList = res.data.push_service
 					}
 				});
 			},
@@ -216,19 +170,14 @@
 			},
 			/*下拉刷新的回调*/
 			downCallback() {
-				this.PageNumber = 1
 				setTimeout(() => {
 					this.mescroll.endSuccess() // 请求成功 隐藏加载状态
-
 					// this.mescroll.showNoMore()
-
 				}, 1500)
 			},
 
 			/*上拉加载的回调*/
 			upCallback(page) {
-				this.PageNumber++
-				console.log(this.PageNumber)
 				setTimeout(() => {
 					this.mescroll.endSuccess() // 请求成功 隐藏加载状态
 					// if (this.PageNumber > 3) {

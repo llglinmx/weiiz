@@ -127,7 +127,7 @@
 				this.showContent = false;
 			},
 			hide() {
-				this.$emit('update:visible', false);
+				this.$emit('close', false);
 			},
 			formatText(item) {
 				return (typeof item === 'object' && item) ? item[this.textKey] : item;

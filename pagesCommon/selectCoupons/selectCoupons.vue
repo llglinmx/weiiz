@@ -58,35 +58,42 @@
 						</swiper-item>
 						<swiper-item class="swiper-box-item-list">
 							<view class="box-item-list-main" :style="{display:isDataNo?'block':'none'}">
-								<view class="available-coupons-list">
-
-									<view class="available-coupons-list-li" v-for="(item,index) in 10" :key="index"
-										style="margin-bottom: 64rpx;">
-										<view
-											class="available-coupons-list-li-left available-coupons-list-li-left-gray">
-											<view class="coupons-list-li-left-money">
-												20 <text>元</text>
-											</view>
-											<view class="coupons-list-li-left-text">
-												满200元可用
-											</view>
-										</view>
-										<view class="available-coupons-list-li-right">
-											<view class="list-li-right-content">
-												<view class="list-li-right-content-title" style="color: #ccc;">全平台通用券
+								<z-paging ref="paging1" @query="changeList" :list.sync="noAvailableCouponList"
+									loading-more-no-more-text="已经到底了" :refresher-angle-enable-change-continued="false"
+									:touchmove-propagation-enabled="true" :mounted-auto-call-reload="false"
+									:use-custom-refresher="true">
+									<view class="available-coupons-list">
+										<view class="available-coupons-list-li"
+											v-for="(item,index) in noAvailableCouponList" :key="index"
+											style="margin-bottom: 64rpx;">
+											<view
+												class="available-coupons-list-li-left available-coupons-list-li-left-gray">
+												<view class="coupons-list-li-left-money">
+													{{item.reduce_cost | rounding}} <text>元</text>
 												</view>
-												<view class="list-li-right-content-text" style="color: #ccc;">
-													<view class="list-li-right-content-text-store">门店：全平台</view>
-													<view class="list-li-right-content-text-limited-period">
-														有效期：2020.01.09-2020.01.18</view>
+												<view class="coupons-list-li-left-text">
+													满{{item.least_cost}}元可用
 												</view>
 											</view>
-										</view>
-										<view class="available-coupons-list-msg">
-											仅适用[花·SUN SPA]门店商品
+											<view class="available-coupons-list-li-right">
+												<view class="list-li-right-content">
+													<view class="list-li-right-content-title" style="color: #ccc;">
+														{{item.name}}
+													</view>
+													<view class="list-li-right-content-text" style="color: #ccc;">
+														<view class="list-li-right-content-text-store">
+															门店：{{item.store_name}}</view>
+														<view class="list-li-right-content-text-limited-period">
+															有效期：{{item.end_time}}</view>
+													</view>
+												</view>
+											</view>
+											<view class="available-coupons-list-msg">
+												仅适用[{{item.store_name}}]门店商品
+											</view>
 										</view>
 									</view>
-								</view>
+								</z-paging>
 							</view>
 							<view class="box-item-list-main" :style="{display:!isDataNo?'block':'none'}">
 								<loading v-if="isLoadNo" />
@@ -164,13 +171,14 @@
 			},
 
 
+
 			// 获取优惠券列表
 			getAvailableCoupon(num, size) {
 				var vuedata = {
 					page_index: num, // 请求页数，
 					each_page: size, // 请求条数
 					store: this.storeId,
-					use_status: this.typeState,
+					use_status: 1,
 				}
 				this.apiget('api/v1/members/coupon', vuedata).then(res => {
 					if (res.status == 200) {
@@ -178,8 +186,6 @@
 							this.isData = true
 							let list = res.data.data
 							this.$refs.paging.addData(list);
-
-
 							this.couponList = this.couponList.concat(list)
 							var obj = {};
 							this.couponList = this.couponList.reduce(function(item, next) {
@@ -204,6 +210,27 @@
 				})
 			},
 
+			// 不可用优惠券
+			changeList(pageNo, pageSize) {
+				var vuedata = {
+					page_index: pageNo, // 请求页数，
+					each_page: pageSize, // 请求条数
+					store: this.storeId,
+					use_status: 2,
+				}
+				this.apiget('api/v1/members/coupon', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.data.length != 0) {
+							this.isDataNo = true
+							let list = res.data.data
+							this.$refs.paging1.addData(list);
+						} else {
+							this.isDataNo = false
+							this.isLoadNo = false
+						}
+					}
+				})
+			},
 
 			// tabs 点击
 			tabClick(e) {
@@ -213,20 +240,16 @@
 			tabChange(e) {
 				this.$refs.boxTabs.tabToIndex(e.detail.current)
 				this.defaultIndex = e.detail.current
-				this.tabIndex(this.defaultIndex)
-			},
-
-			tabIndex(e) {
-				switch (e) {
+				switch (this.defaultIndex) {
 					case 0:
-						this.typeState = 1
+						this.queryList(1, 10)
 						break;
 					case 1:
-						this.typeState = 2
+						this.changeList(1, 10)
 						break;
 				}
-				this.getAvailableCoupon(1, 10)
 			},
+
 
 			// 选中优惠券点击
 			checkCoupons(index, id, least_cost, reduce_cost) {

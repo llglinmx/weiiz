@@ -18,7 +18,7 @@
 									<view class="list-li-top-phone">{{item.mobile}}</view>
 								</view>
 								<view class="box-content-list-li-address">
-									<text class="address-text">{{item.country}} {{item.province}} {{item.city}} {{item.area}} {{item.address}}</text>
+									<text class="address-text">{{intercept(item.country)}} {{intercept(item.province)}}{{intercept(item.city)}} {{intercept(item.area)}} {{item.address}}</text>
 									<text class="iconfont icongengduo icon-font"
 										style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
 								</view>
@@ -112,15 +112,12 @@
 			zPaging
 		},
 		onShow() {
-			console.log(this.$store.state.isAdd)
-
 			if (this.$store.state.isAdd) { //是否有添加地址 或者编辑修改地址
 				this.getPointsDetails(1, 10)
 			}
 
 		},
-		onLoad() {
-		},
+		onLoad() {},
 		onReady() {
 			// 获取顶部电量状态栏高度
 			uni.getSystemInfo({
@@ -144,14 +141,12 @@
 					select_sort: 1
 				}
 				this.apiget('api/v1/members/address', vuedata).then(res => {
-
 					if (res.status == 200) {
 						if (res.data.data.length != 0) {
 							this.isData = true;
 							let list = res.data.data
 							let totalSize = res.data.total_rows
 							this.$refs.paging.addData(list);
-
 							this.addressList = this.addressList.concat(list)
 
 
@@ -245,7 +240,11 @@
 					}
 				})
 			},
-
+			// 字符截取
+			intercept(val) {
+				var str = val.split(',')
+				return str[0]
+			},
 		}
 	}
 </script>

@@ -8,22 +8,20 @@
 				<view class="content-list-li" @click="listAllClick('email')">
 					<view class="content-list-li-title">邮箱</view>
 					<view class="content-list-li-wrap">
-						<view class="content-list-li-wrap-text">
-							1527892466@qq.com
-						</view>
+						<view class="content-list-li-wrap-text">{{email}}</view>
 						<view class="content-list-li-more flex-center">
-							<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
+							<text class="iconfont icongengduo icon-font"
+								style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 						</view>
 					</view>
 				</view>
 				<view class="content-list-li" @click="listAllClick('phone')">
 					<view class="content-list-li-title">手机</view>
 					<view class="content-list-li-wrap">
-						<view class="content-list-li-wrap-text">
-							183****7210
-						</view>
+						<view class="content-list-li-wrap-text">{{mobile|mobileStr}}</view>
 						<view class="content-list-li-more flex-center">
-							<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
+							<text class="iconfont icongengduo icon-font"
+								style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 						</view>
 					</view>
 				</view>
@@ -34,7 +32,8 @@
 							修改
 						</view>
 						<view class="content-list-li-more flex-center">
-							<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
+							<text class="iconfont icongengduo icon-font"
+								style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 						</view>
 					</view>
 				</view>
@@ -45,7 +44,8 @@
 							注销后无法恢复，请谨慎操作
 						</view>
 						<view class="content-list-li-more flex-center">
-							<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
+							<text class="iconfont icongengduo icon-font"
+								style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
 						</view>
 					</view>
 				</view>
@@ -64,6 +64,9 @@
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
+				email: '', //邮箱
+				mobile: '', //手机号
+				id: '', //用户id
 			};
 		},
 		components: {
@@ -78,24 +81,70 @@
 				}
 			});
 		},
+		onLoad() {
+			this.getInfo()
+		},
+		filters: {
+			// 手机号中间四位变 * 号
+			mobileStr(str) {
+				if (str.length > 7) {
+					return str.substring(0, 3) + '****' + str.substring(7, str.length);
+				} else {
+					return str.substring(0, str.length - 1) + '****';
+				}
+			}
+		},
 		methods: {
-			listAllClick(type) {
 
+			// 获取个人信息
+			getInfo() {
+				let vuedata = {
+
+				}
+				this.apiget('api/v1/members/member_info', vuedata).then(res => {
+					if (res.status == 200) {
+						this.email = res.data.email
+						this.mobile = res.data.mobile
+						this.id = res.data.id
+						console.log(res.data)
+					}
+				});
+			},
+
+
+
+
+			listAllClick(type) {
+				var str ={}
 				switch (type) {
 					case "email":
 						break;
 					case "phone":
+						str = {
+							phone: this.mobile,
+							id: this.id
+						}
+						uni.navigateTo({
+							url: "../../pagesCommon/changePhone/changePhone?data=" + JSON.stringify(str)
+						})
 						break;
 					case "password":
+						str = {
+							phone: this.mobile,
+							id: this.id
+						}
+						uni.navigateTo({
+							url: "../../pagesCommon/changePassword/changePassword?data=" + JSON.stringify(str)
+						})
 						break;
 					case "logOut":
 						break;
 
 				}
-				uni.showToast({
-					title: type,
-					icon: "none"
-				})
+				// uni.showToast({
+				// 	title: type,
+				// 	icon: "none"
+				// })
 			},
 
 			// 保存按钮
@@ -157,7 +206,7 @@
 						}
 
 						.content-list-li-more {
-							.icon-font{
+							.icon-font {
 								margin-top: 4rpx;
 							}
 						}

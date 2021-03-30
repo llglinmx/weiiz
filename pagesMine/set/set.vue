@@ -128,6 +128,7 @@
 						uni.navigateTo({
 							url: "../../pagesMineTwo/personalInfo/personalInfo"
 						})
+						this.$store.commit("upEditText",'')
 						break;
 						// 身体状态
 					case "bodyState":
