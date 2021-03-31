@@ -19,39 +19,50 @@
 				<swiper class="swiper-box" :current="defaultIndex" @change="tabChange">
 					<swiper-item class="swiper-box-item-list">
 						<view class="box-content-calendar">
-							<ren-calendar ref='ren' :markDays='markDays' :headerBar='true' @onDayClick='onDayClick'></ren-calendar>
+							<ren-calendar ref='ren' :markDays='markDays' :headerBar='true' @onDayClick='onDayClick'>
+							</ren-calendar>
 						</view>
-						<view class="box-item-business">
-							<view class="box-item-business-main">
-								<view class="box-item-business-main-list" v-for="(item,index) in 10" :key="index">
-									<view class="box-item-business-main-list-item">
-										<view class="business-main-list-item-date">2月2日</view>
-										<view class="business-main-list-box">
-											<view class="business-main-list-box-li" v-for="(j,idx) in 3" :key="idx">
-												<view class="business-main-list-box-li-image">
-													<image src="../../static/images/004.png" mode="aspectFill"></image>
-												</view>
-												<view class="business-main-list-box-li-info">
-													<view class="business-main-list-box-li-info-title">罗约蓝池·温泉SPA</view>
-													<view class="business-main-list-box-li-info-score">
-														<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
-														<text>5分</text>
+						<view class="box-item-business" :style="{display:isBusData?'block':'none'}">
+							<z-paging ref="paging1" @query="businessListChange" :list.sync="businessList"
+								loading-more-no-more-text="已经到底了" :refresher-angle-enable-change-continued="false"
+								:touchmove-propagation-enabled="true" :use-custom-refresher="true"
+								style="height: 100%;">
+								<view class="box-item-business-main">
+									<view class="box-item-business-main-list" v-for="(item,index) in businessList"
+										:key="index">
+										<view class="box-item-business-main-list-item">
+											<view class="business-main-list-item-date">{{item.name}}</view>
+											<view class="business-main-list-box">
+												<view class="business-main-list-box-li" v-for="(j,idx) in item.data"
+													:key="j.id">
+													<view class="business-main-list-box-li-image">
+														<image :src="j.simg" mode="aspectFill"></image>
 													</view>
-													<view class="business-main-list-box-li-info-text">
-														<view class="business-main-list-box-li-info-text-title">
-															明发商业广场
+													<view class="business-main-list-box-li-info">
+														<view class="business-main-list-box-li-info-title">{{j.name}}
 														</view>
-														<view class="business-main-list-box-li-info-text-address">
-															<text class="iconfont icondingwei1 icon-font" style="color: #ccc;font-size: 24rpx;margin-top: 4rpx;"></text>
-															<text>6.1km</text>
+														<view class="business-main-list-box-li-info-score">
+															<score :comment="j.comment"></score>
 														</view>
-													</view>
-													<view class="business-main-list-box-li-info-wrap">
-														<view class="business-main-list-box-li-info-wrap-item" v-if="idx==1" style="background: #FA6019;color:#fff">
-															区域综合排名第一
+														<view class="business-main-list-box-li-info-text">
+															<view class="business-main-list-box-li-info-text-title">
+																{{j.address}}
+															</view>
+															<view class="business-main-list-box-li-info-text-address">
+																<text class="iconfont icondingwei1 icon-font"
+																	style="color: #ccc;font-size: 24rpx;margin-top: 4rpx;"></text>
+																<text>6.1km</text>
+															</view>
 														</view>
-														<view class="business-main-list-box-li-info-wrap-item" v-else>
-															按摩/SPA
+														<view class="business-main-list-box-li-info-wrap">
+															<view class="business-main-list-box-li-info-wrap-item"
+																v-if="idx==1" style="background: #FA6019;color:#fff">
+																区域综合排名第一
+															</view>
+															<view class="business-main-list-box-li-info-wrap-item"
+																v-else>
+																按摩/SPA
+															</view>
 														</view>
 													</view>
 												</view>
@@ -59,74 +70,106 @@
 										</view>
 									</view>
 								</view>
-							</view>
+							</z-paging>
+						</view>
+						<view class="box-item-business" :style="{display:!isBusData?'block':'none'}">
+							<loading v-if="isBusLoad" />
+							<no-data v-if="!isBusLoad" />
 						</view>
 					</swiper-item>
 					<swiper-item class="swiper-box-item-list">
 						<view class="box-content-calendar">
-							<ren-calendar ref='ren' :markDays='markDays' :headerBar='true' @onDayClick='onDayClick'></ren-calendar>
+							<ren-calendar ref='ren' :markDays='markDays' :headerBar='true' @onDayClick='onDayClick'>
+							</ren-calendar>
 						</view>
-						<view class="box-item-project">
-							<view class="box-item-project-main" v-for="(item,index) in 10" :key="index">
-								<view class="box-item-project-main-date">2月{{index+1}}日</view>
-								<view class="box-item-project-main-list">
-									<view class="box-item-project-main-list-li" v-for="(i,idx) in 5">
-										<view class="box-item-project-main-list-li-image">
-											<image src="../../static/images/pro-001.png" mode="aspectFill"></image>
-										</view>
-										<view class="box-item-project-main-list-li-price">￥599.00</view>
-									</view>
-								</view>
-							</view>
-						</view>
-					</swiper-item>
-					<swiper-item class="swiper-box-item-list">
-						<view class="box-content-calendar">
-							<ren-calendar ref='ren' :markDays='markDays' :headerBar='true' @onDayClick='onDayClick'></ren-calendar>
-						</view>
-						<view class="box-item-technician">
-							<view class="box-item-technician-main" v-for="(item,index) in 10" :key="index">
-								<view class="box-item-technician-main-date">3月{{index+1}}日</view>
-								<view class="box-item-technician-main-list">
-									<view class="box-item-technician-main-list-li" v-for="(i,idx) in 5">
-										<view class="box-item-technician-main-list-li-image">
-											<image src="../../static/images/pro-001.png" mode="aspectFill"></image>
-										</view>
-										<view class="box-item-technician-main-list-li-info">
-											<view class="technician-main-list-li-info-title">
-												<view class="technician-main-list-li-info-title-text">王二麻子</view>
-												<view class="technician-main-list-li-info-title-msg">【金牌技师】</view>
-											</view>
-											<view class="technician-main-list-li-info-score">
-												<text class="iconfont iconwujiaoxing icon-font" style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
-												<text>5分</text>
-											</view>
-											<view class="technician-main-list-li-info-text-wrap">
-												<view class="technician-main-list-li-info-text-wrap-msg">
-													工龄：2年
-												</view>
-												<view class="technician-main-list-li-info-text-wrap-msg">
-													预约次数：1240
-												</view>
-											</view>
-											<view class="technician-main-list-li-info-type">
-												<view class="technician-main-list-li-info-type-item" v-for="(s,k) in 3">
-													泰式按摩
-												</view>
 
+						<view class="box-item-project" :style="{display:isProData?'block':'none'}">
+							<z-paging ref="paging2" @query="projectListChange" :mounted-auto-call-reload='false'
+								:list.sync="projectList" loading-more-no-more-text="已经到底了"
+								:refresher-angle-enable-change-continued="false" :touchmove-propagation-enabled="true"
+								:use-custom-refresher="true" style="height: 100%;">
+								<view class="box-item-project-main">
+									<view class="box-item-project-main" v-for="(item,index) in projectList"
+										:key="index">
+										<view class="box-item-project-main-date">{{item.name}}</view>
+										<view class="box-item-project-main-list">
+											<view class="box-item-project-main-list-li" v-for="(i,idx) in i.data"
+												:key="i.id">
+												<view class="box-item-project-main-list-li-image">
+													<image :src="i.simg" mode="aspectFill"></image>
+												</view>
+												<view class="box-item-project-main-list-li-price">￥{{i.price}}</view>
 											</view>
 										</view>
 									</view>
 								</view>
-							</view>
+							</z-paging>
+						</view>
+						<view class="box-item-project" :style="{display:!isProData?'block':'none'}">
+							<loading v-if="isProLoad" />
+							<no-data v-if="!isProLoad" />
+						</view>
+					</swiper-item>
+					<swiper-item class="swiper-box-item-list">
+						<view class="box-content-calendar">
+							<ren-calendar ref='ren' :markDays='markDays' :headerBar='true' @onDayClick='onDayClick'>
+							</ren-calendar>
+						</view>
+						<view class="box-item-technician" :style="{display:isTechData?'block':'none'}">
+							<z-paging ref="paging3" @query="technicianListChange" :mounted-auto-call-reload='false'
+								:list.sync="technicianList" loading-more-no-more-text="已经到底了"
+								:refresher-angle-enable-change-continued="false" :touchmove-propagation-enabled="true"
+								:use-custom-refresher="true" style="height: 100%;">
+								<view class="box-item-technician-wrap">
+									<view class="box-item-technician-main" v-for="(item,index) in technicianList"
+										:key="index">
+										<view class="box-item-technician-main-date">{{item.name}}</view>
+										<view class="box-item-technician-main-list">
+											<view class="box-item-technician-main-list-li" v-for="(i,idx) in item.data"
+												:key="i.id">
+												<view class="box-item-technician-main-list-li-image">
+													<image :src="i.simg" mode="aspectFill">
+													</image>
+												</view>
+												<view class="box-item-technician-main-list-li-info">
+													<view class="technician-main-list-li-info-title">
+														<view class="technician-main-list-li-info-title-text">{{i.name}}
+														</view>
+														<view class="technician-main-list-li-info-title-msg"
+															v-if="i.level_name">
+															【{{i.level_name.name}}】
+														</view>
+													</view>
+													<view class="technician-main-list-li-info-score">
+														<score :comment="i.comment"></score>
+													</view>
+													<view class="technician-main-list-li-info-text-wrap">
+														<view class="technician-main-list-li-info-text-wrap-msg">
+															工龄：{{i.service_times}}年
+														</view>
+														<view class="technician-main-list-li-info-text-wrap-msg">
+															预约次数：{{i.service_num}}
+														</view>
+													</view>
+													<view class="technician-main-list-li-info-type">
+														<view class="technician-main-list-li-info-type-item"
+															v-for="(s,k) in i.service_info">{{s.name}}</view>
+													</view>
+												</view>
+											</view>
+										</view>
+									</view>
+								</view>
+							</z-paging>
+						</view>
+						<view class="box-item-technician" :style="{display:!isTechData?'block':'none'}">
+							<loading v-if="isTechLoad" />
+							<no-data v-if="!isTechLoad" />
 						</view>
 					</swiper-item>
 
 				</swiper>
 			</view>
-		</view>
-		<view class="box-footer">
-			<text class="iconfont iconxiangxiajiantou"></text>
 		</view>
 	</view>
 </template>
@@ -134,6 +177,10 @@
 <script>
 	import liuyunoTabs from "@/components/liuyuno-tabs/liuyuno-tabs.vue";
 	import RenCalendar from '@/components/ren-calendar/ren-calendar.vue'
+	import score from '../../components/score/score.vue'
+	import loading from '../../components/loading/loading.vue'
+	import noData from '../../components/no-data/no-data.vue'
+	import zPaging from '../../uni_modules/z-paging/components/z-paging/z-paging.vue'
 	export default {
 		data() {
 			return {
@@ -142,11 +189,30 @@
 				defaultIndex: 0, //当前 滑动的下标
 				markDays: [],
 				curDate: '',
+				businessList: [],
+				projectList: [],
+				technicianList: [],
+				isBusData: false,
+				isBusLoad: true,
+				isProData: false,
+				isProLoad: true,
+				isTechData: false,
+				isTechLoad: true,
+				startTime: '',
+				endTime: '',
+				proStartTime: '',
+				proEndTime: '',
+				tecStartTime: '',
+				tecEndTime: '',
 			};
 		},
 		components: {
 			liuyunoTabs,
-			RenCalendar
+			RenCalendar,
+			score,
+			loading,
+			noData,
+			zPaging,
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -161,10 +227,138 @@
 			this.markDays.push(today);
 		},
 		methods: {
+
+
+			// 商家
+			businessListChange(pageNo, pageSize) {
+				var vuedata = {
+					num: pageNo,
+					size: pageSize,
+					type: 1,
+					start_time: this.startTime,
+					end_time: this.endTime,
+				}
+				this.apiget('api/v1/members/record', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.length != 0) {
+							this.isBusData = true
+							let list = res.data.data
+							var arr = []
+							for (var key in list) {
+								var str = {
+									name: key,
+									data: list[key]
+								}
+								arr.push(str)
+							}
+
+							this.$refs.paging1.complete(arr);
+						} else {
+							this.isBusData = false
+							this.isBusLoad = false
+						}
+
+					}
+				});
+			},
+			// 项目
+			projectListChange(pageNo, pageSize) {
+				var vuedata = {
+					num: pageNo,
+					size: pageSize,
+					type: 2,
+					start_time: this.proStartTime,
+					end_time: this.proEndTime,
+				}
+				this.apiget('api/v1/members/record', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.length != 0) {
+							this.isProData = true
+							let list = res.data.data
+							var arr = []
+							for (var key in list) {
+								var str = {
+									name: key,
+									data: list[key]
+								}
+								arr.push(str)
+							}
+
+							this.$refs.paging2.complete(arr);
+						} else {
+							this.isProData = false
+							this.isProLoad = false
+						}
+
+					}
+				});
+			},
+
+			// 技师
+			technicianListChange(pageNo, pageSize) {
+				var vuedata = {
+					num: pageNo,
+					size: pageSize,
+					type: 3,
+					start_time: this.tecStartTime,
+					end_time: this.tecEndTime,
+				}
+				this.apiget('api/v1/members/record', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.length != 0) {
+							this.isTechData = true
+							let list = res.data.data
+							var arr = []
+							for (var key in list) {
+								var str = {
+									name: key,
+									data: list[key]
+								}
+								arr.push(str)
+							}
+
+							this.$refs.paging3.complete(arr);
+						} else {
+							this.isTechData = false
+							this.isTechLoad = false
+						}
+					}
+				});
+			},
+
 			// 日期选择
 			onDayClick(data) {
 				this.curDate = data.date;
-				console.log(this.curDate)
+				var date1 = new Date(data.time1)
+				var date2 = new Date(data.time2)
+
+
+				switch (this.defaultIndex) {
+					case 0:
+						this.startTime = date1 > date2 ? data.time2 : data.time1
+						this.endTime = date1 > date2 ? data.time1 : data.time2
+
+						if (this.startTime != '' && this.endTime != '') {
+							this.businessListChange(1, 20)
+						}
+						break;
+					case 1:
+						this.proStartTime = date1 > date2 ? data.time2 : data.time1
+						this.proEndTime = date1 > date2 ? data.time1 : data.time2
+
+						if (this.proStartTime != '' && this.proEndTime != '') {
+							this.projectListChange(1, 20)
+						}
+						break;
+					case 2:
+						this.tecStartTime = date1 > date2 ? data.time2 : data.time1
+						this.tecEndTime = date1 > date2 ? data.time1 : data.time2
+						if (this.tecStartTime != '' && this.tecEndTime != '') {
+							this.technicianListChange(1, 20)
+						}
+						break;
+				}
+				// console.log(this.startTime, this.endTime)
 			},
 
 			// 返回
@@ -190,7 +384,21 @@
 			tabChange(e) {
 				this.$refs.boxTabs.tabToIndex(e.detail.current)
 				this.defaultIndex = e.detail.current
+				this.changeIndex(this.defaultIndex)
 			},
+			changeIndex(index) {
+				switch (index) {
+					case 0:
+						this.businessListChange(1, 20)
+						break;
+					case 1:
+						this.projectListChange(1, 20)
+						break;
+					case 2:
+						this.technicianListChange(1, 20)
+						break;
+				}
+			}
 		}
 	}
 </script>
@@ -274,10 +482,7 @@
 							overflow-y: scroll;
 
 							.box-item-business-main {
-
-								.box-item-business-main-list:last-child {
-									margin-bottom: 40rpx;
-								}
+								height: 100%;
 
 								.box-item-business-main-list {
 									padding: 0 20rpx;
@@ -389,51 +594,52 @@
 							flex: 1;
 							overflow-y: scroll;
 
-							.box-item-project-main:last-child {
-								margin-bottom: 40rpx;
-							}
-
 							.box-item-project-main {
-								padding: 0 20rpx;
-								box-sizing: border-box;
+								height: 100%;
 
-								.box-item-project-main-date {
-									margin: 20rpx 0;
-									padding-left: 20rpx;
+								.box-item-project-main {
+									padding: 0 20rpx;
 									box-sizing: border-box;
-									font-size: 28rpx;
-									color: #999;
-								}
 
-								.box-item-project-main-list {
-									display: flex;
-									flex-wrap: wrap;
+									.box-item-project-main-date {
+										margin: 20rpx 0;
+										padding-left: 20rpx;
+										box-sizing: border-box;
+										font-size: 28rpx;
+										color: #999;
+									}
 
-									.box-item-project-main-list-li {
-										width: 230rpx;
-										height: 298rpx;
-										margin-right: 10rpx;
-										margin-bottom: 10rpx;
-										border-radius: 10rpx;
-										background: #fff;
-										overflow: hidden;
+									.box-item-project-main-list {
+										display: flex;
+										flex-wrap: wrap;
 
-										.box-item-project-main-list-li-image {
-											image {
-												width: 230rpx;
-												height: 230rpx;
+										.box-item-project-main-list-li {
+											width: 230rpx;
+											height: 298rpx;
+											margin-right: 10rpx;
+											margin-bottom: 10rpx;
+											border-radius: 10rpx;
+											background: #fff;
+											overflow: hidden;
+
+											.box-item-project-main-list-li-image {
+												image {
+													width: 230rpx;
+													height: 230rpx;
+													border-radius: 10rpx;
+												}
+											}
+
+											.box-item-project-main-list-li-price {
+												margin-left: 20rpx;
+												font-size: 28rpx;
+												color: #000;
 											}
 										}
 
-										.box-item-project-main-list-li-price {
-											margin-left: 20rpx;
-											font-size: 28rpx;
-											color: #000;
+										.box-item-project-main-list-li:nth-child(3n) {
+											margin-right: 0;
 										}
-									}
-
-									.box-item-project-main-list-li:nth-child(3n) {
-										margin-right: 0;
 									}
 								}
 							}
@@ -443,126 +649,125 @@
 							flex: 1;
 							overflow-y: scroll;
 
-							.box-item-technician-main:last-child {
-								margin-bottom: 40rpx;
-							}
+							.box-item-technician-wrap {
+								height: 100%;
 
-							.box-item-technician-main {
-								padding: 0 20rpx;
-								box-sizing: border-box;
 
-								.box-item-technician-main-date {
-									margin: 20rpx 0;
-									padding-left: 20rpx;
+								.box-item-technician-main {
+									padding: 0 20rpx;
 									box-sizing: border-box;
-									font-size: 28rpx;
-									color: #999;
-								}
 
-								.box-item-technician-main-list {
-									.box-item-technician-main-list-li {
-										padding: 20rpx;
+									.box-item-technician-main-date {
+										margin: 20rpx 0;
+										padding-left: 20rpx;
 										box-sizing: border-box;
-										display: flex;
-										height: 204rpx;
-										background: #FFFFFF;
-										border-radius: 10rpx;
+										font-size: 28rpx;
+										color: #999;
+									}
 
-										.box-item-technician-main-list-li-image {
+									.box-item-technician-main-list {
+										.box-item-technician-main-list-li {
+											padding: 20rpx;
+											box-sizing: border-box;
+											display: flex;
+											height: 204rpx;
+											background: #FFFFFF;
 											border-radius: 10rpx;
 
-											image {
-												width: 164rpx;
-												height: 164rpx;
-											}
-										}
-
-										.box-item-technician-main-list-li-info {
-											flex: 1;
-											margin-left: 20rpx;
-
-											.technician-main-list-li-info-title {
-												display: flex;
-												align-items: center;
-
-												.technician-main-list-li-info-title-text {
-													color: #000;
-													font-size: 34rpx;
-
-												}
-
-												.technician-main-list-li-info-title-msg {
-													color: #FF8366;
-													font-size: 28rpx;
-												}
-											}
-
-											.technician-main-list-li-info-score {
-
-												display: flex;
-												align-items: center;
+											.box-item-technician-main-list-li-image {
+												border-radius: 10rpx;
 
 												image {
-													width: 30rpx;
-													height: 30rpx;
-												}
-
-												text {
-													margin-left: 10rpx;
-													font-size: 24rpx;
-													color: #999;
+													width: 164rpx;
+													height: 164rpx;
+													border-radius: 10rpx;
 												}
 											}
 
-											.technician-main-list-li-info-text-wrap {
-												margin: 10rpx 0;
-												display: flex;
-												flex-wrap: wrap;
-												align-items: center;
+											.box-item-technician-main-list-li-info {
+												flex: 1;
+												margin-left: 20rpx;
 
-												.technician-main-list-li-info-text-wrap-msg {
-													height: 24rpx;
-													padding: 0 20rpx;
-													box-sizing: border-box;
-													line-height: 24rpx;
-													border-right: 1rpx solid #ccc;
-													font-size: 24rpx;
-													color: #ccc;
+												.technician-main-list-li-info-title {
+													display: flex;
+													align-items: center;
+
+													.technician-main-list-li-info-title-text {
+														color: #000;
+														font-size: 34rpx;
+
+													}
+
+													.technician-main-list-li-info-title-msg {
+														color: #FF8366;
+														font-size: 28rpx;
+													}
 												}
 
-												.technician-main-list-li-info-text-wrap-msg:first-child {
-													padding-left: 0;
+												.technician-main-list-li-info-score {
+
+													display: flex;
+													align-items: center;
+
+													image {
+														width: 30rpx;
+														height: 30rpx;
+													}
+
+													text {
+														margin-left: 10rpx;
+														font-size: 24rpx;
+														color: #999;
+													}
 												}
 
-												.technician-main-list-li-info-text-wrap-msg:last-child {
-													border-right: 0;
+												.technician-main-list-li-info-text-wrap {
+													margin: 10rpx 0;
+													display: flex;
+													flex-wrap: wrap;
+													align-items: center;
+
+													.technician-main-list-li-info-text-wrap-msg {
+														height: 24rpx;
+														padding: 0 20rpx;
+														box-sizing: border-box;
+														line-height: 24rpx;
+														border-right: 1rpx solid #ccc;
+														font-size: 24rpx;
+														color: #ccc;
+													}
+
+													.technician-main-list-li-info-text-wrap-msg:first-child {
+														padding-left: 0;
+													}
+
+													.technician-main-list-li-info-text-wrap-msg:last-child {
+														border-right: 0;
+													}
+												}
+
+												.technician-main-list-li-info-type {
+													position: relative;
+													display: flex;
+													flex-wrap: wrap;
+													// height: 38rpx;
+													// overflow: hidden;
+
+													.technician-main-list-li-info-type-item {
+														padding: 6rpx 10rpx;
+														margin-right: 8rpx;
+														margin-bottom: 8rpx;
+														background: #F5F5F5;
+														border-radius: 3rpx;
+														color: #666;
+														font-size: 22rpx;
+													}
+
+													.technician-main-list-li-info-type-item:nth-child(4) {
+														margin-right: 0;
+													}
 												}
 											}
-
-											.technician-main-list-li-info-type {
-												position: relative;
-												display: flex;
-												flex-wrap: wrap;
-												// height: 38rpx;
-												// overflow: hidden;
-
-												.technician-main-list-li-info-type-item {
-													padding: 6rpx 10rpx;
-													margin-right: 8rpx;
-													margin-bottom: 8rpx;
-													background: #F5F5F5;
-													border-radius: 3rpx;
-													color: #666;
-													font-size: 22rpx;
-												}
-
-												.technician-main-list-li-info-type-item:nth-child(4) {
-													margin-right: 0;
-												}
-
-											}
-
-
 										}
 									}
 								}

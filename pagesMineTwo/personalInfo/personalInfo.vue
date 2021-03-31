@@ -399,6 +399,7 @@
 							image {
 								width: 112rpx;
 								height: 112rpx;
+								border-radius: 50%;
 							}
 						}
 					}

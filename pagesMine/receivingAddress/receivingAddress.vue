@@ -147,6 +147,7 @@
 							let list = res.data.data
 							let totalSize = res.data.total_rows
 							this.$refs.paging.addData(list);
+							
 							this.addressList = this.addressList.concat(list)
 
 

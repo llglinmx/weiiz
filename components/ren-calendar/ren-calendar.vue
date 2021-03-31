@@ -15,8 +15,9 @@
 		<view :class="{ hide: !monthOpen }" class="content" :style="{ height: height }">
 			<view :style="{ top: positionTop + 'rpx' }" class="days">
 				<view class="item" v-for="(item, index) in dates" :key="index">
-					<view class="day" @click="selectOne(item, $event)" :class="{
-                            choose: choose == `${item.year}-${item.month}-${item.date}`&&item.isCurM,
+					<!-- choose: choose == `${item.year}-${item.month}-${item.date}`&&item.isCurM, -->
+					<view class="day" @click="selectOne(item, $event,index)" :class="{
+                            choose: item.active&&item.isCurM,
                             nolm: !item.isCurM,
                             today: isToday(item.year, item.month, item.date),
                             isWorkDay: isWorkDay(item.year, item.month, item.date)
@@ -29,7 +30,8 @@
 			</view>
 		</view>
 		<view class="open" v-if="collapsible" @click="toggle">
-			<text class="iconfont iconxiangxiajiantou" :class="monthOpen?'rotate-deg':''" style="color: #000;font-size: 46rpx;"></text>
+			<text class="iconfont iconxiangxiajiantou" :class="monthOpen?'rotate-deg':''"
+				style="color: #000;font-size: 46rpx;"></text>
 		</view>
 		<!-- <image src="https://i.loli.net/2020/07/16/2MmZsucVTlRjSwK.png" mode="scaleToFill" v-if="collapsible" @click="toggle"
 		 class="weektoggle" :class="{ down: monthOpen }"></image> -->
@@ -81,7 +83,9 @@
 				dates: [], // 当前月的日期数据
 				positionTop: -88,
 				monthOpen: false,
-				choose: ''
+				choose: '',
+				time1: '',
+				time2: '',
 			};
 		},
 		created() {
@@ -143,7 +147,8 @@
 						date: this.formatNum(lastDayOfLastMonth - startDay + i),
 						day: weekstart + i - 1 || 7,
 						month: m - 1 >= 0 ? this.formatNum(m - 1) : 12,
-						year: m - 1 >= 0 ? y : y - 1
+						year: m - 1 >= 0 ? y : y - 1,
+						active: false,
 					});
 				}
 				for (let j = 1; j <= lastDateOfMonth; j++) {
@@ -152,7 +157,8 @@
 						day: (j % 7) + firstDayOfMonth - 1 || 7,
 						month: this.formatNum(m),
 						year: y,
-						isCurM: true //是否当前月份
+						isCurM: true, //是否当前月份
+						active: false,
 					});
 				}
 				for (let k = 1; k <= endDay; k++) {
@@ -160,7 +166,8 @@
 						date: this.formatNum(k),
 						day: (lastDateOfMonth + startDay + weekstart + k - 1) % 7 || 7,
 						month: m + 1 <= 11 ? this.formatNum(m + 1) : 0,
-						year: m + 1 <= 11 ? y : y + 1
+						year: m + 1 <= 11 ? y : y + 1,
+						active: false,
 					});
 				}
 				// console.log(dates);
@@ -225,17 +232,38 @@
 				}
 			},
 			// 点击回调
-			selectOne(i, event) {
+			selectOne(i, event, index) {
 				let date = `${i.year}-${i.month}-${i.date}`;
 				let selectD = new Date(date).getTime();
 				let curTime = new Date().getTime();
 				let week = new Date(date).getDay();
 				let weekText = ['日', '一', '二', '三', '四', '五', '六'];
 				let formatWeek = '星期' + weekText[week];
+
+				// 判断是否有选择过时间 
+				if (this.time2 != '') {
+					this.time1 = date
+					this.time2 = ''
+					this.dates.forEach(item => {
+						item.active = false
+					})
+				} else {
+					// 判断是有获取过时间 有则获取第二次点击的时间
+					if (this.time1 == '') {
+						this.time1 = date
+					} else {
+						this.time2 = date
+					}
+				}
+				this.dates[index].active = true
+
 				let response = {
 					date: date,
-					week: formatWeek
+					week: formatWeek,
+					time1: this.time1,
+					time2: this.time2
 				};
+
 				if (!i.isCurM) {
 					// console.log('不在当前月范围内');
 					return false;
@@ -252,7 +280,6 @@
 					this.choose = date;
 					this.$emit('onDayClick', response);
 				}
-				console.log(response);
 			},
 			//改变年月
 			changYearMonth(y, m) {
@@ -463,10 +490,13 @@
 			height: 80rpx;
 			background: #fff;
 			border-radius: 50%;
-			text{
+			z-index: 999;
+
+			text {
 				transition: 0.3s;
 			}
-			.rotate-deg{
+
+			.rotate-deg {
 				transform: rotate(180deg) !important;
 			}
 		}

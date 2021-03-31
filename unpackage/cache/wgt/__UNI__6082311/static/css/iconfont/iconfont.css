@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'iconfont';  /* project id 2394062 */
-  src: url('https://at.alicdn.com/t/font_2394062_1ig1nma13uc.eot');
-  src: url('https://at.alicdn.com/t/font_2394062_1ig1nma13uc.eot?#iefix') format('embedded-opentype'),
-  url('https://at.alicdn.com/t/font_2394062_1ig1nma13uc.woff2') format('woff2'),
-  url('https://at.alicdn.com/t/font_2394062_1ig1nma13uc.woff') format('woff'),
-  url('https://at.alicdn.com/t/font_2394062_1ig1nma13uc.ttf') format('truetype'),
-  url('https://at.alicdn.com/t/font_2394062_1ig1nma13uc.svg#iconfont') format('svg');
+  src: url('https://at.alicdn.com/t/font_2394062_v6sw2x8kz4s.eot');
+  src: url('https://at.alicdn.com/t/font_2394062_v6sw2x8kz4s.eot?#iefix') format('embedded-opentype'),
+  url('https://at.alicdn.com/t/font_2394062_v6sw2x8kz4s.woff2') format('woff2'),
+  url('https://at.alicdn.com/t/font_2394062_v6sw2x8kz4s.woff') format('woff'),
+  url('https://at.alicdn.com/t/font_2394062_v6sw2x8kz4s.ttf') format('truetype'),
+  url('https://at.alicdn.com/t/font_2394062_v6sw2x8kz4s.svg#iconfont') format('svg');
 }
 
 .iconfont {
@@ -14,6 +14,70 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.iconmap:before {
+  content: "\e616";
+}
+
+.iconyuyuedingdan:before {
+  content: "\e614";
+}
+
+.iconjiazaizhong:before {
+  content: "\e6ac";
+}
+
+.iconwuliuqiache:before {
+  content: "\e820";
+}
+
+.icondingdan1:before {
+  content: "\e604";
+}
+
+.icon70BasicIcons-all-05:before {
+  content: "\e621";
+}
+
+.iconshizhong:before {
+  content: "\e651";
+}
+
+.iconbofang:before {
+  content: "\e615";
+}
+
+.iconjian:before {
+  content: "\e711";
+}
+
+.iconjia:before {
+  content: "\e712";
+}
+
+.icon31shoucangdedianpu:before {
+  content: "\e650";
+}
+
+.iconwode3:before {
+  content: "\e6f0";
+}
+
+.iconshangcheng:before {
+  content: "\e647";
+}
+
+.iconmendian1:before {
+  content: "\e628";
+}
+
+.icondingdan:before {
+  content: "\e631";
+}
+
+.iconshouye:before {
+  content: "\e61b";
 }
 
 .icondagou:before {
@@ -102,10 +166,6 @@
 
 .iconweixuanzhong1:before {
   content: "\e612";
-}
-
-.iconqipao:before {
-  content: "\e708";
 }
 
 .iconshouyiticheng:before {

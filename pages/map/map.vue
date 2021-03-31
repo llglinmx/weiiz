@@ -1,11 +1,26 @@
 <template>
 	<view class="map-box">
-		地图
-		<view class="map-head">
+		<view class="map-head" :style="{paddingTop:barHeight+'px'}">
+			<!-- <view class="map-head-nav-title flex-center">按摩商家</view> -->
 
+			<view class="map-head-nav-tabs">
+				<view class="map-head-nav-tabs-li" v-for="(item,index) in tabsList" :key="index">
+					<view class="map-head-nav-tabs-li-text" :class="idx==index?'map-head-nav-tabs-li-text-active':''">
+						{{item.title}}
+					</view>
+					<view class="map-head-nav-tabs-li-icon">
+						<text class="iconfont iconxiangxiajiantou icon-font" style="color: #ccc;font-size: 28rpx;"
+							v-if="idx!=index"></text>
+						<text class="iconfont iconxiangxiajiantou icon-font" style="color: #FF8366;font-size: 28rpx;"
+							v-else></text>
+					</view>
+				</view>
+			</view>
 		</view>
-		<view class="map-content">
-
+		<view class="map-content" id="map-content">
+			<!-- <map :style="{height:mapHeight+'rpx'}" style="width: 100%;" :latitude="latitude" :longitude="longitude"
+				:markers="covers"></map> -->
+			<!-- <map style="width: 100%;height: 100%;" :latitude="latitude" :longitude="longitude" :markers="covers"></map> -->
 		</view>
 		<!-- tabbar导航栏 -->
 		<view class="map-footer">
@@ -19,13 +34,69 @@
 	export default {
 		data() {
 			return {
+				barHeight: 0, //顶部电量导航栏高度
+				idx: 0, //顶部tabar状态栏下标
 				activeIndex: 2, //当前tabbar所在页面
+				mapHeight: 0,
+				latitude: 24.613838,
+				longitude: 118.037733,
+				covers: [{
+					latitude: 24.613838,
+					longitude: 118.037733,
+					iconPath: '../../static/address-icon.png'
+				}, {
+					latitude: 24.613838,
+					longitude: 118.037733,
+					iconPath: '../../static/address-icon.png'
+				}],
+				tabsList: [{
+						title: "全部",
+						type: "all"
+					},
+					{
+						title: "按摩商家",
+						type: "business"
+					},
+					{
+						title: "价格",
+						type: "price"
+					},
+				],
 			}
 		},
 		components: {
 			Tabbar,
 		},
+		onReady() {
+			// 获取顶部电量状态栏高度
+			uni.getSystemInfo({
+				success: (res) => {
+					this.barHeight = res.statusBarHeight
+				}
+			});
+			const query = uni.createSelectorQuery().in(this);
+			query.select('#map-content').boundingClientRect(data => {
+				this.mapHeight = data.height * 2
+			}).exec();
+		},
+		onLoad() {
+			// this.showNvue()
+		},
+		
 		methods: {
+
+
+			showNvue() {
+				const map = uni.getSubNVueById('map')
+				map.setStyle({
+					'position':"absolute",
+					'top':'120px'
+				})
+			},
+
+
+
+
 			// tabbar点击
 			tabbarClick(index) {
 				this.activeIndex = index
@@ -64,8 +135,62 @@
 		display: flex;
 		flex-direction: column;
 
+		.map-head {
+			box-sizing: border-box;
+
+			.map-head-nav-title {
+				height: 88rpx;
+				font-size: 34rpx;
+				color: #000;
+				font-weight: 500;
+			}
+
+
+			.map-head-nav-tabs {
+				display: flex;
+				justify-content: space-around;
+				height: 76rpx;
+				background: #fff;
+
+				.map-head-nav-tabs-li {
+					display: flex;
+					align-items: center;
+
+					.map-head-nav-tabs-li-text {
+						margin-right: 10rpx;
+						color: #666;
+						font-size: 28rpx;
+					}
+
+					.map-head-nav-tabs-li-text-active {
+						color: #FF8366;
+					}
+
+					.map-head-nav-tabs-li-icon {
+						.icon-font {
+							margin-top: 4rpx;
+						}
+					}
+
+					.map-head-nav-tabs-li-icon-max {
+						image {
+							width: 36rpx;
+							height: 36rpx;
+						}
+					}
+				}
+
+			}
+
+
+		}
+
 		.map-content {
 			flex: 1;
+		}
+
+		.map-footer {
+			height: 102rpx;
 		}
 	}
 </style>

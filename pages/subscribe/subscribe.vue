@@ -2,7 +2,8 @@
 	<view class="sub-box">
 		<view class="sub-head" :style="{paddingTop:barHeight+'px'}">
 			<view class="sub-head-tabs">
-				<Tabs :TabsList='TabsList' :IndexIdx='idx' @TabClick="TabBtn"></Tabs>
+				<!-- <Tabs :TabsList='TabsList' :IndexIdx='idx' @TabClick="TabBtn"></Tabs> -->
+				<liuyuno-tabs ref="boxTabs" :tabData="TabsList" :activeIndex="idx" @tabClick='tabClick' />
 			</view>
 		</view>
 		<view class="sub-content">
@@ -24,7 +25,7 @@
 
 <script>
 	import Tabbar from "../../components/tabbar/tabbar.vue"
-	import Tabs from "../../components/tabs/tabs.vue"
+	import liuyunoTabs from "@/components/liuyuno-tabs/liuyuno-tabs.vue";
 	export default {
 		data() {
 			return {
@@ -37,7 +38,7 @@
 		},
 		components: {
 			Tabbar,
-			Tabs
+			liuyunoTabs
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -51,11 +52,12 @@
 			// tab点击
 			TabBtn(e) {
 				this.idx = e
-				this.tabIndex(this.idx)
+				// this.tabIndex(this.idx)
 			},
 			// 滑动切换列表
 			tabChange(e) {
 				this.idx = e.detail.current
+				this.$refs.boxTabs.tabToIndex(e.detail.current)
 				this.tabIndex(this.idx)
 			},
 			tabIndex(index) {

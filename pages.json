@@ -39,7 +39,7 @@
 		}, {
 			"path": "pages/map/map",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "地图",
 				"enablePullDownRefresh": false
 			}
 
@@ -433,34 +433,28 @@
 					"enablePullDownRefresh": false
 				}
 
-			}    ,{
-                    "path" : "edit/edit",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "changePassword/changePassword",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "changePhone/changePhone",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+			}, {
+				"path": "edit/edit",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "changePassword/changePassword",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "changePhone/changePhone",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}]
 		},
 		{
 			"root": "pagesMall",
