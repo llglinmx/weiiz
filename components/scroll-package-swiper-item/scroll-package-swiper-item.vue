@@ -1,5 +1,5 @@
 <template>
-	<view class="content">
+	<view class="content-box">
 		<!-- 这里设置了z-paging加载时禁止自动调用reload方法，自行控制何时reload（懒加载），同时允许touchmove事件冒泡，否则无法横向滚动切换tab -->
 		<z-paging ref="paging" @query="queryList" :list.sync="dataList" loading-more-no-more-text="已经到底了"
 			:mounted-auto-call-reload="false" :refresher-angle-enable-change-continued="false"
@@ -27,7 +27,7 @@
 						</view>
 					</view>
 					<view class="box-package-card-list-li-bottom">
-						<view class="card-list-li-bottom-title">
+						<view class="card-list-li-bottom-title" :style="{color:currentIndex==2?'#999':'#333'}">
 							<view class="card-list-li-bottom-title-item">项目</view>
 							<view class="card-list-li-bottom-title-item">使用次数</view>
 							<view class="card-list-li-bottom-title-item">已使用</view>

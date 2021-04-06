@@ -32,7 +32,7 @@
 		align-items: center;
 		font-weight: 500;
 	}
-	.content{
+	.content-box{
 		height: 100%;
 	}
 </style>

@@ -19,7 +19,7 @@
 				<view class="mine-head-info-left">
 					<view class="head-info-left-box">
 						<view class="head-info-box-image flex-center" @click="userInfoClick">
-							<image src="../../static/images/userImage.png" mode=""></image>
+							<image :src="info.avatar!=''?info.avatar:'../../static/images/userImage.png'" mode="aspectFill"></image>
 						</view>
 						<view class="head-info-right">
 							<!-- 昵称 -->
@@ -148,7 +148,11 @@
 				toolBarWidth: 0, //进度条长度
 				parWidth: 0, // 进度条父级长度度
 				activeIndex: 4, //当前tabbar所在页面
-				info: {},
+				info: {
+					nickname:'',
+					avatar:'../../static/images/userImage.png',
+					level_name:''
+				},
 				list: [{
 						number: "0.00",
 						text: "余额/元",
@@ -373,7 +377,6 @@
 			// 获取顶部电量状态栏高度
 			uni.getSystemInfo({
 				success: (res) => {
-					console.log(res)
 					this.barHeight = res.statusBarHeight
 				}
 			});
@@ -644,10 +647,12 @@
 							height: 128rpx;
 							background: rgba(255, 255, 255, .2);
 							border-radius: 50%;
+							overflow: hidden;
 
 							image {
 								width: 112rpx;
 								height: 112rpx;
+								border-radius: 50%;
 							}
 						}
 

@@ -10,60 +10,8 @@
 			<view class="box-content-wrap">
 				<view class="box-content-wrap-item">
 					<swiper class="swiper-box" :current="defaultIndex" @change="tabChange">
-						<swiper-item class="swiper-box-item-list">
-							<view class="content-list-item">
-								<view class="content-list-item-li" v-for="(item,index) in arrList" @click="allProblem(item,index)">
-									<view class="content-list-item-li-title">{{item}}</view>
-									<view class="content-list-item-li-more flex-center">
-										<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
-									</view>
-
-								</view>
-							</view>
-						</swiper-item>
-						<swiper-item class="swiper-box-item-list">
-							<view class="content-list-item">
-								<view class="content-list-item-li" v-for="(item,index) in arrList">
-									<view class="content-list-item-li-title">{{item}}</view>
-									<view class="content-list-item-li-more flex-center">
-										<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
-									</view>
-
-								</view>
-							</view>
-						</swiper-item>
-						<swiper-item class="swiper-box-item-list">
-							<view class="content-list-item">
-								<view class="content-list-item-li" v-for="(item,index) in arrList">
-									<view class="content-list-item-li-title">{{item}}</view>
-									<view class="content-list-item-li-more flex-center">
-										<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
-									</view>
-
-								</view>
-							</view>
-						</swiper-item>
-						<swiper-item class="swiper-box-item-list">
-							<view class="content-list-item">
-								<view class="content-list-item-li" v-for="(item,index) in arrList">
-									<view class="content-list-item-li-title">{{item}}</view>
-									<view class="content-list-item-li-more flex-center">
-										<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
-									</view>
-
-								</view>
-							</view>
-						</swiper-item>
-						<swiper-item class="swiper-box-item-list">
-							<view class="content-list-item">
-								<view class="content-list-item-li" v-for="(item,index) in arrList">
-									<view class="content-list-item-li-title">{{item}}</view>
-									<view class="content-list-item-li-more flex-center">
-										<text class="iconfont icongengduo icon-font" style="color: #ccc;font-size: 32rpx;font-weight: 500;"></text>
-									</view>
-
-								</view>
-							</view>
+						<swiper-item class="swiper-box-item-list" v-for="(item,index) in tabs" :key="index">
+							<scroll-problem-swiper-item :tabIndex="index" :currentIndex="defaultIndex"></scroll-problem-swiper-item>
 						</swiper-item>
 					</swiper>
 				</view>
@@ -76,6 +24,7 @@
 <script>
 	import liuyunoTabs from "@/components/liuyuno-tabs/liuyuno-tabs.vue";
 	import navTitle from "../../components/navTitle/navTitle.vue"
+	import scrollProblemSwiperItem from "../../components/scroll-problem-swiper-item/scroll-problem-swiper-item.vue"
 	export default {
 		data() {
 			return {
@@ -108,7 +57,32 @@
 				}
 			});
 		},
+		onLoad() {
+			// this.getData(1, 10)
+		},
 		methods: {
+
+			getData(num, size) {
+				var vuedata = {
+					page_index: num, // 请求页数，
+					each_page: size, // 请求条数
+				}
+				this.apiget('pc/news/new_info', vuedata).then(res => {
+					if (res.status == 200) {
+						console.log(res.data.length)
+						if (res.data.length !== 0) {
+							console.log(res.data)
+							let list = res.data.data
+							let totalSize = res.data.total_rows
+							// this.$refs.paging1.complete(list);
+						} else {
+
+						}
+					}
+				});
+			},
+
+
 			// tabs 点击
 			tabClick(e) {
 				this.defaultIndex = e
@@ -118,14 +92,6 @@
 				this.$refs.boxTabs.tabToIndex(e.detail.current)
 				this.defaultIndex = e.detail.current
 			},
-
-			// 问题点击进入详情
-			allProblem(item, index) {
-				console.log(index)
-				uni.navigateTo({
-					url: "../../pagesMineThree/problemDetails/problemDetails"
-				})
-			}
 		}
 	}
 </script>
@@ -163,34 +129,7 @@
 							height: 100%;
 							overflow-y: scroll;
 
-							.content-list-item {
-								margin: 0 0 20rpx 0;
-								background: #fff;
-
-								.content-list-item-li {
-									display: flex;
-									align-items: center;
-									justify-content: space-between;
-									padding: 0 40rpx;
-									box-sizing: border-box;
-									height: 100rpx;
-									border-bottom: 1rpx solid #EDEDED;
-
-									.content-list-item-li-title {
-										font-size: 28rpx;
-										font-family: Source Han Sans CN;
-										font-weight: 400;
-										color: #000000;
-									}
-
-									.content-list-item-li-more {
-										.icon-more {
-											margin-top: 4rpx;
-										}
-									}
-								}
-
-							}
+							
 						}
 					}
 				}

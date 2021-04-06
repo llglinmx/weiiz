@@ -169,12 +169,28 @@
 		onLoad() {
 			this.languageList();
 			this.getInfo()
+
+
+
+			// uni.getLocation({
+			// 	type: 'wgs84',
+			// 	geocode: true, //设置该参数为true可直接获取经纬度及城市信息
+			// 	success: (res)=> {
+			// 		console.log('当前位置的经度：' + res.longitude);
+			// 		console.log('当前位置的纬度：' + res.latitude);
+			// 	},
+			// 	fail: function() {
+			// 		uni.showToast({
+			// 			title: '获取地址失败，将导致部分功能不可用',
+			// 			icon: 'none'
+			// 		});
+			// 	}
+			// })
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
 			uni.getSystemInfo({
 				success: (res) => {
-					console.log(res)
 					this.barHeight = res.statusBarHeight
 				}
 			});
@@ -191,8 +207,6 @@
 						this.bannerList = res.data.bannerList
 						this.arrList = res.data.classList
 						this.noticeList = res.data.noticeList
-						console.log(res.datas)
-
 					}
 				});
 			},

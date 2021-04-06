@@ -108,7 +108,8 @@
 		pathToBase64,
 		base64ToPath
 	} from '../../js_sdk/mmmm-image-tools/index.js'
-	import uploadImage from "../../js_sdk/yushijie-ossutil/ossutil/uploadFile.js";
+	import uploadImage from "../../js_sdk/oss/uploadOSS.js";
+	// import uploadImage from "../../js_sdk/yushijie-ossutil/ossutil/uploadFile.js";
 
 	export default {
 		data() {
@@ -156,6 +157,7 @@
 				birth: '', //生日
 				address: '请选择地址',
 				userImage: '', // 用户头像
+				avatar: '',
 				noUserImage: '../../static/images/userImage.png',
 
 				years,
@@ -208,7 +210,18 @@
 						//转为base64位图片
 						pathToBase64(res.tempFilePaths[0]).then((data) => {
 							this.userImage = data
-							// console.log(res)
+							const path = 'avatar/';
+
+							// #ifdef H5
+							let file = res.tempFilePaths[0];
+							let suffix = res.tempFiles[0].name.split('.').pop();
+							// #endif
+
+							// #ifdef APP-PLUS
+							let file = res.tempFilePaths[0];
+							let suffix = res.tempFiles[0].path.split('.').pop();
+							// #endif
+							this.getOss(path, file, suffix)
 
 						})
 
@@ -217,6 +230,22 @@
 				});
 			},
 
+			// 获取阿里云oss 信息
+			getOss(path, file, suffix) {
+				this.apiget('app/oss/url', {}).then(res => {
+					if (res.status == 200) {
+						var obj = {
+							accessid: res.data.accessid,
+							policy: res.data.policy,
+							signature: res.data.signature,
+						}
+						// 上传图片
+						uploadImage(obj, file, path, suffix, result => {
+							this.avatar = result
+						});
+					}
+				});
+			},
 
 			// 昵称
 			nickNameClick() {
@@ -292,26 +321,20 @@
 					sex: this.sex,
 					birth: this.birth,
 					address: this.address,
+					avatar: this.avatar,
 				}
-
-				// uni.showLoading({
-				// 	title: "头像上传中",
-				// 	mask: true
-				// })
-				// uploadImage(this.userImage, 'images/',
-				// 	result => {
-				// 		console.log(result)
-				// 		uni.hideLoading();
-				// 	}
-				// )
-				// return false;
-
+				console.log(vuedata)
 				this.apiput('api/v1/members/member_info/edit/' + this.id, vuedata).then(res => {
 					if (res.status == 200) {
 						uni.showToast({
 							title: "信息修改成功",
 							icon: "none"
 						})
+						setTimeout(function() {
+							uni.navigateBack({
+								delta: 1
+							})
+						}, 500)
 					}
 				});
 			},

@@ -10,7 +10,8 @@
 			<view class="sub-content-wrap">
 				<swiper class="swiper-box" :current="idx" @change="tabChange">
 					<swiper-item class="swiper-box-item-list" v-for="(item, index) in TabsList" :key="index">
-						<scroll-tab-swiper-item :tabIndex="index" :currentIndex="idx" :orderType='orderType'>
+						<scroll-tab-swiper-item :tabIndex="index" :currentIndex="idx" :orderType='orderType'
+						@couponCode="viewCouponCode">
 						</scroll-tab-swiper-item>
 					</swiper-item>
 				</swiper>
@@ -26,6 +27,7 @@
 <script>
 	import Tabbar from "../../components/tabbar/tabbar.vue"
 	import liuyunoTabs from "@/components/liuyuno-tabs/liuyuno-tabs.vue";
+	import scrollTabSwiperItem from "@/components/scroll-tab-swiper-item/scroll-tab-swiper-item.vue"
 	export default {
 		data() {
 			return {
@@ -38,7 +40,8 @@
 		},
 		components: {
 			Tabbar,
-			liuyunoTabs
+			liuyunoTabs,
+			scrollTabSwiperItem
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -49,8 +52,17 @@
 			});
 		},
 		methods: {
+			
+			
+			// 查看券码
+			viewCouponCode(id) {
+				uni.navigateTo({
+					url: "../../pagesMineThree/waitingForWriteOff/waitingForWriteOff?id=" + id
+				})
+			},
+			
 			// tab点击
-			TabBtn(e) {
+			tabClick(e) {
 				this.idx = e
 				// this.tabIndex(this.idx)
 			},

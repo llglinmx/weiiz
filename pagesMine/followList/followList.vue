@@ -23,11 +23,7 @@
 												<view class="store-list-li-content-info-title">{{item.store_items.name}}
 												</view>
 												<view class="store-list-li-content-info-score">
-													<text class="iconfont iconwujiaoxing icon-font"
-														:style="{color:isComment(item.store_items.comment,storeIndex)?'#FFCD4D':'#eee',}"
-														style="font-size: 28rpx;"
-														v-for="(store,storeIndex) in 5"></text>
-													<text>{{storeMsg(item.store_items.comment)}}分</text>
+													<score :comment="item.store_items.comment"></score>
 												</view>
 												<view class="store-list-li-content-info-wrap">
 													<view class="info-wrap-text">{{item.store_items.address}}</view>
@@ -90,6 +86,7 @@
 												:style="{color:true?'#FFCD4D':'#eee',}" style="font-size: 28rpx;"
 												v-for="(store,storeIndex) in 5"></text>
 											<text>5分</text>
+											<!-- <score :comment="item.store_items.comment"></score>s -->
 										</view>
 										<view class="technician-wrap-list-li-info-introduce">
 											<view class="technician-list-li-info-introduce-text">
@@ -134,7 +131,7 @@
 	import zPaging from '../../uni_modules/z-paging/components/z-paging/z-paging.vue'
 	import UniPopup from "../../components/uni-popup/uni-popup.vue"
 	import UniPopupDialog from "../../components/uni-popup/uni-popup-dialog.vue"
-
+	import score from '../../components/score/score.vue'
 	export default {
 		data() {
 			return {
@@ -170,6 +167,7 @@
 			loading,
 			noData,
 			zPaging,
+			score,
 			UniPopup,
 			UniPopupDialog
 		},
@@ -308,44 +306,6 @@
 
 				});
 			},
-// 评分
-			isComment(comment, index) {
-				var store = parseInt(comment)
-				var str = 0
-				if (store <= 20) {
-					str = 1
-				} else if (store > 20 && store <= 40) {
-					str = 2
-				} else if (store > 40 && store <= 60) {
-					str = 3
-				} else if (store > 60 && store <= 80) {
-					str = 4
-				} else if (store > 80) {
-					str = 5
-				}
-				if (str > index) {
-					return true
-				} else {
-					return false
-				}
-			},
-			// 评分提示
-			storeMsg(comment) {
-				var store = parseInt(comment)
-				var str = 0
-				if (store <= 20) {
-					str = 1
-				} else if (store > 20 && store <= 40) {
-					str = 2
-				} else if (store > 40 && store <= 60) {
-					str = 3
-				} else if (store > 60 && store <= 80) {
-					str = 4
-				} else if (store > 80) {
-					str = 5
-				}
-				return str
-			},
 		}
 	}
 </script>
@@ -408,16 +368,6 @@
 										display: flex;
 										align-items: center;
 
-										image {
-											width: 30rpx;
-											height: 30rpx;
-										}
-
-										text {
-											margin-left: 4rpx;
-											color: #999;
-											font-size: 24rpx;
-										}
 									}
 
 									.store-list-li-content-info-wrap {

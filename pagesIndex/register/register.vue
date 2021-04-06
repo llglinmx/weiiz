@@ -72,8 +72,8 @@
 				isAll: false, //用于判断是否都有输入
 				countdown: '',
 				isSemsText: true, //验证码倒计时
-				setCountdown: null,
 				isShowPassword: false, //是否显示密码
+				setCountdown: null,
 			};
 		},
 		components: {
@@ -221,7 +221,6 @@
 					if (reg.test(this.phone)) {
 						this.apipost('send_sms', vuedata).then(res => {
 							if (res.status == 200) {
-								this.countDown();
 								this.smsCodeId = res.data.sms_code_id
 								uni.showToast({
 									title: "验证码发送成功",

@@ -28,13 +28,13 @@
 									<view class="wrap-list-li-top-info-price">￥{{item.price}}</view>
 									<view class="wrap-list-li-top-info-box">
 										<view class="list-li-top-info-box-item flex-center"
-											v-for="(i,j) in item.service" :key="i.id">{{i.name}}x{{i.times}}次</view>
+											v-for="(i,j) in item.service">{{i.name}}x{{i.times}}次</view>
 									</view>
-									<view class="wrap-list-li-top-info-bottom">
+									<view class="wrap-list-li-top-info-bottom" v-for="(i,j) in item.common_store_name">
 										<view class="list-li-top-info-bottom-title">
 											<text class="iconfont iconshangjia"
 												style="font-size: 28rpx;color: #FF967D;"></text>
-											<text>{{item.common_store_name}}</text>
+											<text>{{i.name}}</text>
 										</view>
 										<view class="list-li-top-info-bottom-btn flex-center"
 											@click.stop="payment(item)">去付款</view>
@@ -274,6 +274,7 @@
 									display: flex;
 									align-items: center;
 									justify-content: space-between;
+									margin-bottom: 10rpx;
 
 									.list-li-top-info-bottom-title {
 										display: flex;

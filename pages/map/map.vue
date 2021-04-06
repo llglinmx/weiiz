@@ -18,8 +18,8 @@
 			</view>
 		</view>
 		<view class="map-content" id="map-content">
-			<!-- <map :style="{height:mapHeight+'rpx'}" style="width: 100%;" :latitude="latitude" :longitude="longitude"
-				:markers="covers"></map> -->
+			<map :style="{height:mapHeight+'rpx'}" style="width: 100%;" :latitude="latitude" :longitude="longitude"
+				:markers="marker"></map>
 			<!-- <map style="width: 100%;height: 100%;" :latitude="latitude" :longitude="longitude" :markers="covers"></map> -->
 		</view>
 		<!-- tabbar导航栏 -->
@@ -40,15 +40,7 @@
 				mapHeight: 0,
 				latitude: 24.613838,
 				longitude: 118.037733,
-				covers: [{
-					latitude: 24.613838,
-					longitude: 118.037733,
-					iconPath: '../../static/address-icon.png'
-				}, {
-					latitude: 24.613838,
-					longitude: 118.037733,
-					iconPath: '../../static/address-icon.png'
-				}],
+				marker: [],
 				tabsList: [{
 						title: "全部",
 						type: "all"
@@ -80,18 +72,36 @@
 			}).exec();
 		},
 		onLoad() {
-			// this.showNvue()
+			// this.getList()
 		},
-		
+
 		methods: {
-
-
-			showNvue() {
-				const map = uni.getSubNVueById('map')
-				map.setStyle({
-					'position':"absolute",
-					'top':'120px'
-				})
+			// 获取门店列表
+			getList() {
+				this.apiget('pc/store', {}).then(res => {
+					if (res.status == 200) {
+						if (res.data.storeList.length != 0) {
+							let marker = []
+							res.data.storeList.forEach(item => {
+								var str = {
+									id: item.id,
+									latitude: item.latitude,
+									longitude: item.longitude,
+									iconPath: require('../../static/images/address-icon.png'),
+									width: 45,
+									height: 45,
+									title: item.name
+									// callout: {
+									// 	content: item.name,
+									// 	bgColor: "#999999"
+									// }
+								}
+								marker.push(str)
+							})
+							this.marker = marker
+						}
+					}
+				});
 			},
 
 

@@ -104,6 +104,7 @@
 				确认修改
 			</view>
 		</view>
+		
 		<s-picker @close="popClose" :visible.sync="visible" :title="pickerTitle" :list="dataList" v-model="oneSelected"
 			@input="pickerInput"></s-picker>
 
@@ -220,8 +221,8 @@
 			areaCodeClick() {
 				this.isAreaCode = true
 			},
-			areaClose() {
-				this.isAreaCode = false
+			areaClose(e) {
+				this.isAreaCode = e
 			},
 			// 选择区号
 			areaCodeInput(e) {
@@ -233,6 +234,7 @@
 
 			// 打开选择地址
 			showAddress(type) {
+				this.visible = false;
 				this.typeName = type
 				switch (type) {
 					case 'country':
@@ -296,8 +298,8 @@
 				}
 			},
 			// 关闭弹出
-			popClose() {
-				this.visible = false
+			popClose(e) {
+				this.visible = e
 			},
 
 			// 获取省份

@@ -35,6 +35,11 @@ const uploadFile = function(filePath, dir, successc, failc) {
 		filePath: filePath, //要上传文件资源的路径
 		name: 'file', //必须填file
 		fileType: 'image',
+		// header: {
+		// 	"Accept": 'application/json, text/plain, */*',
+		// 	//"Content-Type": 'application/x-www-form-urlencoded'
+		// 	"Content-Type": 'multipart/form-data'
+		// },
 		formData: {
 			'key': aliyunFileKey,
 			'policy': policyBase64,

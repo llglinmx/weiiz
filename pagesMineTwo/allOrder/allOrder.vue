@@ -9,8 +9,9 @@
 		<view class="sub-content">
 			<view class="sub-content-wrap">
 				<swiper class="swiper-box" :current="idx" @change="tabChange">
-					<swiper-item class="swiper-box-item-list" v-for="(item, index) in TabsList" :key="index" >
-						<scroll-tab-swiper-item :tabIndex="index" :currentIndex="idx" :orderType='orderType' ></scroll-tab-swiper-item>
+					<swiper-item class="swiper-box-item-list" v-for="(item, index) in TabsList" :key="index">
+						<scroll-tab-swiper-item :tabIndex="index" :currentIndex="idx" :orderType='orderType'
+							@couponCode="viewCouponCode"></scroll-tab-swiper-item>
 					</swiper-item>
 				</swiper>
 			</view>
@@ -52,7 +53,7 @@
 			this.idx = options.listIndex * 1 // *1 是为了把字符串转为数字
 		},
 		onShow() {
-			
+
 		},
 
 		methods: {
@@ -133,9 +134,9 @@
 				this.tabIndex(this.idx)
 			},
 			// 查看券码
-			viewCouponCode() {
+			viewCouponCode(id) {
 				uni.navigateTo({
-					url: "../../pagesMineThree/waitingForWriteOff/waitingForWriteOff"
+					url: "../../pagesMineThree/waitingForWriteOff/waitingForWriteOff?id=" + id
 				})
 			},
 			// 订单评价

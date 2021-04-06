@@ -1,5 +1,5 @@
 <template>
-	<view class="content">
+	<view class="content-box">
 		<!-- 这里设置了z-paging加载时禁止自动调用reload方法，自行控制何时reload（懒加载），同时允许touchmove事件冒泡，否则无法横向滚动切换tab -->
 		<z-paging ref="paging" @query="queryList" :list.sync="dataList" loading-more-no-more-text="已经到底了"
 			:mounted-auto-call-reload="false" :refresher-angle-enable-change-continued="false"
@@ -162,7 +162,7 @@
 			},
 			// 查看券码 
 			viewCouponCode(item) {
-				console.log('点击了', item.title);
+				this.$emit('couponCode', item.id)
 			}
 		}
 	}
@@ -219,6 +219,7 @@
 						image {
 							width: 132rpx;
 							height: 132rpx;
+							border-radius: 10rpx;
 						}
 					}
 

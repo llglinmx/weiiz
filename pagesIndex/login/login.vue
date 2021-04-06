@@ -317,6 +317,7 @@
 					align-items: center;
 
 					input {
+						height: 100%;
 						margin-right: 20rpx;
 						flex: 1;
 						font-size: 32rpx;

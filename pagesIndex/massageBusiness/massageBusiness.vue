@@ -4,73 +4,11 @@
 			<navTitle navTitle="按摩商家"></navTitle>
 		</view>
 		<view class="box-content">
-			<view class="box-content-map-wrap box-content-public"
-				:style="{width:mapWidth+'px',left:!isFlag?'0':'-100%'}">
+			<view class="box-content-list-wrap box-content-public">
 				<view class="box-wrap-tabs">
-					<view class="box-wrap-tabs-li" v-for="(item,index) in tabsList" :key="index"
-						@click="tabsShowList(item,index)">
-						<view class="box-tabs-li-text" :class="idx==index?'box-tabs-li-text-active':''">{{item.title}}
-						</view>
-						<view class="box-tabs-li-icon">
-							<text class="iconfont iconxiangxiajiantou icon-font" style="color: #ccc;font-size: 28rpx;"
-								v-if="idx!=index"></text>
-							<text class="iconfont iconxiangxiajiantou icon-font"
-								style="color: #FF8366;font-size: 28rpx;" v-else></text>
-
-						</view>
-					</view>
-				</view>
-				<view class="box-map-wrap-main">
-					<view class="map-wrap-main-view">
-						<button type="primary" @click="shrinkShow">点击打开单个商家</button>
-						<!-- <map style="width: 100%;" :style="{height:mesHeight+'rpx'}" :latitude="latitude"
-							:longitude="longitude" :markers="covers">
-						</map> -->
-					</view>
-					<view class="map-wrap-main-list" :style="{bottom:bottomDistance+'px'}">
-						<view class="map-wrap-list-icon" @click="shrinkHidden">
-							<text class="iconfont iconxiangxiajiantou icon-font"
-								style="color: #999;font-size: 44rpx;"></text>
-						</view>
-						<view class="map-wrap-list-content">
-							<view class="list-content-image">
-								<image style="width: 164rpx;height: 164rpx;" src="../../static/images/shop-ico.png"
-									mode="aspectFill"></image>
-							</view>
-							<view class="list-content-info">
-								<view class="list-content-info-title">
-									印象诗意·悠然SPA
-								</view>
-								<view class="list-content-info-score">
-									<text class="iconfont iconwujiaoxing icon-font"
-										style="color: #FFCD4D;font-size: 28rpx;" v-for="item in 5"></text>
-									<text>5分</text>
-								</view>
-								<view class="list-content-info-box">
-									<view class="list-content-info-box-text">明发商业广场</view>
-									<view class="list-content-info-address">
-										<text class="iconfont icondingwei1 icon-font"
-											style="color: #ccc;font-size: 24rpx;margin-top: 4rpx;"></text>
-										<text>6.1km</text>
-									</view>
-								</view>
-								<view class="list-content-info-service-content">
-									<view class="list-info-service-content-li flex-center">
-										按摩/SPA
-									</view>
-									<view class="list-info-service-content-li flex-center">
-										按摩/SPA
-									</view>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
-			<view class="box-content-list-wrap box-content-public" :style="{width:mapWidth+'px',left:mapLeft+'px'}">
-				<view class="box-wrap-tabs">
-					<view class="box-wrap-tabs-li" v-for="(item,index) in tabsList2" :key="index">
-						<view class="box-tabs-li-text">{{item.title}}</view>
+					<view class="box-wrap-tabs-li" v-for="(item,index) in tabsList2" :key="index"
+						@click="navClick(index)">
+						<view class="box-tabs-li-text" :style="{color:idx!=index?'':'#FF8366'}">{{item.title}}</view>
 						<view class="box-tabs-li-icon" v-if="index!==2&&index!==3">
 							<text class="iconfont iconxiangxiajiantou icon-font" style="color: #ccc;font-size: 28rpx;"
 								v-if="idx!=index"></text>
@@ -78,8 +16,14 @@
 								style="color: #FF8366;font-size: 28rpx;" v-else></text>
 						</view>
 						<view class="box-tabs-li-icon-max" v-else>
-							<image :src="item.icon" mode="aspectFill" v-if="idx!=index"></image>
-							<image :src="item.iconActive" mode="aspectFill" v-else></image>
+							<view class="icon-max-triangle">
+								<text class="icon-max-triangle-top"
+									:class="idx==index&&desc==1?'icon-max-triangle-top-active':''"></text>
+								<text class="icon-max-triangle-bottom"
+									:class="idx==index&&desc==0?'icon-max-triangle-bottom-active':''"></text>
+							</view>
+							<!-- <image :src="item.icon" mode="aspectFill" v-if="idx!=index"></image>
+							<image :src="item.iconActive" mode="aspectFill" v-else></image> -->
 						</view>
 					</view>
 				</view>
@@ -96,10 +40,7 @@
 								<view class="list-content-info">
 									<view class="list-content-info-title">{{item.name}}</view>
 									<view class="list-content-info-score">
-										<text class="iconfont iconwujiaoxing icon-font"
-											:style="{color:isComment(item.comment,storeIndex)?'#FFCD4D':'#eee',}"
-											style="font-size: 28rpx;" v-for="(store,storeIndex) in 5"></text>
-										<text>{{storeMsg(item.comment,index)}}分</text>
+										<score :comment='item.comment'></score>
 									</view>
 									<view class="list-content-info-box">
 										<view class="list-content-info-box-text">{{item.address}}</view>
@@ -122,17 +63,11 @@
 						</view>
 					</z-paging>
 				</view>
-				<view class="map-wrap-list-content-load" v-if="!isData">
+				<view class="map-wrap-list-content-load" :style="{display:!isData?'block':'none'}">
 					<loading v-if="isLoad" />
 					<no-data v-if="!isLoad" />
 				</view>
 			</view>
-			<view class="box-content-tab-btn" @click="tabClick" :class="isFlag?'box-content-tab-btn-state':''">
-				<text class="iconfont iconcaidan icon-font"
-					style="color: #666;font-size: 48rpx;margin-top: 4rpx;"></text>
-				<text>商家列表</text>
-			</view>
-
 			<view class="box-content-drop-down" :style="{height:dropDownHeight+'px'}">
 				<view class="massage-pull-down-all" v-if="isTabsType=='all'">
 					全部
@@ -156,6 +91,7 @@
 	import loading from '../../components/loading/loading.vue'
 	import noData from '../../components/no-data/no-data.vue'
 	import zPaging from '../../uni_modules/z-paging/components/z-paging/z-paging.vue'
+	import score from '../../components/score/score.vue'
 	export default {
 		data() {
 			return {
@@ -183,42 +119,24 @@
 				dropDownHeight: 0,
 				tabsList2: [{
 						title: "全部",
-						icon: "../../static/images/more-gray.png",
-						iconActive: "../../static/images/more-icon-FF967D.png"
 					},
 					{
 						title: "按摩商家",
-						icon: "../../static/images/more-gray.png",
-						iconActive: "../../static/images/more-icon-FF967D.png"
 					},
 					{
 						title: "价格",
-						icon: "../../static/images/jx-ico.png",
-						iconActive: "../../static/images/sx-ico.png"
+
 					},
 					{
 						title: "评分",
-						icon: "../../static/images/jx-ico.png",
-						iconActive: "../../static/images/sx-ico.png"
 					},
 				],
 				idx: 0, //顶部tabar状态栏下标
-				bottomDistance: -(264 / 2), // 初始位置
+				desc: 0, //1显示升序，0显示降序
 				massageList: ["全部", "脸部按摩", "泰式按摩", "中式按摩", "日式按摩", "韩式按摩", "足疗按摩"], // 按摩下拉种类
 				isTabsShow: false, // 是否有显示下拉
 				isTabsType: "all", // 用于判断 tabs  下拉属于哪个
 				tabsShowIndex: -1,
-				latitude: 24.613838,
-				longitude: 118.037733,
-				covers: [{
-					latitude: 24.613838,
-					longitude: 118.037733,
-					iconPath: '../../static/address-icon.png'
-				}, {
-					latitude: 24.613838,
-					longitude: 118.037733,
-					iconPath: '../../static/address-icon.png'
-				}]
 			};
 		},
 		components: {
@@ -226,7 +144,8 @@
 			UniPopup,
 			zPaging,
 			loading,
-			noData
+			noData,
+			score
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -247,19 +166,9 @@
 
 		},
 		methods: {
-			// 商家切换开关
-			tabClick() {
-				this.mapLeft = this.isFlag ? this.mapWidth : 0
-				this.isFlag = !this.isFlag
-			},
+
 			//顶部tabs 点击显示下拉内容 
 			tabsShowList(item, index) {
-
-				// if(this.tabsShowIndex==index){
-				// 	this.isTabsShow = false
-				// }else{
-				// 	this.isTabsShow = true
-				// }
 
 				this.isTabsType = item.type // 用于判断当前点击哪一个 然后显示对于的界面
 
@@ -271,19 +180,25 @@
 				this.dropDownHeight = 0
 			},
 
-			// 显示单个商家信息
-			shrinkShow() {
-				this.bottomDistance = 0
-			},
-			//点击隐藏单个商家
-			shrinkHidden() {
-				this.bottomDistance = (-(264 / 2)) // 回到初始位置
-			},
+
 			// 跳转商家详情
 			merchantDetails(id) {
 				uni.navigateTo({
 					url: "../../pagesIndexTwo/merchantDetails/merchantDetails?id=" + id
 				})
+			},
+
+			// 筛选栏点击
+			navClick(index) {
+				// 判断是否有切换筛选栏
+				if (this.idx != index) {
+					this.desc = 0
+				}
+				if (index == 2 || index == 3) {
+					this.desc = this.desc == 1 ? 0 : 1
+				}
+
+				this.idx = index
 			},
 
 			// 上拉 下拉 
@@ -315,45 +230,6 @@
 
 					}
 				})
-			},
-
-			// 评分
-			isComment(comment, index) {
-				var store = parseInt(comment)
-				var str = 0
-				if (store <= 20) {
-					str = 1
-				} else if (store > 20 && store <= 40) {
-					str = 2
-				} else if (store > 40 && store <= 60) {
-					str = 3
-				} else if (store > 60 && store <= 80) {
-					str = 4
-				} else if (store > 80) {
-					str = 5
-				}
-				if (str > index) {
-					return true
-				} else {
-					return false
-				}
-			},
-			// 评分提示
-			storeMsg(comment, index) {
-				var store = parseInt(comment)
-				var str = 0
-				if (store <= 20) {
-					str = 1
-				} else if (store > 20 && store <= 40) {
-					str = 2
-				} else if (store > 40 && store <= 60) {
-					str = 3
-				} else if (store > 60 && store <= 80) {
-					str = 4
-				} else if (store > 80) {
-					str = 5
-				}
-				return str
 			},
 		}
 	}
@@ -406,168 +282,69 @@
 						}
 
 						.box-tabs-li-icon-max {
-							image {
-								width: 36rpx;
-								height: 36rpx;
-							}
-						}
-					}
+							position: relative;
+							height: 40rpx;
+							width: 20rpx;
 
-				}
-			}
-
-			.box-content-map-wrap {
-				position: absolute;
-				top: 0;
-				height: 100%;
-				z-index: 1;
-				display: flex;
-				flex-direction: column;
-				transition: 0.3s;
-
-
-				.box-map-wrap-main {
-					position: relative;
-					flex: 1;
-					// overflow-y: scroll;
-					overflow-y: hidden;
-					// background: purple;
-
-					.map-wrap-main-view {}
-
-					.map-wrap-main-list {
-						position: absolute;
-						left: 0;
-						padding: 0 40rpx;
-						box-sizing: border-box;
-						width: 100%;
-						height: 264rpx;
-						background: #fff;
-						box-shadow: 0px -1rpx 10rpx rgba(0, 0, 0, 0.1);
-						opacity: 1;
-						border-radius: 40rpx 40rpx 0rpx 0rpx;
-						transition: 0.3s;
-
-						.map-wrap-list-icon {
-							display: flex;
-							align-items: center;
-							justify-content: center;
-							height: 60rpx;
-
-							image {
-								width: 20rpx;
-								height: 36rpx;
-								transform: rotate(90deg);
-							}
-						}
-
-
-						.map-wrap-list-content {
-							display: flex;
-
-
-							.list-content-image {
-								image {
-									width: 164rpx;
-									height: 164rpx;
-									border-radius: 10rpx;
-								}
-							}
-
-							.list-content-info {
-								flex: 1;
-								display: flex;
-								flex-direction: column;
-								margin-left: 20rpx;
-
-								.list-content-info-title {
-									color: #000;
-									font-size: 34pxr;
+							.icon-max-triangle {
+								.icon-max-triangle-top {
+									width: 0;
+									height: 0;
+									border: 4px solid transparent;
+									position: absolute;
+									left: 0;
+									border-bottom-color: #c0c4cc;
 								}
 
-								.list-content-info-score {
-									display: flex;
-									align-items: center;
-
-
-									text {
-										margin-right: 6rpx;
-										color: #999;
-										font-size: 24rpx;
-									}
+								.icon-max-triangle-top-active {
+									border-bottom-color: #FF8366 !important;
 								}
 
-								.list-content-info-box {
-									display: flex;
-									justify-content: space-between;
-
-									.list-content-info-box-text {
-										line-height: 28rpx;
-										font-size: 24rpx;
-										color: #666;
-									}
-
-									.list-content-info-address {
-										display: flex;
-										align-items: center;
-
-										image {
-											width: 19rpx;
-											height: 24rpx;
-										}
-
-										text {
-											margin-left: 10rpx;
-											font-size: 24rpx;
-											color: #999;
-										}
-									}
+								.icon-max-triangle-bottom {
+									width: 0;
+									height: 0;
+									border: 4px solid transparent;
+									position: absolute;
+									left: 0;
+									border-top-color: #c0c4cc;
+									bottom: 0;
 								}
 
-								.list-content-info-service-content {
-									display: flex;
-									flex-wrap: wrap;
-
-									.list-info-service-content-li {
-										width: 112rpx;
-										height: 34rpx;
-										margin-right: 8rpx;
-										margin-bottom: 8rpx;
-										background: #F5F5F5;
-										border-radius: 3rpx;
-										font-size: 22rpx;
-										color: 666;
-									}
+								.icon-max-triangle-bottom-active {
+									border-top-color: #FF8366 !important;
 								}
 							}
 						}
 					}
+
 				}
 			}
 
 			.box-content-list-wrap {
-				position: absolute;
-				top: 0;
+				width: 100%;
 				height: 100%;
-				z-index: 2;
 				transition: 0.5s;
 				background: #F7F7F7;
 				display: flex;
 				flex-direction: column;
 
 				.box-content-business-list {
-					// padding: 0 20rpx;
+					padding: 0 20rpx;
 					box-sizing: border-box;
 					// margin-top: 10rpx;
 					flex: 1;
 					overflow-y: scroll;
+
+					.map-wrap-list-content:first-child {
+						margin-top: 20rpx;
+					}
 
 					.map-wrap-list-content {
 						display: flex;
 						padding: 20rpx;
 						box-sizing: border-box;
 						background: #fff;
-						margin-bottom: 10rpx;
+						margin-bottom: 20rpx;
 						border-radius: 10px;
 
 						.list-content-image {

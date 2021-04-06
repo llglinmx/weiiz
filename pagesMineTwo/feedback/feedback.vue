@@ -15,12 +15,13 @@
 								<view class="content-list-feedback">
 									<view class="content-list-feedback-title">我要反馈：</view>
 									<view class="content-list-feedback-textarea">
-										<textarea value="" placeholder="请在此输入您要反馈的详细内容" />
-										<text>0/100</text>
+										<textarea v-model.trim="content" placeholder="请在此输入您要反馈的详细内容" />
+										<text>{{content.length}}/100</text>
 									</view>
 									<view class="content-list-all-image">
 										<view class="content-list-image-li flex-center">
-											<text class="iconfont icontupian icon-font" style="color: #fff;font-size: 50rpx;font-weight: 500;"></text>
+											<text class="iconfont icontupian icon-font"
+												style="color: #fff;font-size: 50rpx;font-weight: 500;"></text>
 										</view>
 										<view class="content-list-image-li">
 											<image src="../../static/images/002.png" mode="aspectFill"></image>
@@ -30,16 +31,16 @@
 										</view>
 									</view>
 								</view>
-							
-								
+
+
 								<view class="content-list-item-contact">
-								<view class="list-item-title">
-									联系方式：
+									<view class="list-item-title">
+										联系方式：
+									</view>
+									<view class="list-item-input">
+										<input type="number" v-model.trim="phone" placeholder="请输入您的联系方式" />
+									</view>
 								</view>
-								<view class="list-item-input">
-									<input type="number" value="" placeholder="请输入您的联系方式" />
-								</view>
-							</view>
 							</view>
 						</swiper-item>
 						<swiper-item class="swiper-box-item-list">
@@ -77,7 +78,7 @@
 			</view>
 		</view>
 		<view class="box-footer" :class="defaultIndex!=0?'hidden-btn':''">
-			<btnPink btnName="保存" @btnClick="preserve"></btnPink>
+			<btnPink btnName="提交" @btnClick="submit"></btnPink>
 		</view>
 	</view>
 </template>
@@ -92,6 +93,8 @@
 				barHeight: 0, //顶部电量导航栏高度
 				defaultIndex: 0,
 				tabs: ["我要反馈", "联系方式"],
+				phone: '', //手机号
+				content: '', //留言内容
 			};
 		},
 		components: {
@@ -118,10 +121,54 @@
 				this.defaultIndex = e.detail.current
 			},
 
-			// 保存按钮
-			preserve() {
+			// 提交按钮
+			submit() {
+				var vuedata = {
+					status: 2,
+					content: this.content,
+					mobile: this.phone
+				}
+
+				if (this.content.length < 100) {
+					if (this.content.length != '') {
+						var reg = /^1[3|4|5|7|8][0-9]{9}$/; //验证规则
+						if (this.phone != '') {
+							if (reg.test(this.phone)) {
+								this.apipost('api/v1/members/voice_message/add', vuedata).then(res => {
+									if (res.status == 200) {
+										uni.showToast({
+											title: "留言反馈成功",
+											icon: "none"
+										})
+										setTimeout(function() {
+											uni.navigateBack({
+												delta: 1
+											})
+										}, 1000)
+									}
+								});
+								return false
+							}
+							uni.showToast({
+								title: "请输入正确的手机号",
+								icon: "none"
+							})
+							return false
+						}
+						uni.showToast({
+							title: "请输入手机号",
+							icon: "none"
+						})
+						return false
+					}
+					uni.showToast({
+						title: "请输入留言内容",
+						icon: "none"
+					})
+					return false
+				}
 				uni.showToast({
-					title: "保存",
+					title: "超过最大字数限制 100",
 					icon: "none"
 				})
 			}
@@ -133,7 +180,7 @@
 	.box {
 		display: flex;
 		flex-direction: column;
-		height:100%;
+		height: 100%;
 		background: #F7F7F7;
 
 		.box-head {
@@ -142,14 +189,14 @@
 
 		.box-content {
 			flex: 1;
-			
+
 			box-sizing: border-box;
 			overflow-y: scroll;
 
 			.box-content-tabs {}
 
 			.box-content-wrap {
-				height: calc( 100% - 90rpx);
+				height: calc(100% - 90rpx);
 				overflow-y: scroll;
 
 				.box-content-wrap-item {
@@ -164,7 +211,7 @@
 							overflow-y: scroll;
 
 							.content-list-item {
-								
+
 								.content-list-feedback {
 									padding: 30rpx 40rpx;
 									box-sizing: border-box;
@@ -193,7 +240,8 @@
 											text-indent: 1rem;
 											font-size: 28rpx;
 										}
-										text{
+
+										text {
 											position: absolute;
 											right: 20rpx;
 											bottom: 20rpx;
@@ -201,28 +249,32 @@
 											color: #CCCCCC;
 										}
 									}
-									.content-list-all-image{
+
+									.content-list-all-image {
 										display: flex;
 										margin-top: 30rpx;
 										background: #fff;
-										.content-list-image-li{
-											
+
+										.content-list-image-li {
+
 											width: 120rpx;
 											height: 120rpx;
 											background: #EDEDED;
 											margin-right: 20rpx;
 											border-radius: 10rpx;
-											image{
+
+											image {
 												width: 120rpx;
 												height: 120rpx;
 											}
 										}
-										.content-list-image-li:last-child{
+
+										.content-list-image-li:last-child {
 											margin-right: 0;
 										}
 									}
 								}
-								
+
 
 								.content-list-item-contact {
 									display: flex;
@@ -247,11 +299,11 @@
 										}
 									}
 								}
-								
+
 								.content-list-wrap {
 									margin: 20rpx 0;
 									background: #fff;
-								
+
 									.content-list-wrap-li {
 										display: flex;
 										align-items: center;
@@ -260,14 +312,14 @@
 										box-sizing: border-box;
 										height: 91rpx;
 										border-bottom: 1rpx solid #EDEDED;
-								
+
 										.content-list-wrap-li-title {
 											font-size: 28rpx;
 											font-family: Source Han Sans CN;
 											font-weight: 400;
 											color: #000000;
 										}
-								
+
 										.content-list-li-text {
 											font-size: 28rpx;
 											font-family: Source Han Sans CN;
@@ -275,22 +327,25 @@
 											color: #999999;
 										}
 									}
-								
+
 									.content-list-wrap-li:last-child {
 										border-bottom: none;
 									}
 								}
-								.content-list-qrcode{
+
+								.content-list-qrcode {
 									display: flex;
 									align-items: center;
 									flex-direction: column;
 									padding: 40rpx;
 									box-sizing: border-box;
-									image{
+
+									image {
 										width: 300rpx;
 										height: 300rpx;
 									}
-									text{
+
+									text {
 										margin-top: 20rpx;
 										font-size: 28rpx;
 										font-family: Source Han Sans CN;
@@ -312,7 +367,8 @@
 			transition: 0.5s;
 			opacity: 1;
 		}
-		.hidden-btn{
+
+		.hidden-btn {
 			position: absolute;
 			transform: scale(0.1);
 			opacity: 0;
