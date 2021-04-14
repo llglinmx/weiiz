@@ -6,7 +6,8 @@
 		<view class="box-content">
 			<view class="box-content-wrap">
 				<view class="box-content-wrap-msg-time">
-					支付剩余时间 {{rocallTime}}
+					<!-- 支付剩余时间 {{rocallTime}} -->
+					<count-down :endTime="endTime" color='#999' />
 				</view>
 				<view class="box-content-wrap-price">
 					￥<text>{{dataInfo.payable}}</text>
@@ -50,12 +51,17 @@
 		<view class="box-footer">
 			<btn-pink btnName="确认支付" @btnClick="confirmPay"></btn-pink>
 		</view>
+		<jpPwd ref="jpPwds" contents='' @completed="completed" @forget="forget"></jpPwd>
 	</view>
 </template>
 
 <script>
 	import navTitle from "../../components/navTitle/navTitle.vue"
 	import btnPink from "../../components/btnPink/btnPink.vue"
+	import uniPopup from "../../components/uni-popup/uni-popup.vue"
+	import jpPwd from '@/components/jp-pwd/jp-pwd.vue';
+	import countDown from '@/components/count-down/count-down.vue'
+
 	export default {
 		data() {
 			return {
@@ -63,6 +69,7 @@
 				rocallTime: '',
 				dataInfo: {},
 				defaultIndex: -1,
+				type: -1,
 				payType: [{
 						title: '支付宝支付',
 						image: '../../static/images/zfb-ico.png'
@@ -76,7 +83,9 @@
 						image: '../../static/images/paypal.png'
 					},
 				],
-				balance: 0
+				password: '',
+				balance: 0,
+				endTime: '2021-04-15 14:53:01'
 			};
 		},
 		filters: {
@@ -84,7 +93,10 @@
 		},
 		components: {
 			navTitle,
-			btnPink
+			btnPink,
+			uniPopup,
+			jpPwd,
+			countDown
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -115,65 +127,96 @@
 				switch (this.defaultIndex) {
 					case -1:
 						title = "余额支付"
+						this.type = 2
+						if (this.balance >= Number(this.dataInfo.payable)) { //判断余额是否大于需要支付的金额
+							this.$refs.jpPwds.toOpen() //打开支付密码键盘
+							return false;
+						}
+						uni.showToast({
+							title: '余额不足，请选择其他支付方式',
+							icon: "none"
+						})
 						break;
 					case 0:
 						title = "支付宝支付"
+						this.type = 3
 						break;
 					case 1:
 						title = "微信支付"
+						this.type = 1
 						break;
 					case 2:
 						title = "银行卡支付"
 						break;
 				}
+
+				if (this.type !== 2) {
+					uni.showToast({
+						title: "暂不支持" + title,
+						icon: "none"
+					})
+				}
+			},
+
+			// 监听输入密码
+			completed(e) {
+				this.password = e
+				this.$refs.jpPwds.toCancel()
+				this.placeAnOrder()
+			},
+			// 忘记密码
+			forget() {
 				uni.showToast({
-					title: title,
-					icon: "none"
-				})
-				return false
-				uni.navigateTo({
-					url: "../paymentSuccessful/paymentSuccessful"
+					title: '忘记密码',
+					icon: 'none'
 				})
 			},
+
+
+			// 下单接口
+			placeAnOrder() {
+				var vuedata;
+				if (this.type == 2) {
+					vuedata = {
+						id: this.dataInfo.id,
+						pay_type: this.type,
+						password: this.password,
+					}
+				} else {
+					vuedata = {
+						id: this.dataInfo.id,
+						pay_type: this.type,
+					}
+				}
+
+				this.apipost('api/v1/order/service/pay', vuedata).then(res => {
+					if (res.status == 200) {
+						uni.navigateTo({
+							url: "../paymentSuccessful/paymentSuccessful"
+						})
+					} else {
+						uni.showToast({
+							title: res.message,
+							icon: 'none'
+						})
+					}
+				})
+
+
+
+			},
+
+
 			// 获取订单信息
 			getOrderInfo(id) {
 				this.apiget('api/v1/members/member_order/' + id, {}).then(res => {
 					if (res.status == 200) {
 						this.dataInfo = res.data
-						this.runBack(45000000) // 传入一个时间戳
+						// this.endTime = res.data.end_time
 					}
 				})
 			},
 
-
-			// 倒计时
-			runBack(cm) {
-				if (cm > 0) {
-					// 如果时间是超过1分钟，则需要展示的样式是： x分x秒，如果是小于1分钟，则是 00分x秒
-					cm > 60000 ?
-						(this.rocallTime =
-							(new Date(cm).getMinutes() < 10 ?
-								"0" + new Date(cm).getMinutes() :
-								new Date(cm).getMinutes()) +
-							":" +
-							(new Date(cm).getSeconds() < 10 ?
-								"0" + new Date(cm).getSeconds() :
-								new Date(cm).getSeconds())) :
-						(this.rocallTime =
-							"00:" +
-							(new Date(cm).getSeconds() < 10 ?
-								"0" + new Date(cm).getSeconds() :
-								new Date(cm).getSeconds()));
-					let _msThis = this;
-					// 使用setTimeout倒计时，1秒后，重复调用此函数。，直到cm =0为止，跳出这个函数
-					setTimeout(function() {
-						cm -= 1000;
-						_msThis.runBack(cm);
-					}, 1000);
-				} else {
-					console.log("订单已关闭")
-				}
-			},
 		}
 	}
 </script>
@@ -308,5 +351,6 @@
 			box-sizing: border-box;
 			margin-bottom: 30rpx;
 		}
+
 	}
 </style>

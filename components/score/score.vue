@@ -22,7 +22,9 @@
 			isComment(comment, index) {
 				var store = parseInt(comment)
 				var str = 0
-				if (store <= 20) {
+				if (store <= 0) {
+					str = 0
+				} else if (store > 0 && store <= 20) {
 					str = 1
 				} else if (store > 20 && store <= 40) {
 					str = 2
@@ -43,7 +45,9 @@
 			storeMsg(comment) {
 				var store = parseInt(comment)
 				var str = 0
-				if (store <= 20) {
+				if (store <= 0) {
+					str = 0
+				} else if (store > 0 && store <= 20) {
 					str = 1
 				} else if (store > 20 && store <= 40) {
 					str = 2

@@ -19,15 +19,17 @@
 										<text>{{content.length}}/100</text>
 									</view>
 									<view class="content-list-all-image">
-										<view class="content-list-image-li flex-center">
+										<view class="content-list-image-li" v-for="(item,index) in imageList"
+											:key="index">
+											<image :src="item" mode="aspectFill"></image>
+											<text class="close flex-center" @click="delImage(index)">
+												<text class="iconfont iconcuowu"
+													style="color: #fff;font-size: 36rpx;"></text>
+											</text>
+										</view>
+										<view class="content-list-image-li flex-center" @click="upPhoto" v-if="imageList.length<4">
 											<text class="iconfont icontupian icon-font"
 												style="color: #fff;font-size: 50rpx;font-weight: 500;"></text>
-										</view>
-										<view class="content-list-image-li">
-											<image src="../../static/images/002.png" mode="aspectFill"></image>
-										</view>
-										<view class="content-list-image-li">
-											<image src="../../static/images/002.png" mode="aspectFill"></image>
 										</view>
 									</view>
 								</view>
@@ -87,6 +89,12 @@
 	import navTitle from "../../components/navTitle/navTitle.vue"
 	import btnPink from "../../components/btnPink/btnPink.vue"
 	import liuyunoTabs from "@/components/liuyuno-tabs/liuyuno-tabs.vue";
+	import {
+		pathToBase64,
+		base64ToPath
+	} from '../../js_sdk/mmmm-image-tools/index.js'
+	import uploadImage from "../../js_sdk/oss/uploadOSS.js";
+
 	export default {
 		data() {
 			return {
@@ -95,6 +103,7 @@
 				tabs: ["我要反馈", "联系方式"],
 				phone: '', //手机号
 				content: '', //留言内容
+				imageList: [],
 			};
 		},
 		components: {
@@ -111,6 +120,51 @@
 			});
 		},
 		methods: {
+
+
+			// 上传图片
+			upPhoto() {
+				uni.chooseImage({
+					count: 4, //默认100
+					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					success: (res) => {
+
+						res.tempFilePaths.forEach((item, index) => {
+							const path = 'images/';
+							// #ifdef H5
+							let file = item;
+							let suffix = res.tempFiles[index].name.split('.').pop();
+							// #endif
+
+							// #ifdef APP-PLUS
+							let file = item;
+							let suffix = res.tempFiles[index].path.split('.').pop();
+							// #endif
+
+							// 获取阿里云oss 信息
+							this.apiget('app/oss/url', {}).then(ress => {
+								if (ress.status == 200) {
+									var obj = {
+										accessid: ress.data.accessid,
+										policy: ress.data.policy,
+										signature: ress.data.signature,
+									}
+									// 上传图片
+									uploadImage(obj, file, path, suffix, result => {
+										this.imageList.push(result)
+									});
+								}
+							});
+						})
+					}
+				});
+			},
+
+			// 删除图片
+			delImage(index) {
+				this.imageList.splice(index, 1)
+			},
+
 			// tabs 点击
 			tabClick(e) {
 				this.defaultIndex = e
@@ -256,16 +310,26 @@
 										background: #fff;
 
 										.content-list-image-li {
-
+											position: relative;
 											width: 120rpx;
 											height: 120rpx;
 											background: #EDEDED;
-											margin-right: 20rpx;
+											margin-right: 30rpx;
 											border-radius: 10rpx;
 
 											image {
 												width: 120rpx;
 												height: 120rpx;
+											}
+
+											.close {
+												position: absolute;
+												width: 40rpx;
+												height: 40rpx;
+												top: -20rpx;
+												right: -20rpx;
+												border-radius: 50%;
+												background: rgba(0, 0, 0, 0.5);
 											}
 										}
 

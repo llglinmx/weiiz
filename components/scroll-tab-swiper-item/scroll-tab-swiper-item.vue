@@ -63,10 +63,14 @@
 							</view>
 						</view>
 						<view class="content-list-li-all-btns">
-							<view class="more-list-li-btn flex-center more-list-li-btn-border" v-if="item.status==-1">
+							<view class="more-list-li-btn flex-center more-list-li-btn-border" v-if="item.status==-1"
+								@click="cancelOrder(item.id)">
 								取消订单
 							</view>
-							<view class="more-list-li-btn flex-center" v-if="item.status==-1">去付款</view>
+							<view class="more-list-li-btn flex-center" v-if="item.status==-1"
+								@click="goAndPay(item.id)">去付款</view>
+								<view class="more-list-li-btn flex-center" v-if="item.status==1"
+									@click="applyForRefund(item.id)">申请退款</view>
 							<view class="more-list-li-btn flex-center more-list-li-btn-border-red" v-if="item.status==1"
 								@click="viewCouponCode(item)">查看券码</view>
 							<view class="more-list-li-btn flex-center more-list-li-btn-border"
@@ -78,17 +82,31 @@
 				</view>
 			</view>
 		</z-paging>
+		<uni-popup ref="popup" type="dialog">
+			<uni-popup-dialog type="warn" mode='base' title="警告" :content="content" :duration="2000"
+				:before-close="true" @close="close" @confirm="confirm"></uni-popup-dialog>
+		</uni-popup>
 	</view>
 </template>
 
 <script>
+	import UniPopup from "../../components/uni-popup/uni-popup.vue"
+	import UniPopupDialog from "../../components/uni-popup/uni-popup-dialog.vue"
+
 	export default {
 		data() {
 			return {
 				dataList: [],
 				firstLoaded: false,
 				isLoad: true,
+				type: '',
+				content: '',
+				id: ''
 			}
+		},
+		components: {
+			UniPopup,
+			UniPopupDialog
 		},
 		props: {
 			tabIndex: {
@@ -132,19 +150,15 @@
 				// 	this.$refs.paging.complete(data);
 				// 	this.firstLoaded = true;
 				// })
-				var page = {
-					num: pageNo,
-					size: pageSize
-				}
-				this.getDataList(page)
+				this.getDataList(pageNo,pageSize)
 			},
 
 
 			// 获取数据
-			getDataList(page) {
+			getDataList(num,size) {
 				var vuedata = {
-					page_index: page.num, // 请求页数，
-					each_page: page.size, // 请求条数
+					page_index: num, // 请求页数，
+					each_page: size, // 请求条数
 					order_status: this.orderType
 				}
 				this.apiget('api/v1/members/member_order', vuedata).then(res => {
@@ -156,10 +170,65 @@
 							this.firstLoaded = true;
 						}
 						this.isLoad = false
-
 					}
 				});
 			},
+
+			// 申请退款
+			applyForRefund(id) {
+				this.content = "你确定要申请此订单的退款吗?"
+				this.type = 'applyForRefund'
+				this.$refs.popup.open()
+				this.id = id
+			},
+
+			// 去付款
+			goAndPay(id) {
+				uni.navigateTo({
+					url: "../../pagesIndexFour/paymentOrder/paymentOrder?id=" + id
+				})
+			},
+
+			// 取消订单
+			cancelOrder(id) {
+				this.content = "你确定要取消此订单吗?"
+				this.type = 'cancelOrder'
+				this.$refs.popup.open()
+				this.id = id
+			},
+
+			// 弹窗点击取消
+			close(done) {
+				// TODO 做一些其他的事情，before-close 为true的情况下，手动执行 done 才会关闭对话框
+				// ...
+				done()
+			},
+			// 弹窗点击确认
+			confirm(done, value) {
+				if (this.type == 'cancelOrder') { //取消订单
+					this.apiput('api/v1/members/member_order/cancel/' + this.id, {}).then(res => {
+						if (res.status == 200) {
+							uni.showToast({
+								title: "订单取消成功",
+								icon: 'none'
+							})
+							this.getDataList(1,20)
+						}
+					});
+				} else if (this.type == 'applyForRefund') { //申请退款
+					this.apiput('api/v1/members/member_order/refund/' + this.id, {}).then(res => {
+						if (res.status == 200) {
+							uni.showToast({
+								title: "退款申请成功",
+								icon: 'none'
+							})
+							this.getDataList(1,20)
+						}
+					});
+				}
+				done()
+			},
+
 			// 查看券码 
 			viewCouponCode(item) {
 				this.$emit('couponCode', item.id)

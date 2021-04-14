@@ -85,6 +85,7 @@
 				classifyList: ["泰式按摩", "中式按摩", "韩式按摩", "美式按摩", "足底按摩"], //按摩分类
 				isCheck: -1,
 				storeId: '', //门店id
+				service: '', //服务id
 				technicianList: [],
 				isData: false,
 				isLoad: true,
@@ -107,7 +108,10 @@
 			});
 		},
 		onLoad(options) {
-			this.storeId = options.storeId
+			var data = JSON.parse(options.data)
+
+			this.storeId = data.storeId
+			this.service = data.service
 		},
 		onShow() {
 			this.technicianId = this.$store.state.checkId
@@ -124,13 +128,14 @@
 			getTechnician(num, size) {
 				var vuedata = {
 					store: this.storeId,
+					service: this.service,
 					page_index: num, // 请求页数，
 					each_page: size, // 请求条数
 				}
-				this.apiget('pc/engineer', vuedata).then(res => {
+				this.apiget('api/v1/order/service/engineer', vuedata).then(res => {
 					if (res.status == 200) {
 						this.isData = true
-						var list = res.data.engineerList
+						var list = res.data.engineer
 						var arr = []
 						this.$refs.paging.addData(list);
 

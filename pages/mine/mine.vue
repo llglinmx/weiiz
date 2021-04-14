@@ -238,10 +238,7 @@
 						}, {
 							image: "../../static/images/money.jpg",
 							title: "我的余额"
-						}, {
-							image: "../../static/images/gift.jpg",
-							title: "我要入驻"
-						}, {
+						},{
 							image: "../../static/images/money.jpg",
 							title: "优惠券"
 						}, {
@@ -514,12 +511,6 @@
 						// 我的余额
 						uni.navigateTo({
 							url: "../../pagesMine/myBalance/myBalance"
-						})
-						break;
-					case "我要入驻":
-						// 我要入驻
-						uni.navigateTo({
-							url: "../../pagesMine/settleIn/settleIn"
 						})
 						break;
 					case "优惠券":
@@ -897,7 +888,7 @@
 						.swiper-item {
 							display: flex;
 							align-items: center;
-							justify-content: space-around;
+							// justify-content: space-around;
 							flex-wrap: wrap;
 
 							.content-commonly-list-li:nth-child(5) {

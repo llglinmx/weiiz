@@ -40,8 +40,8 @@ function uploadImage(obj, file, path, suffix, result) {
 			}, 600);
 
 
-			const resultUrl = `${fileKey}`;
-			// const resultUrl = `${ossDomain}${fileKey}`;
+			// const resultUrl = `${fileKey}`;
+			const resultUrl = `${ossDomain}${fileKey}`;
 
 			result(resultUrl)
 		},

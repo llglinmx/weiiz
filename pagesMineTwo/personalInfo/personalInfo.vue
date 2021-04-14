@@ -104,6 +104,7 @@
 	import pickerAddress from '@/components/liudx-pickerAddress/index.vue'
 	import liudxPicker from "../../components/liudx-picker/index.vue"
 	import sPicker from '../../components/s-ui/s-picker/index.vue'
+	
 	import {
 		pathToBase64,
 		base64ToPath

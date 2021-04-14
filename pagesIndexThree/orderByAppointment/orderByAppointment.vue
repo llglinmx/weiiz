@@ -138,12 +138,12 @@ ss<template>
 				</view>
 			</view>
 
-			<view class="box-content-coupon">
+			<view class="box-content-coupon" :style="{height:infoData.coupon_num>0?'auto':'0'}">
 				<view class="box-content-coupon-top" @click="checkCoupons">
 					<view class="box-content-coupon-top-title">优惠券</view>
 					<view class="box-content-coupon-top-more">
 						<text v-if="couponId!=-1">-￥{{preferentiaAmount |toFixed}}</text>
-						<text v-if="couponId==-1" style="color: #999;">请选择</text>
+						<text v-if="couponId==-1" style="color: #999;">{{infoData.coupon_num}} 张优惠券可用</text>
 						<text class="iconfont icongengduo icon-font"
 							style="color: #FF8366;font-size: 32rpx;margin-top: 4rpx;" v-if="couponId !==-1"></text>
 						<text class="iconfont icongengduo icon-font"
@@ -183,17 +183,15 @@ ss<template>
 				typeListIndex: -1,
 				defaultIndex: 0, //星期 当前选中日期
 				tabs: [],
-				timeList: [
-					"09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
-					"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
-					"09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
-					"13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
-				],
+				timeList: [],
 				technicianList: [],
 				tabsList: [],
 				dataTop: {},
 				dataList: {
-					price:0
+					price: 0,
+				},
+				infoData:{
+					coupon_num:0
 				},
 				sotreId: '', //门店id
 				technicianId: -1, //初始技师id
@@ -250,7 +248,7 @@ ss<template>
 			this.getTimeandWeek()
 		},
 		computed: {
-			subtotal(){
+			subtotal() {
 				var price = Number(this.servicePrice) + Number(this.dataList.price)
 				return price.toFixed(2)
 			},
@@ -296,6 +294,7 @@ ss<template>
 						this.dataTop = res.data.store
 						this.dataList = res.data.service
 						this.storeId = res.data.store.id
+						this.infoData =  res.data
 						// console.log(res.data)
 					}
 				})
@@ -431,8 +430,6 @@ ss<template>
 					title: "请选择技师",
 					icon: "none"
 				})
-
-
 			},
 
 			// 创建订单
@@ -460,6 +457,11 @@ ss<template>
 						uni.navigateTo({
 							url: "../../pagesIndexFour/paymentOrder/paymentOrder?id=" + res.data
 						})
+					} else {
+						uni.showToast({
+							title: res.message,
+							icon: "none"
+						})
 					}
 				})
 				// uni.navigateTo({
@@ -470,9 +472,13 @@ ss<template>
 
 			// 点击选择技师
 			selectTechnician() {
+				var str = {
+					service: this.dataList.id,
+					storeId: this.storeId,
+				}
 				uni.navigateTo({
-					url: "../../pagesIndexFour/selectMassageTechnician/selectMassageTechnician?storeId=" + this
-						.storeId
+					url: "../../pagesIndexFour/selectMassageTechnician/selectMassageTechnician?data=" + JSON
+						.stringify(str)
 				})
 
 				this.$store.commit("upCheckId", this.technicianId)
@@ -997,6 +1003,8 @@ ss<template>
 				margin-top: 20rpx;
 				padding: 0 40rpx;
 				background: #FFFFFF;
+				overflow: hidden;
+				transition: 0.3s;
 
 				.box-content-coupon-top {
 					display: flex;

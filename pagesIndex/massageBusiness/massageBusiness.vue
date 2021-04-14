@@ -351,6 +351,7 @@
 							image {
 								width: 164rpx;
 								height: 164rpx;
+								border-radius: 10rpx;
 							}
 						}
 

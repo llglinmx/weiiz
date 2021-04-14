@@ -9,7 +9,6 @@
 			<view class="box-content-wrap">
 				<view class="box-content-wrap-icon">
 					<text class="iconfont iconzhifuchenggong icon-font" style="color: #26BF82;font-size: 160rpx;"></text>
-					
 				</view>
 				<view class="box-content-wrap-title">
 					订单支付成功

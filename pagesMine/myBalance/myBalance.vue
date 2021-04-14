@@ -96,7 +96,6 @@
 		},
 		onShow() {
 			this.balance = this.$store.state.balance
-			console.log(this.$store.state.balance)
 		},
 		// 过滤器
 		filters: {
@@ -280,12 +279,12 @@
 							align-items: center;
 
 							image {
-								width: 36rpx;
-								height: 36rpx;
+								width: 50rpx;
+								height: 50rpx;
 							}
 
 							.payment-method-list-li-title {
-								margin-left: 40rpx;
+								margin-left: 30rpx;
 								color: #4D4D4D;
 								font-size: 30rpx;
 							}

@@ -9,67 +9,62 @@
 			</view>
 		</view>
 		<view class="box-content">
-			<mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption" :height="mesHeight">
+			<z-paging ref="paging" @query="queryList" :list.sync="dataList" loading-more-no-more-text="已经到底了"
+				:refresher-angle-enable-change-continued="false" :touchmove-propagation-enabled="true"
+				:use-custom-refresher="true">
 				<view class="box-content-list">
-					<view class="box-content-list-li" v-for="(item,index) in dataList" :key="index">
+					<view class="box-content-list-li" v-for="(item,index) in dataList" :key="item.id">
 						<view class="list-li-top">
 							<view class="list-li-top-left">
-								<image src="../../static/images/tool.jpg" mode=""></image>
-								<text>罗约蓝池·温泉SPA</text>
+								<text v-if="item.store!='-1'" class="iconfont iconshangjia"
+									style="font-size: 28rpx;color: #FF967D;"></text>
+								<text>{{item.store_name}}</text>
 							</view>
-							<view class="list-li-top-right">
-								<image src="../../static/images/address-gray.png" mode="aspectFill"></image>
+							<view class="list-li-top-right" v-if="item.store!='-1'">
+								<text class="iconfont icondingwei1" style="font-size: 24rpx;color: #999;"></text>
 								<text>6.1km</text>
 							</view>
 						</view>
 						<view class="list-li-bottom">
 							<view class="list-li-bottom-left">
 								<view class="list-li-bottom-money">
-									20
+									{{item.quantity}}
 									<text>元</text>
 								</view>
 							</view>
 							<view class="list-li-bottom-center">
 								<view class="list-li-center-title">
-									店铺优惠券
+									{{item.name}}
 								</view>
 								<view class="list-li-center-text">
-									满200减20
+									<!-- 满200减20 -->
 								</view>
 							</view>
 							<view class="list-li-bottom-right">
-								<!-- <view class="list-li-bottom-btn flex-center">立即领取</view> -->
-								<view class="list-li-bottom-btn flex-center" style="background: none;color: #FF4040;">去使用</view>
+								<view class="list-li-bottom-btn flex-center" v-if="item.store=='-1'">立即领取</view>
+								<view class="list-li-bottom-btn flex-center" v-if="item.store!='-1'"
+									style="background: none;color: #FF4040;">
+									去使用</view>
 							</view>
 						</view>
 					</view>
 				</view>
-			</mescroll-uni>
+			</z-paging>
 		</view>
 	</view>
 </template>
 
 <script>
-	import MescrollMixin from "../../components/mescroll-uni/mescroll-mixins.js";
-	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue"
+	import loading from '../../components/loading/loading.vue'
+	import zPaging from '../../uni_modules/z-paging/components/z-paging/z-paging.vue'
+	import noData from '../../components/no-data/no-data.vue'
+	import score from '../../components/score/score.vue'
 	export default {
-		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
-				mesHeight: 0,
-				downOption: { // 下拉刷新配置
-					auto: false,
-				},
-				upOption: { // 上拉加载配置
-					noMoreSize: 5,
-					textLoading: "正在加载更多数据",
-					textNoMore: "——  已经到底了  ——",
-					isBounce: true,
-					auto: false,
-				},
-				PageNumber: 1, // 请求页数，
-				PageLimt: 10, // 请求条数
 				barHeight: 0, //顶部电量导航栏高度
+				isData: false,
+				isLoad: true,
 				dataList: [{
 						money: "20.00"
 					},
@@ -91,12 +86,19 @@
 			}
 		},
 		components: {
-			MescrollUni
+			noData,
+			loading,
+			zPaging,
+			score
+		},
+		filters: {
+			integer(val) {
+				// console.log(val)
+				// var str = val.split('.')
+				// return str[0]
+			},
 		},
 		onShow() {
-			const sys = uni.getSystemInfoSync();
-			var Heigh = sys.windowHeight
-			this.mesHeight = (Heigh - 66) * 2
 
 		},
 		onReady() {
@@ -115,28 +117,32 @@
 				})
 			},
 
-			/*下拉刷新的回调*/
-			downCallback() {
-				this.PageNumber = 1
-				setTimeout(() => {
-					this.mescroll.endSuccess() // 请求成功 隐藏加载状态
-
-					// this.mescroll.showNoMore()
-
-				}, 1500)
+			// 上拉 下拉
+			queryList(pageNo, pageSize) {
+				this.getCoupon(pageNo, pageSize)
 			},
 
-			/*上拉加载的回调*/
-			upCallback(page) {
-				this.PageNumber++
-				console.log(this.PageNumber)
-				setTimeout(() => {
-					this.mescroll.endSuccess() // 请求成功 隐藏加载状态
-					// if (this.PageNumber > 3) {
-					this.mescroll.showNoMore()
-					// }
-				}, 1500)
-				console.log("上拉加载")
+			// 获取地址列表
+			getCoupon(num, size) {
+				var vuedata = {
+					page_index: num, // 请求页数，
+					each_page: size, // 请求条数
+				}
+				this.apiget('pc/coupon', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.couponList.length != 0) {
+							this.isData = true;
+							let list = res.data.couponList
+							this.$refs.paging.addData(list);
+
+						} else {
+							// 显示无数据背景
+							this.isData = false;
+							this.isLoad = false;
+						}
+
+					}
+				});
 			},
 
 		}
@@ -216,13 +222,9 @@
 							display: flex;
 							align-items: center;
 
-							image {
-								width: 28rpx;
-								height: 28rpx;
-							}
 
 							text {
-								margin-left: 8rpx;
+								margin-right: 8rpx;
 								font-size: 28rpx;
 								font-family: Source Han Sans CN;
 								font-weight: 500;
@@ -234,13 +236,8 @@
 							display: flex;
 							align-items: center;
 
-							image {
-								width: 19rpx;
-								height: 24rpx;
-							}
-
 							text {
-								margin-left: 8rpx;
+								margin-right: 8rpx;
 								font-size: 24rpx;
 								font-family: Source Han Sans CN;
 								font-weight: 400;

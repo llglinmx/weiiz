@@ -66,8 +66,6 @@
 
 	import navTitle from "../../components/navTitle/navTitle.vue"
 	import btnPink from "../../components/btnPink/btnPink.vue"
-	import MescrollMixin from "../../components/mescroll-uni/mescroll-mixins.js";
-	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue"
 	import uniSwipeAction from "../../uni_modules/uni-swipe-action/components/uni-swipe-action/uni-swipe-action.vue"
 	import uniSwipeActionItem from "../../uni_modules/uni-swipe-action/components/uni-swipe-action-item/uni-swipe-action-item.vue"
 	import UniPopup from "../../components/uni-popup/uni-popup.vue"
@@ -76,20 +74,12 @@
 	import zPaging from '../../uni_modules/z-paging/components/z-paging/z-paging.vue'
 
 	export default {
-		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
 				isData: false, //是否有数据
 				isLoad: true, //加载状态   true 为加载中 false 为无数据
 				addressList: [],
-				upOption: { // 上拉加载配置
-					noMoreSize: 6,
-					textLoading: "正在加载更多数据",
-					textNoMore: "——  已经到底了  ——",
-					isBounce: true,
-					auto: true,
-				},
 				options: [{
 					text: '删除',
 					style: {
@@ -103,7 +93,6 @@
 		components: {
 			navTitle,
 			btnPink,
-			MescrollUni,
 			uniSwipeAction,
 			uniSwipeActionItem,
 			UniPopup,

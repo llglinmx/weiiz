@@ -104,18 +104,22 @@
 				确认修改
 			</view>
 		</view>
-		
-		<s-picker @close="popClose" :visible.sync="visible" :title="pickerTitle" :list="dataList" v-model="oneSelected"
-			@input="pickerInput"></s-picker>
 
-		<s-picker @close="areaClose" :visible.sync="isAreaCode" title="区号" :list="areaCodeList" v-model="areaCodeSelect"
-			@input="areaCodeInput"></s-picker>
+
+		<popup-list-select @cancel="popClose" @confirm="pickerInput" :title="pickerTitle" :visible='visible'
+			:dataList="dataList">
+		</popup-list-select>
+
+		<popup-list-select @cancel="areaClose" @confirm="areaConfirm" :visible='isAreaCode' :dataList="areaCodeList">
+		</popup-list-select>
+
 	</view>
 </template>
 
 <script>
 	import navTitle from "../../components/navTitle/navTitle.vue"
-	import sPicker from '../../components/s-ui/s-picker/index.vue'
+	import popupListSelect from '../../components/popup-list-select/popup-list-select.vue'
+
 	export default {
 		data() {
 			return {
@@ -141,7 +145,6 @@
 				areaList: [],
 				dataList: [],
 				visible: false,
-				oneSelected: [0],
 				countryId: '', //国家id
 				provinceId: '', //省id
 				cityId: '', //市id
@@ -150,13 +153,11 @@
 				areaCode: '86',
 				isAreaCode: false,
 				areaCodeList: [],
-				arrCodeList: [],
-				areaCodeSelect: [0],
 			};
 		},
 		components: {
 			navTitle,
-			sPicker
+			popupListSelect
 		},
 		onLoad(options) {
 			var data = JSON.parse(options.data)
@@ -186,8 +187,7 @@
 					name: '86',
 				},
 			]
-			this.arrCodeList = arr
-			this.areaCodeList = [this.arrCodeList]
+			this.areaCodeList = arr
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -225,9 +225,8 @@
 				this.isAreaCode = e
 			},
 			// 选择区号
-			areaCodeInput(e) {
-				var index = e[0]
-				this.areaCode = this.arrCodeList[index].name
+			areaConfirm(e) {
+				this.areaCode = e.name
 			},
 
 
@@ -312,22 +311,22 @@
 						switch (type) {
 							case 'country':
 								this.countryList = res.data
-								this.dataList = [this.countryList]
+								this.dataList = this.countryList
 								this.pickerTitle = "国家"
 								break;
 							case 'province':
 								this.provinceList = res.data
-								this.dataList = [this.provinceList]
+								this.dataList = this.provinceList
 								this.pickerTitle = "省份"
 								break;
 							case 'city':
 								this.cityList = res.data
-								this.dataList = [this.cityList]
+								this.dataList = this.cityList
 								this.pickerTitle = "市"
 								break;
 							case 'area':
 								this.areaList = res.data
-								this.dataList = [this.areaList]
+								this.dataList = this.areaList
 								this.pickerTitle = "区/县"
 								break;
 						}
@@ -337,11 +336,10 @@
 
 			// 选择地址确定按钮事件
 			pickerInput(e) {
-				var index = e[0]
 				switch (this.typeName) {
 					case 'country':
-						this.country = this.countryList[index].name
-						this.countryId = this.countryList[index].id
+						this.country = e.name
+						this.countryId = e.id
 
 						this.province = '请选择'
 						this.provinceId = ''
@@ -352,23 +350,23 @@
 
 						break;
 					case 'province':
-						this.province = this.provinceList[index].name
-						this.provinceId = this.provinceList[index].id
+						this.province = e.name
+						this.provinceId = e.id
 						this.city = '请选择'
 						this.cityId = ''
 						this.area = '请选择'
 						this.areaId = ''
 						break;
 					case 'city':
-						this.city = this.cityList[index].name
-						this.cityId = this.cityList[index].id
+						this.city = e.name
+						this.cityId = e.id
 						this.area = '请选择'
 						this.areaId = ''
 
 						break;
 					case 'area':
-						this.area = this.areaList[index].name
-						this.areaId = this.areaList[index].id
+						this.area = e.name
+						this.areaId = e.id
 						break;
 				}
 

@@ -217,13 +217,6 @@
 				}
 
 			}, {
-				"path": "settleIn/settleIn",
-				"style": {
-					"navigationBarTitleText": "",
-					"enablePullDownRefresh": false
-				}
-
-			}, {
 				"path": "packageCard/packageCard",
 				"style": {
 					"navigationBarTitleText": "",

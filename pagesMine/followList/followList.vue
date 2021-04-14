@@ -9,7 +9,7 @@
 		<view class="box-content">
 			<view class="box-content-store-main" :style="{display:defaultIndex==0?'block':'none'}">
 				<view class="box-content-store-main-wrap" :style="{display:isDateStore?'block':'none'}">
-					<z-paging ref="paging" @query="storeQueryList" :list.sync="storeList">
+					<z-paging ref="paging" @query="storeQueryList" loading-more-no-more-text="已经到底了" :list.sync="storeList">
 						<view class="box-content-store-list">
 							<view class="box-content-store-list-li" v-for="(item,index) in storeList" :key="item.id">
 								<uni-swipe-action>
@@ -51,17 +51,16 @@
 			</view>
 			<view class="box-content-technician-main" :style="{display:defaultIndex==1?'block':'none'}">
 				<view class="box-content-item-technician-wrap" :style="{display:isDateTec?'block':'none'}">
-					<z-paging ref="paging1" @query="technicianQueryList" :mounted-auto-call-reload='false'
+					<z-paging ref="paging1" @query="technicianQueryList"  loading-more-no-more-text="已经到底了":mounted-auto-call-reload='false'
 						:list.sync="technicianList">
 						<view class="content-item-technician-wrap-list">
 							<view class="content-item-technician-wrap-list-li" v-for="(item,index) in technicianList"
 								:key="item.id">
-
 								<view class="box-content-item-technician-wrap-top">
 									<view class="technician-wrap-top-title">
 										<text class="iconfont iconshangjia"
 											style="font-size: 28rpx;color: #FF8366;"></text>
-										<text>{{item.engineer_items.store_info.name}}</text>
+										<text v-if="item.engineer_items.store_info">{{item.engineer_items.store_info.name}}</text>
 									</view>
 									<view class="technician-wrap-top-btn flex-center">
 										预约服务
