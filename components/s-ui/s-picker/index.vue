@@ -8,7 +8,7 @@
 			<div class="confirm-btn" :style="{color:confirmColor}" @click="confirm">{{confirmText}}</div>
 		</div>
 		<div class="s-picker-content">
-			<picker-view v-if="showContent" :value="selectedIndexList" @change="slideChage">
+			<picker-view v-if="showcontent" :value="selectedIndexList" @change="slideChage">
 				<picker-view-column v-for="(listItem,listIndex) of list" :key="listIndex">
 					<view class="s-picker-item" v-for="(item,index) of listItem" :key="index">{{formatText(item.name)}}
 					</view>
@@ -107,7 +107,7 @@
 		data() {
 			return {
 				selectedIndexList: [],
-				showContent: false
+				showcontent: false
 			};
 		},
 		watch: {
@@ -119,12 +119,12 @@
 			beforeShow() {
 				setTimeout(() => {
 					this.setIndex(this.value);
-					this.showContent = true;
+					this.showcontent = true;
 				}, 50);
 			},
 			hideCallback() {
 				this.hide();
-				this.showContent = false;
+				this.showcontent = false;
 			},
 			hide() {
 				this.$emit('close', false);

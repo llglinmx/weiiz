@@ -1,0 +1,351 @@
+<template>
+	<view class="map-box">
+		<view class="map-head" :style="{paddingTop:barHeight+'px'}">
+			<view class="map-head-box">
+				<view class="map-head-nav">
+					<view class="map-head-nav-li" v-for="(item,index) in tabsList" :key='index'
+						@click="navChange(index)">
+						<view class="map-head-nav-li-title">
+							<text class="head-text">{{item.title}}</text>
+							<!-- #ifdef APP-NVUE -->
+							<text class="my-iconfont">&#xe656;</text>
+							<!-- #endif -->
+							<!-- #ifndef APP-NVUE -->
+							<text class="iconfont iconxiangxiajiantou"
+								style="color: #ccc;font-size: 32rpx;margin-top:4rpx;margin-left: 10rpx;"></text>
+							<!-- #endif -->
+						</view>
+					</view>
+				</view>
+				<view class="map-head-main" :class="idx!=-1?'map-head-main-active':''">
+
+				</view>
+			</view>
+		</view>
+		<view class="map-content">
+			<!-- <map class="map-content-main" style="width: 100%;" :latitude="latitude" :longitude="longitude"
+				:markers="marker"></map> -->
+			<map class="map-content-main" :latitude="latitude" :longitude="longitude" :markers="marker"></map>
+		</view>
+		<!-- tabbar导航栏 -->
+		<view class="map-footer">
+			<view class="map-footer-tabbar">
+				<view class="map-footer-tabbar-li" v-for="(item,index) in tabbarList" @click="tabbarClick(index)">
+					<view class="map-footer-tabbar-li-wrap" v-if="!item.isMap">
+						<view class="map-footer-tabbar-li-icon">
+							<text :class="item.style" class="iconfont icon-font"
+								:style="{'font-size':item.size+'rpx'}"></text>
+						</view>
+						<view class="map-footer-tabbar-li-title">
+							<text class="tabbar-li-title-text">{{item.title}}</text>
+						</view>
+					</view>
+					<view class="map-footer-tabbar-li-main" v-if="item.isMap">
+						<view class="map-footer-tabbar-li-main-box">
+
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	import {
+		get
+	} from '../../store/index.js'
+	// import iconCart from '../../static/images/address-icon.png'
+	export default {
+		data() {
+			return {
+				barHeight: 0, //顶部电量导航栏高度
+				idx: -1, //顶部状态栏下标
+				activeIndex: 2, //当前tabbar所在页面
+				mapHeight: 0,
+				latitude: 24.613838,
+				longitude: 118.037733,
+				marker: [],
+				tabsList: [{
+						title: "全部",
+						type: "all",
+					},
+					{
+						title: "按摩商家",
+						type: "business"
+					},
+					{
+						title: "价格",
+						type: "price"
+					},
+				],
+				tabbarList: [{
+						title: "首页",
+						style: 'iconshouye',
+						size: "58",
+						isMap: false
+					},
+					{
+						title: "我的预约",
+						style: 'icondingdan', //阿里图标库样式名
+						size: "56", //字体大小
+						isMap: false
+					},
+					{
+						title: "地图",
+						style: 'iconmap', //阿里图标库样式名
+						size: "48", //字体大小
+						isMap: true
+					},
+					{
+						title: "商城",
+						style: 'icongouwuche', //阿里图标库样式名
+						size: "52", //字体大小
+						isMap: false
+					},
+					{
+						title: "我的",
+						style: 'iconwode3',
+						size: "52",
+						isMap: false
+					}
+				],
+			}
+		},
+		components: {
+
+		},
+		onLoad() {
+			// #ifdef APP-NVUE
+			const domModule = uni.requireNativePlugin('dom')
+			domModule.addRule('fontFace', {
+				'fontFamily': "myIconfont",
+				'src': "url('https://at.alicdn.com/t/font_2394062_g22pptuavh.ttf')"
+			});
+			// #endif
+		},
+		onReady() {
+
+			// 获取顶部电量状态栏高度
+			uni.getSystemInfo({
+				success: (res) => {
+					this.barHeight = res.statusBarHeight
+				}
+			});
+
+		},
+		onLoad() {
+			this.getList()
+		},
+
+		methods: {
+			// 导航栏点击
+			navChange(index) {
+				// this.idx = this.idx == index ? -1 : index
+			},
+
+			// 获取门店列表
+			getList() {
+				get('pc/store', {}).then(res => {
+					if (res.status == 200) {
+						if (res.data.storeList.length != 0) {
+							let marker = []
+							res.data.storeList.forEach(item => {
+								var str = {
+									id: item.id,
+									latitude: item.latitude,
+									longitude: item.longitude,
+									iconPath: '/static/images/address-icon.png',
+									width: 45,
+									height: 45,
+									title: item.name
+									// callout: {
+									// 	content: item.name,
+									// 	bgColor: "#999999"
+									// }
+								}
+								marker.push(str)
+							})
+							this.marker = marker
+							console.log(this.marker)
+						}
+					}
+				});
+			},
+
+
+
+
+			// tabbar点击
+			tabbarClick(index) {
+				this.activeIndex = index
+				switch (index) {
+					case 0: //首页
+						uni.reLaunch({
+							url: '../index/index'
+						})
+						break;
+					case 1: //我的预约
+						uni.reLaunch({
+							url: "../subscribe/subscribe"
+						})
+						break;
+					case 2: //地图
+
+						break;
+					case 3: //商城
+						uni.reLaunch({
+							url: "../mall/mall"
+						})
+						break;
+					case 4: //我的
+						uni.reLaunch({
+							url: "../mine/mine"
+						})
+						break;
+				}
+			},
+		}
+	}
+</script>
+<style scoped lang="scss">
+	/* #ifdef APP-NVUE */
+	.my-iconfont {
+		font-family: myIconfont;
+		font-size: 60rpx;
+		color: #00AAFF;
+	}
+
+	/* #endif */
+
+	.map-box {
+		/* #ifndef APP-NVUE */
+		height: 100%;
+		/* #endif */
+		flex: 1;
+		flex-direction: column;
+
+		.map-head {
+			/* #ifndef APP-NVUE */
+			position: relative;
+			/* #endif */
+			// height: 88rpx;
+			// box-sizing: border-box;.map-head-nav {
+
+
+			.map-head-box {
+				.map-head-nav {
+					height: 88rpx;
+					flex-direction: row;
+
+					.map-head-nav-li {
+						flex: 1;
+						align-items: center;
+						justify-content: center;
+
+						.map-head-nav-li-title {
+							justify-content: center;
+							align-items: center;
+							flex-direction: row;
+
+							.head-text {
+								font-size: 28rpx;
+								color: #666;
+							}
+						}
+					}
+				}
+			}
+
+			.map-head-main {
+				/* #ifndef APP-NVUE */
+				// position: absolute;
+				// bottom: 88rpx;
+				// left: 0;
+				/* #endif */
+				height: 0;
+				overflow: hidden;
+				background: #fff;
+			}
+
+			.map-head-main-active {
+				height: 400rpx !important;
+			}
+
+		}
+
+		.map-content {
+			flex: 1;
+
+			// background: red;
+			.map-content-main {
+				/* #ifndef APP-NVUE */
+				width: 100%;
+				/* #endif */
+				flex: 1;
+			}
+		}
+
+
+
+		.map-footer {
+			height: 102rpx;
+
+			.map-footer-tabbar {
+
+				height: 102rpx;
+				flex-direction: row;
+
+				.map-footer-tabbar-li {
+					flex: 1;
+					align-items: center;
+					justify-content: center;
+
+					.map-footer-tabbar-li-wrap {
+						.map-footer-tabbar-li-icon {
+							.icon-font {}
+						}
+
+						.map-footer-tabbar-li-title {
+							.tabbar-li-title-text {
+								font-size: 20rpx;
+								color: #626366;
+							}
+
+						}
+					}
+
+					.map-footer-tabbar-li-main {
+						position: relative;
+						width: 100%;
+						height: 100%;
+
+						.map-footer-tabbar-li-main-box {
+
+							/* #ifndef APP-NVUE */
+							position: absolute;
+							top: -40rpx;
+							/* #endif */
+							/* #ifdef APP-NVUE */
+							position: absolute;
+							top: 0rpx;
+
+							/* #endif */
+
+
+							width: 100rpx;
+							height: 100rpx;
+							border-radius: 50%;
+							box-shadow: 0rpx -1rpx 10px rgba(0, 0, 0, 0.1);
+							background: #fff;
+							z-index: 1;
+						}
+					}
+
+				}
+			}
+		}
+
+
+	}
+</style>

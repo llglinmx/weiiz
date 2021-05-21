@@ -34,8 +34,10 @@
 						</view>
 					</view>
 					<view class="box-content-gift-list-li-bottom">
-						<view class="gift-list-li-bottom-btn flex-center gift-list-li-bottom-btn-666" @click="give">转赠礼物</view>
-						<view class="gift-list-li-bottom-btn flex-center gift-list-li-bottom-btn-ff6f4d" @click="cardDetails(item)">查看详情</view>
+						<view class="gift-list-li-bottom-btn flex-center gift-list-li-bottom-btn-666" @click="give">转赠礼物
+						</view>
+						<view class="gift-list-li-bottom-btn flex-center gift-list-li-bottom-btn-ff6f4d"
+							@click="cardDetails(item)">查看详情</view>
 					</view>
 				</view>
 			</view>
@@ -128,74 +130,74 @@
 	.box-content-gift-list {
 		padding: 0 20rpx;
 		box-sizing: border-box;
-	
+
 		.box-content-gift-list-li:last-child {
 			margin-bottom: 20rpx;
 		}
-	
+
 		.box-content-gift-list-li {
 			padding: 20rpx;
 			box-sizing: border-box;
 			margin-top: 20rpx;
 			background: #fff;
 			border-radius: 20rpx;
-	
+
 			.box-content-gift-list-list-top {
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-	
+
 				.gift-list-list-top-title {
 					font-size: 28rpx;
 					color: #333;
 				}
-	
+
 				.gift-list-list-top-text {
 					font-size: 29rpx;
 					color: #FF6F4D;
 				}
 			}
-	
+
 			.box-content-gift-list-li-center {
 				display: flex;
 				margin: 30rpx 0;
-	
+
 				.gift-list-li-center-image {
 					image {
 						width: 232rpx;
 						height: 130rpx;
 					}
 				}
-	
+
 				.gift-list-li-center-info {
 					flex: 1;
 					margin-left: 20rpx;
-	
+
 					.gift-list-li-center-info-title {
 						margin-bottom: 20rpx;
 						color: #000;
 						font-size: 34rpx;
 						line-height: 32rpx;
 					}
-	
+
 					.gift-list-li-center-info-text {
-	
+
 						font-size: 24rpx;
 						color: #999;
 					}
-	
+
 					.gift-list-li-center-info-time {
 						font-size: 24rpx;
 						color: #999;
 					}
 				}
-	
+
 			}
-	
+
 			.box-content-gift-list-li-bottom {
 				display: flex;
 				justify-content: flex-end;
-	
+
 				.gift-list-li-bottom-btn {
 					width: 176rpx;
 					height: 60rpx;
@@ -205,16 +207,16 @@
 					border-radius: 32rpx;
 					font-size: 28rpx;
 				}
-	
+
 				.gift-list-li-bottom-btn:last-child {
 					margin-right: 0;
 				}
-	
+
 				.gift-list-li-bottom-btn-ff6f4d {
 					color: #FF6F4D;
 					border: 1rpx solid #FF6F4D;
 				}
-	
+
 				.gift-list-li-bottom-btn-666 {
 					color: #666;
 					border: 1rpx solid #666;

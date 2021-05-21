@@ -37,8 +37,8 @@ const uploadFile = function(filePath, dir, successc, failc) {
 		fileType: 'image',
 		// header: {
 		// 	"Accept": 'application/json, text/plain, */*',
-		// 	//"Content-Type": 'application/x-www-form-urlencoded'
-		// 	"Content-Type": 'multipart/form-data'
+		// 	//"content-Type": 'application/x-www-form-urlencoded'
+		// 	"content-Type": 'multipart/form-data'
 		// },
 		formData: {
 			'key': aliyunFileKey,

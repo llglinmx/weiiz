@@ -19,7 +19,8 @@
 				<view class="mine-head-info-left">
 					<view class="head-info-left-box">
 						<view class="head-info-box-image flex-center" @click="userInfoClick">
-							<image :src="info.avatar!=''?info.avatar:'../../static/images/userImage.png'" mode="aspectFill"></image>
+							<image :src="info.avatar!=''?info.avatar:'../../static/images/userImage.png'"
+								mode="aspectFill"></image>
 						</view>
 						<view class="head-info-right">
 							<!-- 昵称 -->
@@ -51,7 +52,8 @@
 			</view>
 			<!-- 列表 -->
 			<view class="mine-head-list">
-				<view class="mine-head-list-li flex-center" v-for="(item,index) in list" :key="index">
+				<view class="mine-head-list-li flex-center" v-for="(item,index) in list" :key="index"
+					@click="listMenu(index)">
 					<view class="head-list-li-text">
 						{{item.number}}
 					</view>
@@ -146,12 +148,12 @@
 				barHeight: 0, //顶部电量导航栏高度
 				idx: 0,
 				toolBarWidth: 0, //进度条长度
-				parWidth: 0, // 进度条父级长度度
+				parWidth: 0, // 进度条父级长度
 				activeIndex: 4, //当前tabbar所在页面
 				info: {
-					nickname:'',
-					avatar:'../../static/images/userImage.png',
-					level_name:''
+					nickname: '',
+					avatar: '../../static/images/userImage.png',
+					level_name: ''
 				},
 				list: [{
 						number: "0.00",
@@ -173,23 +175,28 @@
 				pointsList: [],
 				stateList: [{
 						image: "../../static/images/icon-1.jpg",
-						title: "待付款"
+						title: "待付款",
+						num: 0
 					},
 					{
 						image: "../../static/images/icon-2.jpg",
-						title: "待核销"
+						title: "待核销",
+						num: 0
 					},
 					{
 						image: "../../static/images/icon-3.jpg",
-						title: "已核销"
+						title: "已核销",
+						num: 0
 					},
 					{
 						image: "../../static/images/icon-4.jpg",
-						title: "退款/售后"
+						title: "退款/售后",
+						num: 0
 					},
 					{
 						image: "../../static/images/icon-5.jpg",
-						title: "全部订单"
+						title: "全部订单",
+						num: 0
 					}
 				],
 				goodsList: [{
@@ -238,7 +245,7 @@
 						}, {
 							image: "../../static/images/money.jpg",
 							title: "我的余额"
-						},{
+						}, {
 							image: "../../static/images/money.jpg",
 							title: "优惠券"
 						}, {
@@ -395,6 +402,13 @@
 						this.list[1].number = res.data.score //积分
 						this.list[2].number = res.data.coupon_num //卡券
 						this.list[3].number = res.data.all_collection //关注
+
+						this.stateList[0].num = res.data.paid_num //待付款数量
+						this.stateList[1].num = res.data.written_off_num //待核销数量
+						this.stateList[2].num = res.data.written_on_num //已核销数量
+						this.stateList[3].num = res.data.refund_num //退款订单数量
+
+
 						// 更新余额
 						this.$store.commit("upBalance", res.data.money)
 
@@ -430,6 +444,36 @@
 				})
 			},
 
+			// 余额  积分  卡券  关注 
+			listMenu(index) {
+				switch (index) {
+					case 0:
+						// 我的余额
+						uni.navigateTo({
+							url: "../../pagesMine/myBalance/myBalance"
+						})
+						break;
+					case 1:
+						// 我的积分
+						uni.navigateTo({
+							url: "../../pagesMine/pointsMall/pointsMall"
+						})
+						break;
+					case 2:
+						// 优惠券
+						uni.navigateTo({
+							url: "../../pagesCommon/allCoupon/allCoupon"
+						})
+						break;
+					case 3:
+						// 关注列表
+						uni.navigateTo({
+							url: "../../pagesMine/followList/followList"
+						})
+						break;
+				}
+			},
+
 			// 扫一扫
 			scanCode() {
 				// 允许从相机和相册扫码
@@ -445,7 +489,6 @@
 			listClick(index) {
 				// 0全部订单 4退款/售后  3已核销 2待核销  1待付款
 				switch (index) {
-
 					case 0:
 						uni.navigateTo({
 							url: "../../pagesMineTwo/allOrder/allOrder?listIndex=1"

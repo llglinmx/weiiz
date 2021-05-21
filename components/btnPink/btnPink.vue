@@ -1,5 +1,5 @@
 <template>
-	<view class="btn-box" @click="btnClick">{{btnName}}</view>
+	<view class="btn-box" @click="btnClick" hover-class="hover-class">{{btnName}}</view>
 </template>
 
 <script>
@@ -35,5 +35,8 @@
 		font-family: Source Han Sans CN;
 		font-weight: 400;
 		color: #FFFFFF;
+	}
+	.hover-class{
+		background: #eee;
 	}
 </style>

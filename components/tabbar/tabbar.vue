@@ -85,6 +85,7 @@
 		height: 102rpx;
 		box-shadow: 0px -1px 10px rgba(0, 0, 0, 0.1);
 		background: #fff;
+		flex-direction: row;
 
 		.tabbar-li {
 			display: flex;

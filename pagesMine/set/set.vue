@@ -128,7 +128,7 @@
 						uni.navigateTo({
 							url: "../../pagesMineTwo/personalInfo/personalInfo"
 						})
-						this.$store.commit("upEditText",'')
+						this.$store.commit("upEditText", '')
 						break;
 						// 身体状态
 					case "bodyState":
@@ -214,9 +214,9 @@
 							uni.reLaunch({
 								url: "../../pagesIndex/login/login"
 							})
-						}, 1000);
-						done()
+						}, 500);
 					}
+					done()
 				});
 			},
 

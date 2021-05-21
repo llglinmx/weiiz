@@ -27,7 +27,8 @@
 													style="color: #fff;font-size: 36rpx;"></text>
 											</text>
 										</view>
-										<view class="content-list-image-li flex-center" @click="upPhoto" v-if="imageList.length<4">
+										<view class="content-list-image-li flex-center" @click="upPhoto"
+											v-if="imageList.length<4">
 											<text class="iconfont icontupian icon-font"
 												style="color: #fff;font-size: 50rpx;font-weight: 500;"></text>
 										</view>
@@ -180,7 +181,8 @@
 				var vuedata = {
 					status: 2,
 					content: this.content,
-					mobile: this.phone
+					mobile: this.phone,
+					bimg: JSON.stringify(this.imageList) //留言图片
 				}
 
 				if (this.content.length < 100) {

@@ -14,25 +14,36 @@
 </script>
 
 <style>
-	
+	/* #ifndef APP-NVUE */
 	@import url("./static/css/iconfont/iconfont.css");
+
+	/* #endif */
+
 	/* import "./static/css/iconfont/iconfont.css" */
 	/*每个页面公共css */
-	page{
+
+	/* #ifndef APP-NVUE */
+	page {
 		height: 100%;
 	}
-	
-	.flex-center{
+
+	.flex-center {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
-	.icon-font{
+
+	.icon-font {
 		display: flex;
 		align-items: center;
 		font-weight: 500;
 	}
-	.content-box{
+
+	.content-box {
 		height: 100%;
 	}
+
+	/* #endif */
+	
+	
 </style>

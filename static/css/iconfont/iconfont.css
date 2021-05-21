@@ -1,11 +1,8 @@
 @font-face {
-  font-family: 'iconfont';  /* project id 2394062 */
-  src: url('https://at.alicdn.com/t/font_2394062_v6sw2x8kz4s.eot');
-  src: url('https://at.alicdn.com/t/font_2394062_v6sw2x8kz4s.eot?#iefix') format('embedded-opentype'),
-  url('https://at.alicdn.com/t/font_2394062_v6sw2x8kz4s.woff2') format('woff2'),
-  url('https://at.alicdn.com/t/font_2394062_v6sw2x8kz4s.woff') format('woff'),
-  url('https://at.alicdn.com/t/font_2394062_v6sw2x8kz4s.ttf') format('truetype'),
-  url('https://at.alicdn.com/t/font_2394062_v6sw2x8kz4s.svg#iconfont') format('svg');
+  font-family: 'iconfont';  /* Project id 2394062 */
+  src: url('https://at.alicdn.com/t/font_2394062_wx2cy5vnvvm.woff2?t=1621560986489') format('woff2'),
+       url('https://at.alicdn.com/t/font_2394062_wx2cy5vnvvm.woff?t=1621560986489') format('woff'),
+       url('https://at.alicdn.com/t/font_2394062_wx2cy5vnvvm.ttf?t=1621560986489') format('truetype');
 }
 
 .iconfont {
@@ -16,12 +13,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.iconmap:before {
-  content: "\e616";
+.iconUpward:before {
+  content: "\e61e";
 }
 
-.iconyuyuedingdan:before {
-  content: "\e614";
+.iconmap:before {
+  content: "\e616";
 }
 
 .iconjiazaizhong:before {

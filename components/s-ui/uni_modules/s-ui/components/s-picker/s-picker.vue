@@ -12,7 +12,7 @@
 				</div>
 			</s-hairline>
 			<div class="s-picker-body">
-				<picker-view v-if="showContent" :value="selectedIndexList" class="picker-view" @change="slideChage"
+				<picker-view v-if="showcontent" :value="selectedIndexList" class="picker-view" @change="slideChage"
 					@pickstart="onPickStart" @pickend="onPickEnd">
 					<picker-view-column v-for="(listItem,listIndex) of list" :key="listIndex">
 						<div class="s-picker-item" v-for="(item,index) of listItem" :key="index">
@@ -137,7 +137,7 @@
 		data() {
 			return {
 				selectedIndexList: [],
-				showContent: false,
+				showcontent: false,
 				disabledConfirm: false
 			};
 		},
@@ -150,13 +150,13 @@
 			beforeShow() {
 				setTimeout(() => {
 					this.setIndex(this.value);
-					this.showContent = true;
+					this.showcontent = true;
 				}, 50);
 				return true;
 			},
 			hideAfter() {
 				this.hide();
-				this.showContent = false;
+				this.showcontent = false;
 			},
 			hide() {
 				this.$emit('update:visible', false);

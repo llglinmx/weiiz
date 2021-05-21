@@ -3,13 +3,12 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTextStyle": "white", //状态栏字体颜色
 				"navigationBarTitleText": "首页"
 			}
 		}, {
 			"path": "pages/signUp/signUp",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "登录/注册",
 				"navigationBarTextStyle": "white", //状态栏字体颜色
 				"enablePullDownRefresh": false
 			}
@@ -40,6 +39,7 @@
 			"path": "pages/map/map",
 			"style": {
 				"navigationBarTitleText": "地图",
+				// "navigationBarTextStyle": "white", //状态栏字体颜色
 				"enablePullDownRefresh": false
 			}
 
@@ -82,7 +82,16 @@
 					"enablePullDownRefresh": false
 				}
 
-			}]
+			}    ,{
+                    "path" : "storeDetails/storeDetails",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "门店详情",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		},
 		{
 			"root": "pagesIndexTwo",

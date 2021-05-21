@@ -3,7 +3,7 @@ import baseconfig from "./baseconfig.js"
 const httpClient = {
 	request: function(method, url, data) {
 		var headers = {
-			// "Content-Type": "application/x-www-form-urlencoded",
+			// "content-Type": "application/x-www-form-urlencoded",
 			'content-type': 'application/x-www-form-urlencoded',
 			"Authorization": uni.getStorageSync("token")
 		};

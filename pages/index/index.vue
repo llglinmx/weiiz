@@ -1,23 +1,28 @@
 <template>
 	<view class="index-box">
+		<!-- 返回顶部 -->
+		<view class="back-to-top flex-center" @click="goTop" :class="isShowTop?'back-to-top-active':''">
+			<text class="iconfont iconUpward"></text>
+		</view>
 		<!-- 顶部 -->
 		<view class="index-head" :style="{paddingTop:barHeight+'px'}">
 			<view class="index-head-wrap">
 				<view class="index-head-address">
-					<text class="iconfont icondingwei1 icon-font" style="color: #fff;"></text>
-					<text>厦门</text>
+					<text class="iconfont icondingwei icon-font" style="color: #FF967D;margin-top: 8rpx;"></text>
+					<text style="margin-left: 15rpx;">厦门</text>
 				</view>
-				<view class="index-head-logo">
-					<image src="../../static/images/logo.png" mode="widthFix"></image>
+
+				<view class="index-head-language flex-center">
+					<text class="iconfont iconsaoyisao icon-font" style="color: #999;font-size: 32rpx;"></text>
 				</view>
-				<view class="index-head-language flex-center" @click="clickLanguage">
+				<!-- <view class="index-head-language flex-center" @click="clickLanguage">
 					<text class="iconfont iconyuyan icon-font" style="color: #fff;font-size: 32rpx;"></text>
 					<text>EN</text>
-				</view>
+				</view> -->
 			</view>
 
 		</view>
-		<view class="index-content">
+		<scroll-view :scroll-top="scrollTop" :scroll-with-animation='true' scroll-y="true" class="index-content" @scroll='scrollMain'>
 			<!-- 搜索框 -->
 			<view class="index-content-search">
 				<view class="content-search-box">
@@ -29,10 +34,10 @@
 					<view class="content-search-text">
 						<input type="text" placeholder="搜索SPA、商家" />
 					</view>
-					<view class="content-search-scan">
+					<!-- <view class="content-search-scan">
 						<text class="iconfont iconsaoyisao icon-font"
 							style="color: #999;font-size: 30rpx;font-weight: 500;"></text>
-					</view>
+					</view> -->
 				</view>
 			</view>
 			<!-- 轮播图 -->
@@ -44,52 +49,77 @@
 					</swiper-item>
 				</swiper>
 			</view>
-			<!-- 公告 -->
-			<view class="index-content-notice">
-				<view class="index-content-notice-box">
-					<view class="content-notice-wrap">
-						<view class="content-notice-wrap-text">公告</view>
-						<view class="content-notice-wrap-swiper">
-							<swiper class="swiper" :autoplay="autoplay" :vertical="true" :interval="5000"
-								:duration="duration" :circular="circular">
-								<swiper-item v-for="(item,index) in noticeList">
-									<text>{{item.title}}</text>
-								</swiper-item>
-							</swiper>
+			<!-- 推荐商家 -->
+			<view class="recommend-business">
+				<menu-title msgTitle="推荐商家" :isShow="true" />
+				<view class="recommend-business-list" @scroll='recommendChange'>
+					<view class="recommend-business-list-li" v-for="(ele,i) in recommendList" :key='i'>
+						<view class="recommend-business-list-li-image">
+							<image :src="ele.simg" mode="aspectFill"></image>
+						</view>
+						<view class="recommend-business-list-li-title">{{ele.name}}</view>
+						<view class="recommend-business-list-li-address">
+							<text class="iconfont icondingwei icon-font"
+								style="color: #FF967D;margin-top: 4rpx;"></text>
+							<text class="recommend-business-list-li-address-text">{{ele.address}}</text>
 						</view>
 					</view>
-					<view class="content-notice-more">
-						<text class="iconfont icongengduo icon-font"></text>
-					</view>
+
+				</view>
+				<view class="recommend-business-speed barWidth">
+					<view class="recommend-business-speed-bar" :style="{width:toolBarWidth+'px'}"></view>
 				</view>
 			</view>
+
 			<!-- 列表 -->
-			<view class="index-content-list">
-				<view class="index-content-list-li" v-for="item in arrList" @click="moreClick(item.name)">
-					<view class="content-list-li-ico">
-						<image :src="item.icon" mode="aspectFill"></image>
+			<view class="index-content-list-wrap">
+				<menu-title msgTitle="附近商家" style="padding: 0 30rpx;box-sizing: border-box;" />
+				<view class="index-content-list">
+					<view class="index-content-list-li" v-for="item in arrList" @click="moreClick(item.name)">
+						<view class="content-list-li-ico">
+							<image :src="item.icon" mode="aspectFill"></image>
+						</view>
+						<view class="content-list-li-text">{{item.name}}</view>
 					</view>
-					<view class="content-list-li-text">{{item.name}}</view>
 				</view>
-			</view>
-			<!-- 更多服务列表 -->
-			<view class="more-services-box">
-				<view class="more-services-title">更多服务</view>
-				<view class="more-services-list">
-					<view class="more-services-list-li" v-for="(item,index) in serviceList" @click="serviceClick(item)"
-						:style="{backgroundImage: 'url('+item.bg+')',backgroundSize: 'contain'}">
-						<view class="more-services-list-li-title">{{item.title}}</view>
-						<view class="more-services-list-li-text">{{item.text}}</view>
-						<view class="more-list-li-btn">
-							<text>点击签到</text>
-							<text class="iconfont icongengduo icon-font"
-								style="color: #fff;font-size: 18rpx;margin-top: 4rpx;"></text>
+				<view class="nearby-business-wrap">
+					<view class="nearby-business-screen">
+						<view class="nearby-business-screen-li">
+							<view class="nearby-business-screen-li-text">综合排序</view>
+						</view>
+						<view class="nearby-business-screen-li">
+							<view class="nearby-business-screen-li-text" style="text-align: center;">区域</view>
+						</view>
+						<view class="nearby-business-screen-li">
+							<view class="nearby-business-screen-li-text" style="text-align: right;">全部筛选</view>
+						</view>
+					</view>
+					<view class="nearby-business-list">
+						<view class="nearby-business-list-li" v-for="item in nearbyList" :key='item.id'>
+							<view class="nearby-business-list-li-image" @click="storeDetails">
+								<image :src="item.simg" mode="aspectFill"></image>
+							</view>
+							<view class="nearby-business-list-li-title">{{item.name}}</view>
+							<view class="nearby-business-list-li-info">
+								<view class="nearby-business-list-li-info-left">
+									<score-max :comment='item.comment' />
+									<view class="nearby-business-list-li-info-left-comment">
+										评价(200)
+									</view>
+								</view>
+								<view class="nearby-business-list-li-info-right">距离6.1KM</view>
+							</view>
+							<view class="nearby-business-list-li-label">
+								<view class="nearby-business-list-li-label-item">推荐商家</view>
+								<view class="nearby-business-list-li-label-item">推荐商家</view>
+								<view class="nearby-business-list-li-label-item">推荐商家</view>
+							</view>
 						</view>
 					</view>
 				</view>
 			</view>
 
-		</view>
+		</scroll-view>
 		<!-- tabbar导航栏 -->
 		<view class="index-footer">
 			<Tabbar @tabbarClick="tabbarClick" :activeIndex="activeIndex"></Tabbar>
@@ -122,6 +152,11 @@
 <script>
 	import Tabbar from "../../components/tabbar/tabbar.vue"
 	import UniPopup from "../../components/uni-popup/uni-popup.vue"
+	import menuTitle from "../../components/menu-title/menu-title.vue"
+	import scoreMax from "../../components/score-max/score-max.vue"
+	import permision from "@/js_sdk/wa-permission/permission.js"
+
+
 	export default {
 		data() {
 			return {
@@ -132,27 +167,6 @@
 				circular: true,
 				arrList: [],
 				textList: ['中文', "英语", "俄语", "法语", "德语"],
-				serviceList: [{
-						title: '商城礼品卡',
-						bg: '../../static/images/card-bg1.png',
-						text: '领取精美礼品一份'
-					},
-					{
-						title: '商城套餐卡',
-						bg: '../../static/images/card-bg2.png',
-						text: '领取精美套餐卡一份'
-					},
-					{
-						title: '积分',
-						bg: '../../static/images/card-bg3.png',
-						text: ' 积分商城兑换好物'
-					},
-					{
-						title: '折扣券',
-						bg: '../../static/images/card-bg4.png',
-						text: ' 领券下单更优惠'
-					},
-				],
 				bannerList: [], //轮播图
 				noticeList: [], //公告
 				barHeight: 0, //顶部电量导航栏高度
@@ -160,33 +174,33 @@
 				isPopup: false,
 				selectIndex: 0, //当前选择的语言
 				activeIndex: 0, //当前tabbar所在页面
+				toolBarWidth: 0, //进度条长度
+				parWidth: 0, // 进度条父级长度
+				longitude: '118.03734908465576', //经度
+				latitude: '24.614746736877', //纬度
+				recommendList: [], //推荐列表
+				nearbyList: [], //附近列表
+				scrollLeft: 0,
+				scrollTop: 0,
+				old: {
+					scrollTop: 0
+				},
+				isShowTop:false,//是否显示返回顶部按钮
 			}
 		},
 		components: {
 			Tabbar,
-			UniPopup
+			UniPopup,
+			menuTitle,
+			scoreMax
 		},
 		onLoad() {
 			this.languageList();
+			this.getIndexInfo()
 			this.getInfo()
-
-
-
-			// uni.getLocation({
-			// 	type: 'wgs84',
-			// 	geocode: true, //设置该参数为true可直接获取经纬度及城市信息
-			// 	success: (res)=> {
-			// 		console.log('当前位置的经度：' + res.longitude);
-			// 		console.log('当前位置的纬度：' + res.latitude);
-			// 	},
-			// 	fail: function() {
-			// 		uni.showToast({
-			// 			title: '获取地址失败，将导致部分功能不可用',
-			// 			icon: 'none'
-			// 		});
-			// 	}
-			// })
+			this.handleAuthorize()
 		},
+
 		onReady() {
 			// 获取顶部电量状态栏高度
 			uni.getSystemInfo({
@@ -197,21 +211,157 @@
 		},
 		methods: {
 
-			// 获取首页信息
-			getInfo() {
-				var vuedata = {
+			// 获取位置信息
+			getLocationFn() {
+				uni.getLocation({
+					type: 'wgs84', // <map> 组件默认为国测局坐标gcj02
+					altitude: true,
+					success: (res) => {
+						this.longitude = res.longitude // 经度
+						this.latitude = res.latitude // 纬度
+						console.log('当前位置的经度：' + res.longitude);
+						console.log('当前位置的纬度：' + res.latitude);
+						// 获取到经纬度之后则执行 
+						this.getRecommendBusiness() //推荐商家
+						this.getNearbyBusiness() //附近
+					},
+					fail(err) {
+						console.log(err)
+					}
+				})
+			},
+			// 用户授权
+			handleAuthorize() {
+				// #ifdef H5
+				this.getRecommendBusiness()
+				this.getNearbyBusiness()
+				// #endif
 
+
+				// 判断机型
+				switch (uni.getSystemInfoSync().platform) {
+					case 'android':
+						// #ifdef APP-PLUS
+						// 安卓  是否授权
+						permision.requestAndroidPermission("android.permission.ACCESS_FINE_LOCATION").then(res => {
+							// 1	已获取授权   0	未获取授权    -1	被永久拒绝授权
+							if (res == 1) {
+								this.getLocationFn()
+							} else if (res == 0) {
+								uni.showModal({
+										title: '温馨提示',
+										content: '为享受智能小程序，您必须授权!',
+										showCancel: false,
+										confirmText: '确认授权'
+									})
+									// 这里只设置了确认按钮，没有取消按钮
+									.then(res => {
+										//res ： [null, {cancel: false, confirm: true, errMsg: 'showModal: ok'}]
+										if (res[1]['confirm']) { // 点击了确认按钮时
+											// 调用下边方法时，会弹出 【使用我的地理位置】界面， 未设置直接返回，还是会走fail授权失败的函数，
+											// 还是会弹出上边的温馨提示！！！
+											// 如果设置, scope.userLocation: true
+											uni.openSetting({
+												success: (res) => {
+													// 如果不设置，res结果：
+													// {errMsg: "openSetting:ok", authSetting: {scope.userLocation: false}}
+													// 如果设置, res结果： 
+													// {errMsg: "openSetting:ok", authSetting: {scope.userLocation: true}}
+													// console.log('小程序设置界面：', res)
+												}
+											})
+										}
+									})
+							}
+						})
+						// #endif
+
+						break;
+					case 'ios':
+						// #ifdef APP-PLUS
+						//判断iOS上是否给予位置权限，有权限返回true，否则返回false
+						permision.judgeIosPermission("location").then(res => {
+							if (res) {
+								this.getLocationFn()
+							} else {
+								uni.showModal({
+										title: '温馨提示',
+										content: '为享受智能小程序，您必须授权!',
+										showCancel: false,
+										confirmText: '确认授权'
+									})
+									// 这里只设置了确认按钮，没有取消按钮
+									.then(res => {
+										//res ： [null, {cancel: false, confirm: true, errMsg: 'showModal: ok'}]
+										if (res[1]['confirm']) { // 点击了确认按钮时
+											// 调用下边方法时，会弹出 【使用我的地理位置】界面， 未设置直接返回，还是会走fail授权失败的函数，
+											// 还是会弹出上边的温馨提示！！！
+											// 如果设置, scope.userLocation: true
+											uni.openSetting({
+												success: (res) => {
+													// 如果不设置，res结果：
+													// {errMsg: "openSetting:ok", authSetting: {scope.userLocation: false}}
+													// 如果设置, res结果： 
+													// {errMsg: "openSetting:ok", authSetting: {scope.userLocation: true}}
+													// console.log('小程序设置界面：', res)
+												}
+											})
+										}
+									})
+							}
+						})
+						// #endif
+						break;
+					case 'devtools':
+						console.log('客户端是在开发者工具上')
+						break;
+					default:
+						console.log('客户端是在其他工具上')
+						break;
 				}
-				this.apiget('pc/index', vuedata).then(res => {
+			},
+
+			// 获取首页信息
+			getIndexInfo() {
+				this.apiget('app/index', {}).then(res => {
 					if (res.status == 200) {
 						this.bannerList = res.data.bannerList
 						this.arrList = res.data.classList
-						this.noticeList = res.data.noticeList
 					}
 				});
 			},
 
+			// 获取推荐商家
+			getRecommendBusiness() {
+				var vuedata = {
+					push: 1,
+					each_page: 50
+				}
+				this.apiget('pc/store', vuedata).then(res => {
+					if (res.status == 200) {
+						this.recommendList = res.data.storeList
 
+						uni.createSelectorQuery().in(this).select(".barWidth").boundingClientRect(data => {
+							this.parWidth = data.width
+							this.toolBarWidth = data.width / this.recommendList.length
+						}).exec();
+					}
+				});
+			},
+			// 获取附近商家
+			getNearbyBusiness() {
+				var vuedata = {
+					ordertype: 'distance',
+					lat: this.latitude,
+					lng: this.longitude,
+					each_page: 50
+				}
+				this.apiget('pc/store', vuedata).then(res => {
+					if (res.status == 200) {
+						this.nearbyList = res.data.storeList
+					}
+				})
+			},
 
 			// 打开切换语言
 			clickLanguage() {
@@ -251,6 +401,42 @@
 				});
 			},
 
+			recommendChange(e) {
+				console.log(e)
+			},
+
+			// 页面滚动
+			scrollMain(e) {
+				this.old.scrollTop = e.detail.scrollTop
+				if(e.detail.scrollTop>1250){
+					this.isShowTop = true
+					return false
+				}
+				this.isShowTop = false
+
+			},
+
+			// 返回顶部
+			goTop(e) {
+				this.scrollTop = this.old.scrollTop
+				this.$nextTick(function() {
+					this.scrollTop = 0
+				});
+			},
+			// 推荐商家滑动切换
+			swiperChange(e) {
+				this.toolBarWidth = (e.detail.current + 1) * (this.parWidth / this.recommendList.length)
+			},
+
+			// 门店详情
+			storeDetails() {
+				return false
+				uni.navigateTo({
+					url: "../../pagesIndex/storeDetails/storeDetails"
+				})
+			},
+
+
 			// 列表点击
 			moreClick(item) {
 				switch (item) {
@@ -269,21 +455,6 @@
 				}
 			},
 
-			// 更多服务列表点击
-			serviceClick(item) {
-				switch (item.title) {
-					case "商城套餐卡":
-						uni.navigateTo({
-							url: "../../pagesIndex/packageCardList/packageCardList"
-						})
-						break;
-					case "商城礼品卡":
-						uni.navigateTo({
-							url: "../../pagesIndex/giftCardShopping/giftCardShopping"
-						})
-						break;
-				}
-			},
 
 			// tabbar点击
 			tabbarClick(index) {
@@ -313,6 +484,19 @@
 						break;
 				}
 			},
+			// 获取个人信息
+			getInfo() {
+				this.apiget('api/v1/members/member_info', {}).then(res => {
+					if (res.status == 200) {
+						// 更新余额
+						this.$store.commit("upBalance", res.data.money)
+
+						// 保存用户信息
+						this.$store.commit('upUserInfo', res.data)
+
+					}
+				});
+			},
 
 		}
 	}
@@ -320,24 +504,41 @@
 
 <style scoped lang="scss">
 	.index-box {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		height: 100%;
+		overflow: hidden;
+
+		.back-to-top{
+			position: fixed;
+			bottom:200rpx;
+			right: -100rpx;
+			width: 100rpx;
+			height: 100rpx;
+			background: rgba(0, 0, 0,0.5);
+			border-radius: 50%;
+			z-index: 9999;
+			transition: 0.3s;
+			color: #fff;
+		}
+		.back-to-top-active{
+			right: 30rpx !important;
+		}
 
 		.index-head {
-			background-color: #FF967D;
 
 			.index-head-wrap {
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				padding: 26rpx 40rpx;
+				padding: 26rpx 30rpx;
 				box-sizing: border-box;
-				background-color: #FF967D;
+				// background-color: #FF967D;
 				font-size: 28rpx;
 				font-family: Source Han Sans CN;
 				font-weight: 400;
-				color: #FFFFFF;
+				color: #333;
 
 				.index-head-address {
 					height: 50rpx;
@@ -351,11 +552,11 @@
 					}
 
 					text {
-						margin-left: 15rpx;
+						// margin-left: 15rpx;
 					}
 
 					.icon-font {
-						font-size: 28rpx;
+						font-size: 38rpx;
 					}
 				}
 
@@ -386,10 +587,11 @@
 		.index-content {
 			height: 100%;
 			flex: 1;
+			overflow-y: scroll;
 
 			.index-content-search {
 				box-sizing: border-box;
-				margin: 30rpx 0;
+				margin: 10rpx 0 30rpx;
 				padding: 0 40rpx;
 
 				.content-search-box {
@@ -398,7 +600,7 @@
 					justify-content: space-between;
 					height: 88rpx;
 					background: #F7F7F7;
-					border-radius: 15rpx;
+					border-radius: 40rpx;
 
 					.content-search-ico {
 						display: flex;
@@ -409,6 +611,8 @@
 					}
 
 					.content-search-text {
+						padding-right: 40rpx;
+						box-sizing: border-box;
 						flex: 1;
 
 						input {
@@ -462,188 +666,212 @@
 				}
 			}
 
-			.index-content-notice {
-				margin: 30rpx auto;
-				padding: 0 40rpx;
+			.recommend-business {
+				padding: 0 30rpx;
 				box-sizing: border-box;
 
-				.index-content-notice-box {
+				.recommend-business-list {
 					display: flex;
-					align-items: center;
-					justify-content: space-between;
+					flex-direction: row;
+					width: 100%;
+					overflow-x: scroll;
 
-					padding: 24rpx 20rpx;
-					box-sizing: border-box;
-					background: #F7F7F7;
-					border-radius: 10rpx;
+					.recommend-business-list-li:last-child {
+						margin-right: 0;
+					}
 
-					.content-notice-wrap {
-						display: flex;
-						align-items: center;
-						flex: 1;
+					.recommend-business-list-li {
+						min-width: 330rpx;
+						margin-right: 30rpx;
 
-						.content-notice-wrap-text {
-							font-weight: bold;
-							font-size: 32rpx;
-							color: #FF967D;
-						}
+						.recommend-business-list-li-image {
+							width: 100%;
+							height: 200rpx;
 
-						.content-notice-wrap-swiper {
-							flex: 1;
-							height: 40rpx;
-
-							.swiper {
-								height: 100%;
+							image {
 								width: 100%;
-
-								swiper-item {
-									height: 100%;
-									width: 100%;
-
-									text {
-										height: 100%;
-										display: block;
-										line-height: 40rpx;
-										margin-left: 20rpx;
-										font-size: 24rpx;
-										font-family: Source Han Sans CN;
-										font-weight: 400;
-										color: #333333;
-										overflow: hidden;
-										text-overflow: ellipsis;
-										white-space: nowrap;
-									}
-								}
+								height: 200rpx;
+								border-radius: 10rpx;
 							}
 						}
 
-					}
-
-					.content-notice-more {
-						width: 20rpx;
-
-						.icon-font {
-							font-weight: bold;
-							color: #333;
-							font-size: 28rpx;
-						}
-					}
-				}
-			}
-
-			.index-content-list {
-				padding-left: 30rpx;
-				box-sizing: border-box;
-				display: flex;
-				overflow-x: scroll;
-				margin-bottom: 30rpx;
-
-				.index-content-list-li {
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					margin-right: 32rpx;
-
-					.content-list-li-ico {
-						display: flex;
-						align-items: center;
-						justify-content: center;
-						width: 128rpx;
-						height: 128rpx;
-						background: #FFF3F0;
-						border-radius: 20rpx;
-
-						image {
-							width: 72rpx;
-							height: 72rpx;
-						}
-					}
-
-					.content-list-li-text {
-						margin-top: 20rpx;
-						font-size: 26rpx;
-						font-family: Source Han Sans CN;
-						font-weight: 400;
-						color: #333333;
-					}
-				}
-			}
-
-			// 更多服务
-			.more-services-box {
-				padding-top: 30rpx;
-
-				.more-services-title {
-					padding-left: 30rpx;
-					box-sizing: border-box;
-					font-size: 36rpx;
-					font-family: Source Han Sans CN;
-					font-weight: 500;
-					color: #000000;
-				}
-
-				.more-services-list {
-					width: 100%;
-					display: flex;
-					display: -webkit-box;
-					margin-top: 30rpx;
-					padding-left: 30rpx;
-					padding-right: 30rpx;
-					box-sizing: border-box;
-					overflow-x: scroll;
-
-					.more-services-list-li {
-						width: 312rpx;
-						height: 180rpx;
-						padding: 30rpx 24rpx;
-						margin-right: 30rpx;
-						border-radius: 10rpx;
-						box-sizing: border-box;
-						background: rgb(247, 247, 247) no-repeat;
-						background-position: bottom;
-						background-size: contain;
-
-						.more-services-list-li-title {
-							font-size: 26rpx;
-							font-family: Source Han Sans CN;
+						.recommend-business-list-li-title {
+							margin-top: 20rpx;
 							font-weight: 500;
-							color: #000000;
+							font-size: 30rpx;
+							color: #000;
 						}
 
-						.more-services-list-li-text {
-							margin-top: 10rpx;
-							font-size: 20rpx;
+						.recommend-business-list-li-address {
+							display: flex;
+							align-items: center;
+
+							.recommend-business-list-li-address-text {
+								font-size: 24rpx;
+								color: #999;
+								overflow: hidden;
+								text-overflow: ellipsis;
+								white-space: nowrap;
+							}
+						}
+					}
+
+				}
+
+				.recommend-business-speed {
+					position: relative;
+					width: 80rpx;
+					height: 4rpx;
+					margin: 20rpx auto 0;
+					background: #ededed;
+					border-radius: 2rpx;
+
+					.recommend-business-speed-bar {
+						position: absolute;
+						width: 0;
+						height: 100%;
+						background: #FF967D;
+						transition: 0.3s;
+					}
+				}
+			}
+
+			.index-content-list-wrap {
+				.index-content-list {
+					padding-left: 30rpx;
+					box-sizing: border-box;
+					display: flex;
+					overflow-x: scroll;
+					margin-bottom: 30rpx;
+
+					.index-content-list-li {
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						margin-right: 32rpx;
+
+						.content-list-li-ico {
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							width: 128rpx;
+							height: 128rpx;
+							background: #FFF3F0;
+							border-radius: 20rpx;
+
+							image {
+								width: 72rpx;
+								height: 72rpx;
+							}
+						}
+
+						.content-list-li-text {
+							margin-top: 20rpx;
+							font-size: 26rpx;
 							font-family: Source Han Sans CN;
 							font-weight: 400;
 							color: #333333;
 						}
+					}
+				}
 
-						.more-list-li-btn {
-							display: flex;
-							align-items: center;
-							justify-content: space-around;
-							width: 122rpx;
-							height: 36rpx;
-							padding: 0 10rpx;
-							box-sizing: border-box;
-							margin-top: 16rpx;
-							background: linear-gradient(90deg, #FFB5A4 0%, #FF714F 100%);
-							border-radius: 30rpx;
+				.nearby-business-wrap {
+					padding: 0 30rpx;
+					box-sizing: border-box;
 
-							text {
-								font-size: 18rpx;
-								font-family: Source Han Sans CN;
-								font-weight: 400;
-								color: #FFFFFF;
+					.nearby-business-screen {
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						height: 110rpx;
+						font-size: 28rpx;
+						color: #000;
+
+						.nearby-business-screen-li {
+							flex: 1;
+
+							.nearby-business-screen-li-text {}
+						}
+					}
+
+					.nearby-business-list {
+						.nearby-business-list-li {
+							margin-bottom: 30rpx;
+
+							.nearby-business-list-li-image {
+								width: 100%;
+								height: 280rpx;
+
+								image {
+									width: 100%;
+									height: 280rpx;
+									border-radius: 10rpx;
+								}
 							}
 
-							.icon-font {}
+							.nearby-business-list-li-title {
+								padding: 20rpx 0;
+								font-size: 30rpx;
+								font-weight: 500;
+								color: #000;
+							}
 
+							.nearby-business-list-li-info {
+								display: flex;
+								align-items: center;
+								justify-content: space-between;
 
+								.nearby-business-list-li-info-left {
+									height: 28rpx;
+									display: flex;
+									align-items: center;
+
+									.nearby-business-list-li-info-left-comment {
+										height: 28rpx;
+										margin-left: 15rpx;
+										padding: 0 20rpx;
+										box-sizing: border-box;
+										border-left: 1px solid #ededed;
+										font-size: 28rpx;
+										font-weight: 500;
+										color: #000;
+										line-height: 32rpx;
+									}
+								}
+
+								.nearby-business-list-li-info-right {
+									font-size: 24rpx;
+									color: #999;
+								}
+							}
+
+							.nearby-business-list-li-label {
+								display: flex;
+								flex-wrap: wrap;
+								margin-top: 20rpx;
+
+								.nearby-business-list-li-label-item:first-child {
+									background: #FFE9ED;
+									border-radius: 10rpx;
+									color: #FF2D56;
+								}
+
+								.nearby-business-list-li-label-item {
+									padding: 8rpx 20rpx;
+									margin-right: 10rpx;
+									box-sizing: border-box;
+									font-size: 24rpx;
+									color: #000;
+									background: #F2F2F2;
+								}
+							}
 						}
 					}
 				}
 			}
+
+
+
 
 		}
 

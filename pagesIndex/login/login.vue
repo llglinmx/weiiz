@@ -181,14 +181,14 @@
 								icon: "none"
 							})
 							uni.setStorageSync('token', res.data.member.token);
-							setTimeout(function() {
-								uni.reLaunch({
-									url: "../../pages/index/index"
-								})
-							}, 1000)
+
+							uni.reLaunch({
+								url: "../../pages/index/index"
+							})
+
 							// 保存用户信息
 							this.$store.commit("upUserInfo", res.data.member)
-							
+
 							// 保存余额
 							this.$store.commit("upBalance", res.data.member.money)
 							break;

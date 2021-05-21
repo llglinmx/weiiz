@@ -146,7 +146,7 @@ export default {
   watch: {
     value (index) {
       this.active = this.value;
-      this.renderContent();
+      this.rendercontent();
       this.refreshNavScroll();
     }
   },
@@ -156,11 +156,11 @@ export default {
         this.active = index;
         this.$emit('input', index);
         this.$emit('change', index);
-        this.renderContent();
+        this.rendercontent();
         this.refreshNavScroll();
       }
     },
-    renderContent () {
+    rendercontent () {
       this.$nextTick(() => {
         const item = this.navContextList[this.active];
         if (item && !item.info.isRender) {
@@ -205,7 +205,7 @@ export default {
     this.active = this.value;
   },
   mounted () {
-    this.renderContent();
+    this.rendercontent();
     this.refreshNavScroll(true);
   }
 };

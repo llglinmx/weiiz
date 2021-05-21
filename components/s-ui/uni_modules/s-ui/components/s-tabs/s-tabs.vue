@@ -205,7 +205,7 @@ export default {
       return uni.createSelectorQuery().in(this);
     },
     refresh () {
-      this.renderContent();
+      this.rendercontent();
       this.scrollByIndex();
     },
     async navClick (index, navItemInfo) {
@@ -227,7 +227,7 @@ export default {
         }
       }
     },
-    renderContent () {
+    rendercontent () {
       const item = this.navContextList[this.current];
       if (item && !item.info.isRender) {
         item.info.isRender = true;

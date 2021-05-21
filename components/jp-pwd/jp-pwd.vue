@@ -423,14 +423,14 @@
 				}
 
 				.pay-pwd-input {
-					width: 750upx;
+					width: 750rpx;
 					height: 20%;
 					line-height: 20%;
 					display: flex;
 					justify-content: flex-start;
 
 					.pay-pwd-grid {
-						margin: 0upx auto;
+						margin: 0rpx auto;
 						margin-top: 20rpx;
 						height: 80%;
 						line-height: 80%;
@@ -438,14 +438,14 @@
 						justify-content: center;
 
 						view {
-							width: 110upx;
+							width: 110rpx;
 							height: 100%;
 							display: flex;
 							align-items: center;
 							justify-content: center;
-							border: #cececd solid 0.1upx;
-							border-radius: 10upx;
-							font-size: 36upx;
+							border: #cececd solid 0.5rpx;
+							border-radius: 10rpx;
+							font-size: 36rpx;
 							font-weight: 600;
 						}
 					}
@@ -453,14 +453,14 @@
 				}
 
 				.input-row {
-					width: 750upx;
+					width: 750rpx;
 					height: 20%;
 					line-height: 20%;
 					display: flex;
 					justify-content: flex-start;
 
 					.pay-pwd-grid {
-						margin: 0upx auto;
+						margin: 0rpx auto;
 						margin-top: 20rpx;
 						height: 80%;
 						line-height: 80%;
@@ -473,7 +473,7 @@
 							display: flex;
 							align-items: center;
 							justify-content: center;
-							font-size: 36upx;
+							font-size: 36rpx;
 							font-weight: 600;
 							border-bottom: 1px solid #c8c8c8;
 						}
@@ -498,13 +498,13 @@
 
 						.keyboard {
 							box-sizing: border-box;
-							width: 250upx;
+							width: 250rpx;
 							height: 100%;
 							line-height: 100%;
 							background-color: rgba(255, 255, 255, .3);
-							border-top: #f7f4f4 solid 0.1upx;
-							border-left: #f7f4f4 solid 0.1upx;
-							font-size: 40upx;
+							border-top: #f7f4f4 solid 0.1rpx;
+							border-left: #f7f4f4 solid 0.1rpx;
+							font-size: 40rpx;
 							font-weight: 600;
 							display: flex;
 							justify-content: center;
@@ -526,13 +526,13 @@
 
 						.keyboard {
 							box-sizing: border-box;
-							width: 240upx;
+							width: 240rpx;
 							margin: 0 7rpx;
 							border-radius: 20rpx;
 							height: 100%;
 							line-height: 100%;
 							background-color: rgba(255, 255, 255, .3);
-							font-size: 40upx;
+							font-size: 40rpx;
 							font-weight: 600;
 							display: flex;
 							justify-content: center;
@@ -613,7 +613,7 @@
 					justify-content: flex-start;
 
 					.pay-pwd-grid {
-						margin: 0upx auto;
+						margin: 0rpx auto;
 						margin-top: 10rpx;
 						height: 80%;
 						line-height: 80%;
@@ -621,14 +621,14 @@
 						justify-content: center;
 
 						view {
-							width: 100upx;
+							width: 100rpx;
 							height: 100%;
 							display: flex;
 							align-items: center;
 							justify-content: center;
-							border: #cececd solid 0.1upx;
-							border-radius: 10upx;
-							font-size: 36upx;
+							border: #cececd solid 0.1rpx;
+							border-radius: 10rpx;
+							font-size: 36rpx;
 							font-weight: 600;
 						}
 					}
@@ -644,7 +644,7 @@
 					text-align: center;
 
 					.pay-pwd-grid {
-						margin: 0upx auto;
+						margin: 0rpx auto;
 						margin-top: 20rpx;
 						height: 80%;
 						line-height: 80%;
@@ -657,7 +657,7 @@
 							display: flex;
 							align-items: center;
 							justify-content: center;
-							font-size: 36upx;
+							font-size: 36rpx;
 							font-weight: 600;
 							border-bottom: 1px solid #c8c8c8;
 						}
@@ -709,13 +709,13 @@
 
 							.keyboard {
 								box-sizing: border-box;
-								width: 250upx;
+								width: 250rpx;
 								height: 100%;
 								line-height: 100%;
 								background-color: rgba(255, 255, 255, .3);
-								border-top: #f7f4f4 solid 0.1upx;
-								border-left: #f7f4f4 solid 0.1upx;
-								font-size: 40upx;
+								border-top: #f7f4f4 solid 0.1rpx;
+								border-left: #f7f4f4 solid 0.1rpx;
+								font-size: 40rpx;
 								font-weight: 600;
 								display: flex;
 								justify-content: center;
@@ -738,13 +738,13 @@
 
 							.keyboard {
 								box-sizing: border-box;
-								width: 240upx;
+								width: 240rpx;
 								margin: 0 6rpx;
 								border-radius: 20rpx;
 								height: 100%;
 								line-height: 100%;
 								background-color: rgba(255, 255, 255, .3);
-								font-size: 40upx;
+								font-size: 40rpx;
 								font-weight: 600;
 								display: flex;
 								justify-content: center;

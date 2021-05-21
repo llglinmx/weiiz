@@ -50,7 +50,28 @@
 			});
 		},
 		onLoad(options) {
+			console.log(options)
 			this.idx = options.listIndex * 1 // *1 是为了把字符串转为数字
+
+			// 从个人中心里面点击进来需要
+			switch (this.idx) {
+				case 0: //、1为全部订单
+					this.orderType = 1
+					break;
+				case 1: //、1为待付款
+					this.orderType = -1
+					break;
+				case 2: //、1为待核销
+					this.orderType = -2
+					break;
+				case 3: //、1为已核销
+					this.orderType = 2
+					break;
+				case 4: //、1为退款
+					this.orderType = 3
+					break;
+			}
+
 		},
 		onShow() {
 
@@ -59,44 +80,8 @@
 		methods: {
 
 
-			queryList(pageNo, pageSize) {
-				//这里的pageNo和pageSize会自动计算好，直接传给服务器即可
-				//这里的请求只是演示，请替换成自己的项目的网络请求，请在网络请求回调中
-				//通过this.$refs.paging.addData(请求回来的数组);将请求结果传给z-paging
-				var page = {
-					num: pageNo,
-					size: pageSize
-				}
-				this.getDataList(page)
-
-			},
 			dropDown() {
 
-			},
-
-
-			// 获取数据
-			getDataList(page) {
-				var vuedata = {
-					page_index: page.num, // 请求页数，
-					each_page: page.size, // 请求条数
-					order_status: this.orderType
-				}
-				this.apiget('api/v1/members/member_order', vuedata).then(res => {
-					if (res.status == 200) {
-						if (res.data.data.length != 0) {
-							let list = res.data.data
-							let totalSize = res.data.total_rows
-							this.$refs.paging.addData(list);
-							this.goodsList = this.goodsList.concat(list); //追加新数据
-							console.log(this.goodsList)
-						} else {
-							// 显示无数据背景
-							this.mescroll.showEmpty()
-						}
-
-					}
-				});
 			},
 
 			tabIndex(index) {
@@ -106,7 +91,6 @@
 						break;
 					case 1:
 						this.orderType = -1
-						// this.orderType = 1
 						break;
 					case 2:
 						this.orderType = -2
