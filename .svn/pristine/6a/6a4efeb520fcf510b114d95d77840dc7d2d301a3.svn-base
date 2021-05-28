@@ -1,0 +1,1095 @@
+ss<template>
+	<view class="box">
+		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
+			<navTitle navTitle="预约下单"></navTitle>
+		</view>
+		<view class="box-content">
+			<view class="box-content-wrap">
+				<view class="content-wrap-top">
+					<view class="content-wrap-top-title">
+						<text class="iconfont iconshangjia" style="font-size: 28rpx;color: #FF8366;"></text>
+						<text>{{dataTop.name}}</text>
+					</view>
+					<view class="content-wrap-top-more">
+						<text class="iconfont icongengduo icon-font"
+							style="color: #999;font-size: 28rpx;margin-top: 4rpx;"></text>
+					</view>
+				</view>
+				<view class="content-wrap-top-list">
+					<view class="content-wrap-top-list-li">
+						<view class="content-wrap-top-list-li-image">
+							<image :src="dataList.simg" mode="aspectFill"></image>
+						</view>
+						<view class="content-wrap-top-list-li-info">
+							<view class="content-wrap-top-list-li-info-top">
+								<view class="content-wrap-top-list-li-info-top-text">{{dataList.name}}</view>
+								<view class="content-wrap-top-list-li-info-top-price">￥{{dataList.price}}</view>
+							</view>
+							<view class="content-wrap-top-list-li-info-type">
+								<!-- <view class="list-li-info-type-item flex-center" v-for="item in label(dataList.service_effectiveness)">{{item}}</view> -->
+							</view>
+						</view>
+					</view>
+					<!-- <view class="content-wrap-top-bottom">
+						<view class="content-wrap-top-bottom-num">预约人数</view>
+						<view class="content-wrap-top-bottom-stepper">
+							<view class="reduce" @click="stepperClick('reduce')">
+								<image src="../../static/images/reduce-icon.png" mode="aspectFill"></image>
+							</view>
+							<view class="num flex-center">
+								{{num}}
+							</view>
+							<view class="add" @click="stepperClick('add')">
+								<image src="../../static/images/add-icon.png" mode="aspectFill"></image>
+							</view>
+						</view>
+					</view> -->
+				</view>
+			</view>
+
+			<view class="box-content-select-technician">
+				<view class="content-select-technician-wrap" :class="technicianId!=-1?'technician-wrap-border':''"
+					@click="selectTechnician">
+					<view class="box-content-select-technician-title" :class="technicianId!=-1?'title-color':''">选择按摩技师
+					</view>
+					<view class="box-content-select-technician-more">
+						<text class="iconfont icongengduo icon-font"
+							style="color: #FF8366;font-size: 32rpx;margin-top: 4rpx;" v-if="technicianId ==-1"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #999;font-size: 32rpx;margin-top: 4rpx;" v-else></text>
+					</view>
+				</view>
+				<view class="select-technician-info" v-if="technicianId==item.id"
+					:class="technicianId!=-1?'select-technician-info-auto':''" v-for="(item,indx) in technicianList"
+					:key="item.id">
+					<view class="select-technician-info-image">
+						<image src="../../static/images/shop-ico.png" mode="aspectFill"></image>
+					</view>
+					<view class="select-technician-info-main">
+						<view class="select-technician-info-main-top">
+							<view class="select-technician-info-main-top-title">{{item.name}}</view>
+							<view class="select-technician-info-main-top-price">￥{{serviceCharge(item.service_fee)}}
+							</view>
+						</view>
+						<view class="select-technician-info-main-center">
+							<view class="select-technician-info-main-title">工龄：{{item.service_times}}年</view>
+						</view>
+						<view class="select-technician-info-main-bottom">
+							<view class="select-technician-info-main-bottom-item flex-center"
+								v-for="(i,j) in item.reserve_info">{{i.name}}</view>
+						</view>
+					</view>
+				</view>
+			</view>
+
+			<view class="box-content-appointment-time"
+				:class="technicianId!=-1?'box-content-appointment-time-active':''">
+				<view class="box-content-appointment-time-wrap">
+					<view class="box-content-appointment-time-wrap-top">
+						<view class="appointment-time-wrap-title">预约时间</view>
+						<view class="appointment-time-wrap-text">
+							<text :style="{opacity:serviceStartTime!=''&&serviceEndTime!=''?'1':'0'}">
+								{{serviceData}} {{serviceStartTime}}-{{serviceEndTime}}
+							</text>
+							<text class="iconfont icongengduo icon-font" style="color: #000;font-size: 32rpx;"></text>
+						</view>
+					</view>
+				</view>
+				<view class="box-content-appointment-time-week">
+					<week-tabs :tabData="tabs" :activeIndex="defaultIndex" @tabClick='tabClick' />
+				</view>
+				<view class="box-content-appointment-time-main">
+					<view class="appointment-time-main-list">
+						<view class="appointment-time-main-list-li flex-center"
+							:class="{'mainListLiActiveFirst':startIndex==index,'mainListLiActive':startIndex<=index && index<=endIndex,'mainListLiActiveLast':endIndex==index,'colorActive':item.status==-1}"
+							v-for="(item,index) in timeList" @click="choiceTime(item,index)" :key="item.time">
+							<text>{{item.time}}</text>
+						</view>
+					</view>
+				</view>
+			</view>
+
+			<view class="box-content-appointment-info">
+				<view class="box-content-appointment-info-list">
+					<view class="box-content-appointment-info-list-li">
+						<view class="appointment-info-list-li-title">预约姓名</view>
+						<view class="appointment-info-list-li-input">
+							<input type="text" v-model.trim="valName" @input='appointmentPerson'
+								placeholder="请输入你的完整姓名" />
+						</view>
+						<view class="appointment-info-list-li-title-type">
+							<view class="appointment-info-list-li-title-type-name flex-center"
+								v-for="(item,index) in typeList" :class="typeListIndex==index?'name-active':''"
+								:key="index" @click="typeListClick(index)">{{item}}</view>
+						</view>
+					</view>
+					<view class="box-content-appointment-info-list-li">
+						<view class="appointment-info-list-li-title">手机号码</view>
+						<view class="appointment-info-list-li-input" style="flex: 1;">
+							<input type="number" v-model.trim="valPhone" placeholder="请输入你的手机号码" />
+						</view>
+					</view>
+					<view class="box-content-appointment-info-list-li">
+						<view class="appointment-info-list-li-title">订单备注</view>
+						<view class="appointment-info-list-li-input" style="flex: 1;">
+							<input type="text" v-model.trim="remarks" placeholder="可将您的其他要求告知商家" />
+						</view>
+					</view>
+				</view>
+			</view>
+
+			<view class="box-content-coupon" :style="{height:infoData.coupon_num>0?'auto':'0'}">
+				<view class="box-content-coupon-top" @click="checkCoupons">
+					<view class="box-content-coupon-top-title">优惠券</view>
+					<view class="box-content-coupon-top-more">
+						<text v-if="couponId!=-1">-￥{{preferentiaAmount |toFixed}}</text>
+						<text v-if="couponId==-1" style="color: #999;">{{infoData.coupon_num}} 张优惠券可用</text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #FF8366;font-size: 32rpx;margin-top: 4rpx;" v-if="couponId !==-1"></text>
+						<text class="iconfont icongengduo icon-font"
+							style="color: #999;font-size: 32rpx;margin-top: 4rpx;" v-else></text>
+					</view>
+				</view>
+				<view class="box-content-coupon-bottom">
+					<view class="box-content-coupon-bottom-text">已优惠￥{{preferentiaAmount|toFixed}}</view>
+					<view class="box-content-coupon-bottom-price">
+						小计￥<text>{{subtotal}}</text>
+					</view>
+				</view>
+			</view>
+
+		</view>
+		<view class="box-footer">
+			<view class="box-footer-text">
+				合计￥：<text>{{totalPrice}}</text>
+			</view>
+			<view class="box-footer-btn flex-center" @click="appointment">
+				立即预约
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	import navTitle from "../../components/navTitle/navTitle.vue"
+	import weekTabs from "@/components/week-tabs/week-tabs.vue";
+	export default {
+		data() {
+			return {
+				barHeight: 0, //顶部电量导航栏高度
+				num: 1, //下单数量
+				isSelect: false, //是否有选择技师
+				typeList: ["先生", "女士"],
+				typeListIndex: -1,
+				defaultIndex: 0, //星期 当前选中日期
+				tabs: [],
+				timeList: [],
+				technicianList: [],
+				tabsList: [],
+				dataTop: {},
+				dataList: {
+					price: 0,
+				},
+				infoData:{
+					coupon_num:0
+				},
+				sotreId: '', //门店id
+				technicianId: -1, //初始技师id
+				couponId: -1, //初始优惠券id
+				startIndex: -1,
+				endIndex: -1,
+				serviceData: '', //服务日期
+				serviceWeek: '', //服务星期（1,2,3）
+				serviceStartTime: '', //服务开始时间
+				serviceEndTime: '', //服务结束时间
+				valName: '', //预约人姓名
+				valPhone: '', //预约人电话
+				remarks: '', //备注
+				preferentiaAmount: 0, //优惠金额
+				servicePrice: 0, //服务费
+			};
+		},
+		components: {
+			navTitle,
+			weekTabs
+		},
+		filters: {
+			toFixed(val) { //保留两位小数
+				return val.toFixed(2)
+			}
+		},
+		onReady() {
+			// 获取顶部电量状态栏高度
+			uni.getSystemInfo({
+				success: (res) => {
+					this.barHeight = res.statusBarHeight
+				}
+			});
+		},
+		onLoad(options) {
+			var data = JSON.parse(options.data)
+			this.getDetails(data.id, data.store)
+		},
+		onShow() {
+			this.technicianId = this.$store.state.checkId
+			this.couponId = this.$store.state.checkCouponId
+
+			if (this.technicianId != -1) { //判读是否选则了技师
+				this.getTechnician(1, 30)
+			}
+			if (this.couponId != -1) { // 是否选了优惠券
+				this.preferentiaAmount = Number(this.$store.state.preferentialAmount)
+			} else {
+				this.preferentiaAmount = 0
+			}
+
+
+			// console.log("预约下单：" + this.technicianId)
+			this.getTimeandWeek()
+		},
+		computed: {
+			subtotal() {
+				var price = Number(this.servicePrice) + Number(this.dataList.price)
+				return price.toFixed(2)
+			},
+			totalPrice() {
+				var price = Number(this.servicePrice) + Number(this.dataList.price) - Number(this.preferentiaAmount)
+				return price.toFixed(2)
+			},
+		},
+		methods: {
+
+			// 切割字符
+			label(str) {
+				return str.split(',')
+			},
+
+			// 步进器
+			stepperClick(type) {
+				switch (type) {
+					case "reduce":
+						if (this.num <= 1) {
+							uni.showToast({
+								title: "已经不能再减了",
+								icon: "none"
+							})
+						} else {
+							this.num -= 1
+						}
+						break;
+					case "add":
+						this.num += 1
+						break;
+				}
+			},
+
+			// 获取详情
+			getDetails(id, store) {
+				var vuedata = {
+					id: id,
+					store: store,
+				}
+				this.apiget('api/v1/order/service', vuedata).then(res => {
+					if (res.status == 200) {
+						this.dataTop = res.data.store
+						this.dataList = res.data.service
+						this.storeId = res.data.store.id
+						this.infoData =  res.data
+						// console.log(res.data)
+					}
+				})
+			},
+
+			// 获取技师
+			getTechnician(num, size) {
+				var vuedata = {
+					page_index: num, // 请求页数，
+					each_page: size, // 请求条数
+					store: this.storeId
+				}
+				this.apiget('pc/engineer', vuedata).then(res => {
+					if (res.status == 200) {
+						this.isData = true
+						var list = res.data.engineerList
+						this.technicianList = list
+						// console.log(list)
+						// this.technicianList.forEach(item => {
+						// 	console.log(item.id)
+						// })
+					} else {
+						this.isData = false
+						this.isLoad = false
+					}
+				})
+			},
+			// 获取技师服务时间
+			getServiceTime(e) {
+				var vuedata = {
+					store: this.storeId,
+					member: this.technicianId, //技师id
+					service: this.dataList.id,
+					date: e.date,
+					week: e.weekNum,
+					fast: 0,
+					order: 0,
+					group_id: 0,
+				}
+				this.apiget('api/v1/order/service/schedule', vuedata).then(res => {
+					if (res.status == 200) {
+						this.timeList = res.data.request[0]
+						this.startIndex = -1;
+						this.endIndex = -1;
+						this.erviceStartTime = ''; //服务开始时间
+						this.serviceEndTime = ''; //服务结束时间
+					}
+				})
+			},
+
+			// 选择时间
+			choiceTime(item, index) {
+				if (item.status == 1) {
+					var time = item.time.split(':');
+					var servtime = item.service_time;
+					var start = 60 * parseInt(time[0]) + parseInt(time[1]) + parseInt(servtime)
+					var d = index + 1;
+					var idx = '';
+					for (index; d < this.timeList.length; d++) {
+						let res = this.timeList[d];
+						let time = res.time.split(':');
+						let end = 60 * parseInt(time[0]) + parseInt(time[1])
+						if (res.status == -1) {
+							uni.showToast({
+								title: "时间不足，不能选择",
+								icon: "none"
+							})
+							return;
+						}
+						if (idx == '' && start <= end) {
+							idx = d;
+							this.startIndex = index;
+							this.endIndex = d;
+							// console.log(item.time, res.time)
+							this.serviceStartTime = item.time;
+							this.serviceEndTime = res.time;
+							return;
+						}
+					}
+
+					uni.showToast({
+						title: "时间不足，不能选择",
+						icon: "none"
+					})
+
+				}
+			},
+
+			// 选择预约人 称呼
+			typeListClick(index) {
+				this.typeListIndex = index
+			},
+			// 监听是否有输入预约人姓名
+			appointmentPerson() {
+				if (this.valName.length > 1) {
+					this.typeListIndex = 0
+					return false;
+				}
+				this.typeListIndex = -1
+			},
+
+
+			// 立即预约按钮
+			appointment() {
+				var reg = /^1[3|4|5|7|8][0-9]{9}$/; //验证规则
+
+				if (this.technicianId != -1) { //判断是否有选择技师
+					if (this.serviceStartTime != '' && this.serviceEndTime != '') { //判断是否有选择服务时间
+						if (this.valName != '' && this.valPhone != '') { // 是否输入联系人与手机号ss
+							if (reg.test(this.valPhone)) { // 判断手机号是否正确
+								this.createOrder()
+								return false
+							}
+							uni.showToast({
+								title: "请输入正确的手机号",
+								icon: "none"
+							})
+							return false
+						}
+						uni.showToast({
+							title: "请检查是否有输入了姓名与手机号",
+							icon: "none"
+						})
+						return false;
+					}
+					uni.showToast({
+						title: "请选择服务时间",
+						icon: "none"
+					})
+					return false;
+				}
+				uni.showToast({
+					title: "请选择技师",
+					icon: "none"
+				})
+			},
+
+			// 创建订单
+			createOrder() {
+				var vuedata = {
+					service: 1, //服务项目id
+					service_type: 1, // 1到店 2上门
+					store: this.storeId, //门店id
+					fast: 0, //是否默认预约：0否，1是
+					member: this.technicianId, //技师ID
+					plan_date: this.serviceData, //预约日期：格式：2021-03-12
+					start: this.serviceStartTime, //预约时间段开始时间：例：10：00
+					end: this.serviceEndTime, //预约时间段结束时间：例：10：00
+					week: this.serviceWeek, //当天星期：值为（0，1，2，3，4，5，6）
+					name: this.valName, //用户名称
+					mobile: this.valPhone, //用户手机号
+					coupon_gift: this.couponId, //优惠券ID
+					group: 0, //是否团购产品：1是，0否
+					group_id: 0, //团购ID
+					remarks: this.remarks //订单备注
+				}
+
+				this.apipost('api/v1/order/service/create', vuedata).then(res => {
+					if (res.status == 200) {
+						uni.navigateTo({
+							url: "../../pagesIndexFour/paymentOrder/paymentOrder?id=" + res.data
+						})
+					} else {
+						uni.showToast({
+							title: res.message,
+							icon: "none"
+						})
+					}
+				})
+				// uni.navigateTo({
+				// 	url: "../../pagesIndexFour/paymentOrder/paymentOrder?id=142"
+				// })
+
+			},
+
+			// 点击选择技师
+			selectTechnician() {
+				var str = {
+					service: this.dataList.id,
+					storeId: this.storeId,
+				}
+				uni.navigateTo({
+					url: "../../pagesIndexFour/selectMassageTechnician/selectMassageTechnician?data=" + JSON
+						.stringify(str)
+				})
+
+				this.$store.commit("upCheckId", this.technicianId)
+				// this.isSelect = !this.isSelect
+			},
+
+			// 点击选择优惠券
+			checkCoupons() {
+				var data = {
+					storeId: this.storeId,
+					money: Number(this.servicePrice) + Number(this.dataList.price),
+				}
+
+				if (this.technicianId != -1) {
+					uni.navigateTo({
+						url: "../../pagesCommon/selectCoupons/selectCoupons?data=" + JSON.stringify(data)
+					})
+					this.$store.commit("upCheckCouponId", this.couponId)
+					return false;
+				}
+				uni.showToast({
+					title: "请先选择技师",
+					icon: "none"
+				})
+
+
+			},
+			// 星期日期tabs 点击
+			tabClick(e) {
+				if (this.defaultIndex != e) { //用于判断是否重复点击
+					this.getServiceTime(this.tabsList[e])
+					this.serviceData = this.tabsList[e].date
+					this.serviceWeek = this.tabsList[e].weekNum
+				}
+				this.defaultIndex = e
+			},
+
+			// 获取一周时间
+			getTimeandWeek() {
+				this.tabs = []
+				//获取当前时间
+				var now = new Date();
+
+				//往后几天就循环几次
+				for (let i = 0; i < 7; i++) {
+					//24 * 3600 * 1000 就是计算一天的时间  
+					var date = new Date(now.getTime() + i * 24 * 3600 * 1000);
+					var year = date.getFullYear();
+					var month = date.getMonth() + 1;
+					var day = date.getDate();
+					var dt2 = new Date(now.getTime() + i * 24 * 3600 * 1000);
+					var weekDay = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+
+					var dateDay = this.addMarh(month) + '-' + this.addMarh(day) //日期
+
+					//把七天的时间和星期添加到数组中 判断当前日期是否为当日 当日则显示 今天
+					if (dateDay == this.getTime()) {
+						this.tabs.push('今天' + ' ' + dateDay)
+					} else {
+						this.tabs.push(weekDay[dt2.getDay()] + ' ' + dateDay)
+					}
+					var str = {
+						date: year + '-' + this.addMarh(month) + '-' + this.addMarh(day),
+						mouth: this.addMarh(month) + '-' + this.addMarh(day),
+						week: weekDay[dt2.getDay()],
+						weekNum: dt2.getDay()
+					}
+					this.tabsList.push(str)
+				}
+				if (this.technicianId != -1) { //在已经选择客户的情况下  执行列表第一个时间的 服务时间接口
+					this.getServiceTime(this.tabsList[0])
+					this.serviceData = this.tabsList[0].date
+					this.serviceWeek = this.tabsList[0].weekNum
+				}
+			},
+			// 小于10 补0 
+			addMarh(num) {
+				return num < 10 ? '0' + num : num
+			},
+
+			// 获取当天日期
+			getTime() {
+				var date = new Date(),
+					year = date.getFullYear(),
+					month = date.getMonth() + 1,
+					day = date.getDate(),
+					hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours(),
+					minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes(),
+					second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+				month >= 1 && month <= 9 ? (month = "0" + month) : "";
+				day >= 0 && day <= 9 ? (day = "0" + day) : "";
+				var timer = month + '-' + day;
+				return timer;
+			},
+			// 服务费
+			serviceCharge(fee) {
+				var str = Number(fee / 100);
+				this.servicePrice = this.dataList.price * str
+				return (this.dataList.price * str).toFixed(2);
+			},
+		}
+	}
+</script>
+
+<style lang="scss">
+	.box {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		background: #F7F7F7;
+
+		.box-head {
+			background-color: #fff;
+		}
+
+		.box-content {
+			flex: 1;
+			overflow-y: scroll;
+
+			font-family: Source Han Sans CN;
+			font-weight: 400;
+
+			.box-content-wrap {
+				padding: 30rpx 40rpx 0;
+				box-sizing: border-box;
+				background: #fff;
+
+				.content-wrap-top {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+
+					.content-wrap-top-title {
+						display: flex;
+						align-items: center;
+
+						text {
+							margin-right: 10rpx;
+							font-size: 28rpx;
+							color: #000;
+							font-weight: 500;
+						}
+					}
+
+					.content-wrap-top-more {
+						image {
+							width: 28rpx;
+							height: 28rpx;
+						}
+
+					}
+				}
+
+				.content-wrap-top-list {
+					.content-wrap-top-list-li {
+						display: flex;
+						padding: 30rpx 0;
+						box-sizing: border-box;
+						border-bottom: 1rpx solid #ededed;
+
+						.content-wrap-top-list-li-image {
+							image {
+								width: 138rpx;
+								height: 138rpx;
+								border-radius: 10rpx;
+							}
+						}
+
+						.content-wrap-top-list-li-info {
+							flex: 1;
+							margin-left: 20rpx;
+
+							.content-wrap-top-list-li-info-top {
+								display: flex;
+								justify-content: space-between;
+								align-items: center;
+								font-size: 30rpx;
+
+								.content-wrap-top-list-li-info-top-text {
+									color: #000;
+								}
+
+								.content-wrap-top-list-li-info-top-price {
+									color: #FF8366
+								}
+							}
+
+							.content-wrap-top-list-li-info-type {
+								display: flex;
+								flex-wrap: wrap;
+								margin-top: 20rpx;
+
+								.list-li-info-type-item {
+									width: 108rpx;
+									height: 34rpx;
+									margin-right: 8rpx;
+									margin-bottom: 8rpx;
+									background: #F5F5F5;
+									border-radius: 3rpx;
+									font-size: 22rpx;
+									color: #666;
+								}
+							}
+						}
+					}
+				}
+
+				.content-wrap-top-bottom {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					height: 100rpx;
+
+					.content-wrap-top-bottom-num {
+						font-size: 30rpx;
+						color: #000;
+					}
+
+					.content-wrap-top-bottom-stepper {
+						display: flex;
+						width: 220rpx;
+						height: 68rpx;
+						border: 1px solid #E0E0E0;
+						border-radius: 20rpx;
+
+						.reduce {
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							width: 80rpx;
+							height: 68rpx;
+
+							image {
+								width: 28rpx;
+								height: 28rpx;
+							}
+						}
+
+						.num {
+							flex: 1;
+							font-size: 28rpx;
+							color: #000;
+						}
+
+						.add {
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							width: 80rpx;
+							height: 68rpx;
+
+							image {
+								width: 28rpx;
+								height: 28rpx;
+							}
+						}
+					}
+				}
+			}
+
+
+			.box-content-select-technician {
+				padding: 0 40rpx;
+				box-sizing: border-box;
+				margin-top: 20rpx;
+				background: #fff;
+
+				.content-select-technician-wrap {
+					display: flex;
+					align-items: center;
+					height: 100rpx;
+					justify-content: space-between;
+
+
+					.box-content-select-technician-title {
+						font-size: 32rpx;
+						color: #FF8366;
+						transition: 0.2s;
+					}
+
+					.title-color {
+						color: #000 !important;
+					}
+
+					.box-content-select-technician-more {
+						image {
+							width: 28rpx;
+							height: 28rpx;
+						}
+					}
+				}
+
+				.technician-wrap-border {
+					border-bottom: 1rpx solid #ededed;
+				}
+
+				.select-technician-info-auto {
+					height: 208rpx !important;
+				}
+
+				.select-technician-info {
+					display: flex;
+					height: 0;
+					overflow: hidden;
+					align-items: center;
+					transition: 0.3s;
+
+					.select-technician-info-image {
+						image {
+							width: 148rpx;
+							height: 148rpx;
+						}
+					}
+
+					.select-technician-info-main {
+						flex: 1;
+						margin-left: 20rpx;
+						display: flex;
+						flex-direction: column;
+
+						.select-technician-info-main-top {
+							display: flex;
+							align-items: center;
+							justify-content: space-between;
+
+							.select-technician-info-main-top-title {
+								font-size: 30rpx;
+								color: #000;
+							}
+
+							.select-technician-info-main-top-price {
+								font-size: 28rpx;
+								color: #999;
+							}
+						}
+
+						.select-technician-info-main-center {
+							display: flex;
+							align-items: center;
+							justify-content: space-between;
+
+							.select-technician-info-main-title {
+								font-size: 24rpx;
+								color: #666;
+							}
+
+						}
+
+						.select-technician-info-main-bottom {
+							display: flex;
+							flex-wrap: wrap;
+							margin-top: 10rpx;
+
+							.select-technician-info-main-bottom-item {
+								width: 108rpx;
+								height: 34rpx;
+								margin-right: 8rpx;
+								margin-bottom: 8rpx;
+								background: #F5F5F5;
+								border-radius: 3rpx;
+								font-size: 22rpx;
+								color: #666666;
+							}
+						}
+					}
+				}
+
+			}
+
+			.box-content-appointment-time-active {
+				height: 600rpx !important;
+				margin-top: 20rpx;
+
+			}
+
+			.box-content-appointment-time {
+				background: #fff;
+				transition: 0.3s;
+				height: 0;
+				overflow: hidden;
+
+				.box-content-appointment-time-wrap {
+					padding: 0 40rpx;
+					box-sizing: border-box;
+
+					.box-content-appointment-time-wrap-top {
+						height: 96rpx;
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						border-bottom: 1rpx solid #ededed;
+						font-size: 32rpx;
+
+						.appointment-time-wrap-title {
+							color: #000;
+						}
+
+						.appointment-time-wrap-text {
+							flex: 1;
+							display: flex;
+							transition: 0.3s;
+							justify-content: flex-end;
+
+							text {
+								color: #26BF82;
+							}
+
+							.icon-font {
+								margin-left: 10rpx;
+								transform: rotate(270deg);
+								transition: 0.3s;
+							}
+						}
+					}
+				}
+
+				.box-content-appointment-time-week {}
+
+				.box-content-appointment-time-main {
+					padding: 30rpx 16rpx;
+					box-sizing: border-box;
+					border-top: 1rpx solid #ededed;
+
+					.appointment-time-main-list {
+						display: flex;
+						flex-wrap: wrap;
+						// justify-content: center;
+
+						.appointment-time-main-list-li {
+							width: 118rpx;
+							height: 64rpx;
+							font-size: 28rpx;
+							color: #666;
+							transition: 0.3s;
+						}
+
+						.mainListLiActive {
+							background: #26BF82;
+							color: #fff;
+							// border-radius: 32rpx;
+						}
+
+						.colorActive {
+							color: #ccc !important;
+						}
+
+						.mainListLiActiveFirst {
+							background: #26BF82;
+							color: #fff;
+							border-radius: 32rpx 0 0 32rpx;
+						}
+
+						.mainListLiActiveLast {
+							background: #26BF82;
+							color: #fff;
+							border-radius: 0 32rpx 32rpx 0;
+						}
+					}
+				}
+			}
+
+
+			.box-content-appointment-info {
+				margin-top: 20rpx;
+				background: #fff;
+
+				.box-content-appointment-info-list {
+					padding-left: 40rpx;
+					box-sizing: border-box;
+
+					.box-content-appointment-info-list-li:last-child {
+						border-bottom: 0;
+					}
+
+					.box-content-appointment-info-list-li {
+						display: flex;
+						align-items: center;
+						height: 99rpx;
+						font-size: 28rpx;
+						border-bottom: 1rpx solid #ededed;
+
+						.appointment-info-list-li-title {}
+
+						.appointment-info-list-li-input {
+							margin-left: 40rpx;
+
+							input {
+								font-size: 28rpx;
+							}
+						}
+
+						.appointment-info-list-li-title-type {
+							display: flex;
+							align-items: center;
+							margin-right: 20rpx;
+
+							.appointment-info-list-li-title-type-name:last-child {
+								margin-right: 0;
+							}
+
+							.name-active {
+								border: 1rpx solid #FF8366 !important;
+								color: #FF8366 !important;
+							}
+
+							.appointment-info-list-li-title-type-name {
+								width: 96rpx;
+								height: 54rpx;
+								border: 1rpx solid #E6E6E6;
+								border-radius: 5rpx;
+								margin-right: 16rpx;
+								color: #999;
+								font-size: 26rpx;
+								transition: 0.3s;
+							}
+						}
+					}
+				}
+			}
+
+			.box-content-coupon {
+				margin-top: 20rpx;
+				padding: 0 40rpx;
+				background: #FFFFFF;
+				overflow: hidden;
+				transition: 0.3s;
+
+				.box-content-coupon-top {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					height: 100rpx;
+					border-bottom: 1rpx solid #ededed;
+
+					.box-content-coupon-top-title {
+						font-size: 32rpx;
+						color: #333;
+					}
+
+					.box-content-coupon-top-more {
+						display: flex;
+						align-items: center;
+
+						text {
+							font-size: 32rpx;
+							color: #FF8366;
+						}
+
+						.icon-font {
+							margin-left: 8rpx;
+						}
+					}
+				}
+
+				.box-content-coupon-bottom {
+					height: 100rpx;
+					display: flex;
+					align-items: center;
+					justify-content: flex-end;
+
+					.box-content-coupon-bottom-text {
+						margin-right: 20rpx;
+						font-size: 28rpx;
+						color: #999;
+					}
+
+					.box-content-coupon-bottom-price {
+						display: flex;
+						align-items: center;
+						font-size: 28rpx;
+						color: #333;
+
+						text {
+							font-size: 36rpx;
+							color: #000;
+							font-weight: 500;
+						}
+					}
+				}
+			}
+		}
+
+		.box-footer {
+			padding: 0 20rpx;
+			box-sizing: border-box;
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+			height: 108rpx;
+			border-top: 1rpx solid #ededed;
+			background: #fff;
+
+			.box-footer-text {
+				font-size: 28rpx;
+				color: #000;
+
+				text {
+					font-size: 40rpx;
+					color: #FF8366;
+				}
+			}
+
+			.box-footer-btn {
+				width: 220rpx;
+				height: 80rpx;
+				margin-left: 20rpx;
+				background: #FF8366;
+				border-radius: 40rpx;
+				color: #fff;
+				font-size: 32rpx;
+			}
+		}
+	}
+</style>

@@ -435,7 +435,7 @@ ss<template>
 			// 创建订单
 			createOrder() {
 				var vuedata = {
-					service: 1, //服务项目id
+					service: this.dataList.id, //服务项目id
 					service_type: 1, // 1到店 2上门
 					store: this.storeId, //门店id
 					fast: 0, //是否默认预约：0否，1是
@@ -446,7 +446,7 @@ ss<template>
 					week: this.serviceWeek, //当天星期：值为（0，1，2，3，4，5，6）
 					name: this.valName, //用户名称
 					mobile: this.valPhone, //用户手机号
-					coupon_gift: this.couponId, //优惠券ID
+					// coupon_gift: this.couponId, //优惠券ID
 					group: 0, //是否团购产品：1是，0否
 					group_id: 0, //团购ID
 					remarks: this.remarks //订单备注
@@ -858,7 +858,7 @@ ss<template>
 				background: #fff;
 				transition: 0.3s;
 				height: 0;
-				overflow: hidden;
+				overflow-y: scroll;
 
 				.box-content-appointment-time-wrap {
 					padding: 0 40rpx;

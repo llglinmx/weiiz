@@ -5,7 +5,8 @@ const httpClient = {
 		var headers = {
 			// "content-Type": "application/x-www-form-urlencoded",
 			'content-type': 'application/x-www-form-urlencoded',
-			"Authorization": uni.getStorageSync("token")
+			"Authorization": uni.getStorageSync("token"),
+			'Content-Language':95
 		};
 
 		return new Promise((resolve, reject) => {

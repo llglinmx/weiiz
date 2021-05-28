@@ -22,7 +22,8 @@
 						<view class="list-li-top-state">
 							<text v-if="item.status==-1">待付款</text>
 							<text v-if="item.status==-2">订单已关闭</text>
-							<text v-if="item.status==1">待核销</text>
+							<text v-if="item.status==1&&item.use_status==-1">待核销</text>
+							<text v-if="item.status==1&&item.use_status==1">已核销</text>
 							<text v-if="item.status==2">已退款</text>
 						</view>
 					</view>
@@ -34,16 +35,10 @@
 							<view class="list-li-item-info">
 								<view class="list-li-info-top">
 									<view class="list-li-info-top-title">{{item.reserve_name}}</view>
-									<view class="list-li-info-top-text">￥298.00</view>
+									<view class="list-li-info-top-text">￥{{item.payable}}</view>
 								</view>
-								<view class="list-li-info-center-box">
+								<!-- <view class="list-li-info-center-box">
 									<view class="list-center-box-wrap">
-										<view class="list-center-box-wrap-item flex-center">
-											60分钟
-										</view>
-										<view class="list-center-box-wrap-item flex-center">
-											背部按摩
-										</view>
 										<view class="list-center-box-wrap-item flex-center">
 											60分钟
 										</view>
@@ -51,7 +46,7 @@
 									<view class="list-center-box-number">
 										x1
 									</view>
-								</view>
+								</view> -->
 							</view>
 						</view>
 					</view>
@@ -59,22 +54,22 @@
 						<view class="content-list-li-payment">
 							<view class="list-li-payment-text">实付款：</view>
 							<view class="list-li-payment-money">
-								<text>￥1200.00</text>
+								<text>￥{{item.amount}}</text>
 							</view>
 						</view>
 						<view class="content-list-li-all-btns">
-							<view class="more-list-li-btn flex-center more-list-li-btn-border" v-if="item.status==-1"
+							<view class="more-list-li-btn flex-center more-list-li-btn-border" v-if="item.status==-1&&item.use_status==-1"
 								@click="cancelOrder(item.id)">
 								取消订单
 							</view>
 							<view class="more-list-li-btn flex-center" v-if="item.status==-1"
 								@click="goAndPay(item.id)">去付款</view>
-								<view class="more-list-li-btn flex-center" v-if="item.status==1"
+								<view class="more-list-li-btn flex-center" v-if="item.status==1&&item.use_status==-1"
 									@click="applyForRefund(item.id)">申请退款</view>
-							<view class="more-list-li-btn flex-center more-list-li-btn-border-red" v-if="item.status==1"
+							<view class="more-list-li-btn flex-center more-list-li-btn-border-red" v-if="item.status==1&&item.use_status==-1"
 								@click="viewCouponCode(item)">查看券码</view>
 							<view class="more-list-li-btn flex-center more-list-li-btn-border"
-								v-if="item.status==1&&item.use_status==1" @click="OrderEval">订单评价</view>
+								v-if="item.status==1&&item.use_status==1">订单评价</view>
 							<view class="more-list-li-btn flex-center more-list-li-btn-border-red"
 								v-if="item.refund_status==-1&&item.status==2">取消申请</view>
 						</view>

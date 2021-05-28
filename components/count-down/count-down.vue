@@ -29,9 +29,10 @@
 				default:'#999'
 			}
 		},
-		mounted() {
-			// this.getTimes()
-			this.countdowm(this.endTime)
+		watch:{
+			endTime(){
+				this.countdowm(this.endTime)
+			}
 		},
 		methods: {
 
@@ -44,10 +45,10 @@
 				var time = time.split('.')[0] //此处是因为我们接口返回的时间格式是这样："2019-12-31 11:00:00.0"
 				var enddate = new Date(time).getTime() //处理好格式之后获取结束时间的毫秒数
 				var totaltime = enddate - nowdate //获取时间差
-
 			},
 
 			countdowm(timestamp) {
+				console.log(timestamp)
 				let self = this;
 				let timer = setInterval(function() {
 					let nowTime = new Date();

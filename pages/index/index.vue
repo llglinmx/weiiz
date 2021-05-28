@@ -8,7 +8,7 @@
 		<view class="index-head" :style="{paddingTop:barHeight+'px'}">
 			<view class="index-head-wrap">
 				<view class="index-head-address">
-					<text class="iconfont icondingwei icon-font" style="color: #FF967D;margin-top: 8rpx;"></text>
+					<text class="iconfont icondingwei icon-font" style="color: #FF967D;"></text>
 					<text style="margin-left: 15rpx;">厦门</text>
 				</view>
 
@@ -22,7 +22,8 @@
 			</view>
 
 		</view>
-		<scroll-view :scroll-top="scrollTop" :scroll-with-animation='true' scroll-y="true" class="index-content" @scroll='scrollMain'>
+		<scroll-view :scroll-top="scrollTop" :scroll-with-animation='true' scroll-y="true" class="index-content"
+			@scroll='scrollMain'>
 			<!-- 搜索框 -->
 			<view class="index-content-search">
 				<view class="content-search-box">
@@ -32,7 +33,7 @@
 						<!-- <image src="../../static/images/search.png" mode=""></image> -->
 					</view>
 					<view class="content-search-text">
-						<input type="text" placeholder="搜索SPA、商家" />
+						<input @confirm="onSearch" type="text" placeholder="搜索SPA、商家" />
 					</view>
 					<!-- <view class="content-search-scan">
 						<text class="iconfont iconsaoyisao icon-font"
@@ -44,16 +45,17 @@
 			<view class="index-content-banner">
 				<swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval"
 					:duration="duration" :circular="circular">
-					<swiper-item v-for="(item,index) in bannerList">
+					<swiper-item v-for="(item,index) in bannerList" :key="index">
 						<image :src="item.bimg" mode="aspectFill" class="swiper-item"></image>
 					</swiper-item>
 				</swiper>
 			</view>
 			<!-- 推荐商家 -->
 			<view class="recommend-business">
-				<menu-title msgTitle="推荐商家" :isShow="true" />
+				<menu-title msgTitle="推荐商家" :isShow="true" @more='moreClick' />
 				<view class="recommend-business-list" @scroll='recommendChange'>
-					<view class="recommend-business-list-li" v-for="(ele,i) in recommendList" :key='i'>
+					<view class="recommend-business-list-li" v-for="(ele,i) in recommendList" :key='i'
+						@click="businessDetails(ele.id)">
 						<view class="recommend-business-list-li-image">
 							<image :src="ele.simg" mode="aspectFill"></image>
 						</view>
@@ -75,15 +77,15 @@
 			<view class="index-content-list-wrap">
 				<menu-title msgTitle="附近商家" style="padding: 0 30rpx;box-sizing: border-box;" />
 				<view class="index-content-list">
-					<view class="index-content-list-li" v-for="item in arrList" @click="moreClick(item.name)">
-						<view class="content-list-li-ico">
+					<view class="index-content-list-li" v-for="(item,index) in arrList" @click="lisClick(item.id,index)">
+						<view class="content-list-li-ico" :class="classIndex==index?'content-list-li-ico-active':''">
 							<image :src="item.icon" mode="aspectFill"></image>
 						</view>
 						<view class="content-list-li-text">{{item.name}}</view>
 					</view>
 				</view>
 				<view class="nearby-business-wrap">
-					<view class="nearby-business-screen">
+					<!-- <view class="nearby-business-screen">
 						<view class="nearby-business-screen-li">
 							<view class="nearby-business-screen-li-text">综合排序</view>
 						</view>
@@ -93,10 +95,10 @@
 						<view class="nearby-business-screen-li">
 							<view class="nearby-business-screen-li-text" style="text-align: right;">全部筛选</view>
 						</view>
-					</view>
+					</view> -->
 					<view class="nearby-business-list">
 						<view class="nearby-business-list-li" v-for="item in nearbyList" :key='item.id'>
-							<view class="nearby-business-list-li-image" @click="storeDetails">
+							<view class="nearby-business-list-li-image" @click="storeDetails(item.id)">
 								<image :src="item.simg" mode="aspectFill"></image>
 							</view>
 							<view class="nearby-business-list-li-title">{{item.name}}</view>
@@ -104,15 +106,16 @@
 								<view class="nearby-business-list-li-info-left">
 									<score-max :comment='item.comment' />
 									<view class="nearby-business-list-li-info-left-comment">
-										评价(200)
+										评价({{item.evaluate_num}})
 									</view>
 								</view>
-								<view class="nearby-business-list-li-info-right">距离6.1KM</view>
+								<view class="nearby-business-list-li-info-right">距离{{item.kilometer}}KM</view>
 							</view>
 							<view class="nearby-business-list-li-label">
-								<view class="nearby-business-list-li-label-item">推荐商家</view>
-								<view class="nearby-business-list-li-label-item">推荐商家</view>
-								<view class="nearby-business-list-li-label-item">推荐商家</view>
+								<view class="nearby-business-list-li-label-item item-recommend" v-if="item.comment>80">
+									推荐商家</view>
+								<!-- <view class="nearby-business-list-li-label-item">推荐12</view>
+								<view class="nearby-business-list-li-label-item">推荐32</view> -->
 							</view>
 						</view>
 					</view>
@@ -133,7 +136,7 @@
 					</view>
 					<view class="popup-list">
 						<view class="popup-list-li" v-for="(item,index) in textList"
-							@click="selectLanguage(item.id,index)" :class="item.default==1?'popup-list-li-active':''">
+							@click="selectLanguage(item.id,index)" :key="index" :class="item.default==1?'popup-list-li-active':''">
 							<text>{{item.name}}</text>
 							<text class="iconfont icondagou icon-font" style="color:#FF967D;font-size: 40rpx;"
 								v-if="item.default==1"></text>
@@ -185,7 +188,9 @@
 				old: {
 					scrollTop: 0
 				},
-				isShowTop:false,//是否显示返回顶部按钮
+				isShowTop: false, //是否显示返回顶部按钮
+				pid:'',
+				classIndex:0,
 			}
 		},
 		components: {
@@ -210,6 +215,12 @@
 			});
 		},
 		methods: {
+			//搜索
+			onSearch(e){
+				uni.navigateTo({
+					url:`/pages/map/map?search=${e.detail.value}&from=index`
+				})
+			},
 
 			// 获取位置信息
 			getLocationFn() {
@@ -221,9 +232,12 @@
 						this.latitude = res.latitude // 纬度
 						console.log('当前位置的经度：' + res.longitude);
 						console.log('当前位置的纬度：' + res.latitude);
+
+						uni.setStorageSync('longitude', this.longitude); //经度
+						uni.setStorageSync('latitude', this.latitude); //纬度
+
 						// 获取到经纬度之后则执行 
 						this.getRecommendBusiness() //推荐商家
-						this.getNearbyBusiness() //附近
 					},
 					fail(err) {
 						console.log(err)
@@ -233,8 +247,9 @@
 			// 用户授权
 			handleAuthorize() {
 				// #ifdef H5
+				uni.setStorageSync('longitude', this.longitude); //经度
+				uni.setStorageSync('latitude', this.latitude); //纬度
 				this.getRecommendBusiness()
-				this.getNearbyBusiness()
 				// #endif
 
 
@@ -327,6 +342,8 @@
 					if (res.status == 200) {
 						this.bannerList = res.data.bannerList
 						this.arrList = res.data.classList
+						this.pid = this.arrList[0].id
+						this.getNearbyBusiness()
 					}
 				});
 			},
@@ -348,13 +365,28 @@
 					}
 				});
 			},
+			// 商家详情
+			businessDetails(id) {
+				uni.navigateTo({
+					url: '../../pagesIndexTwo/merchantDetails/merchantDetails?id=' + id
+				})
+			},
+			// 附近商家列表点击
+			lisClick(id,index) {
+				this.pid = id
+				this.classIndex = index
+				this.getNearbyBusiness()
+			},
 			// 获取附近商家
 			getNearbyBusiness() {
 				var vuedata = {
 					ordertype: 'distance',
 					lat: this.latitude,
 					lng: this.longitude,
-					each_page: 50
+					each_page: 50,
+					orderby: "ASC",
+					nearby_type: 1,
+					pid:this.pid,
 				}
 				this.apiget('pc/store', vuedata).then(res => {
 					if (res.status == 200) {
@@ -402,13 +434,13 @@
 			},
 
 			recommendChange(e) {
-				console.log(e)
+				
 			},
 
 			// 页面滚动
 			scrollMain(e) {
 				this.old.scrollTop = e.detail.scrollTop
-				if(e.detail.scrollTop>1250){
+				if (e.detail.scrollTop > 1250) {
 					this.isShowTop = true
 					return false
 				}
@@ -429,30 +461,16 @@
 			},
 
 			// 门店详情
-			storeDetails() {
-				return false
+			storeDetails(id) {
 				uni.navigateTo({
-					url: "../../pagesIndex/storeDetails/storeDetails"
+					url: "../../pagesIndex/storeDetails/storeDetails?id=" + id
 				})
 			},
-
-
-			// 列表点击
-			moreClick(item) {
-				switch (item) {
-					case "领券中心":
-						uni.navigateTo({
-							url: "../../pagesCommon/collection-center/collection-center"
-						})
-						break;
-					case "按摩":
-						uni.navigateTo({
-							url: "../../pagesIndex/massageBusiness/massageBusiness"
-						})
-						break;
-					default:
-						break;
-				}
+			// 推荐商家更多
+			moreClick() {
+				uni.navigateTo({
+					url: '../../pagesIndex/massageBusiness/massageBusiness'
+				})
 			},
 
 
@@ -510,19 +528,20 @@
 		height: 100%;
 		overflow: hidden;
 
-		.back-to-top{
+		.back-to-top {
 			position: fixed;
-			bottom:200rpx;
+			bottom: 200rpx;
 			right: -100rpx;
 			width: 100rpx;
 			height: 100rpx;
-			background: rgba(0, 0, 0,0.5);
+			background: rgba(0, 0, 0, 0.5);
 			border-radius: 50%;
 			z-index: 9999;
 			transition: 0.3s;
 			color: #fff;
 		}
-		.back-to-top-active{
+
+		.back-to-top-active {
 			right: 30rpx !important;
 		}
 
@@ -758,11 +777,15 @@
 							height: 128rpx;
 							background: #FFF3F0;
 							border-radius: 20rpx;
+							transition: 0.3s;
 
 							image {
 								width: 72rpx;
 								height: 72rpx;
 							}
+						}
+						.content-list-li-ico-active{
+							background: #d8a295 !important;
 						}
 
 						.content-list-li-text {
@@ -850,10 +873,10 @@
 								flex-wrap: wrap;
 								margin-top: 20rpx;
 
-								.nearby-business-list-li-label-item:first-child {
-									background: #FFE9ED;
-									border-radius: 10rpx;
-									color: #FF2D56;
+								.item-recommend {
+									background: #FFE9ED !important;
+									border-radius: 10rpx !important;
+									color: #FF2D56 !important;
 								}
 
 								.nearby-business-list-li-label-item {

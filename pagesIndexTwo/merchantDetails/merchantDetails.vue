@@ -32,14 +32,11 @@
 									<view class="item-wrap-info-left-box">
 										<view class="item-wrap-left-box-title">{{merchantData.name}}</view>
 										<view class="item-wrap-left-box-score">
-											<text class="iconfont iconwujiaoxing icon-font"
-												:style="{color:isComment(merchantData.comment,storeIndex)?'#FFCD4D':'#eee',}"
-												style="font-size: 28rpx;" v-for="(store,storeIndex) in 5"></text>
-											<text>{{storeMsg(merchantData.comment)}}分</text>
+											<score :comment='merchantData.comment' />
 										</view>
-										<view class="item-wrap-left-box-bottom">
-											<view class="item-wrap-left-box-bottom-text flex-center">
-												按摩/SPA
+										<view class="item-wrap-left-box-bottom"v-if="merchantData.class_info">
+											<view class="item-wrap-left-box-bottom-text flex-center" v-for="(item,index) in merchantData.class_info">
+												{{item.name}}
 											</view>
 										</view>
 									</view>
@@ -51,7 +48,39 @@
 								</view>
 							</view>
 							<view class="box-content-item-wrap-business-time">
-								营业时间：周一至周日 {{merchantData.plan_date}}
+								<view>
+									营业时间：
+								</view>
+								<view v-for="(item,index) in merchantData.plan_date" style="font-size: 24rpx;">
+									<view style="display: flex;" v-if="item.mon_times">
+										<view>周一：</view>
+										<view v-for="(ele,i) in item.mon_times" class="flex" style="margin-right: 15rpx;flex-wrap: wrap;">{{ele.start}}-{{ele.end}}</view>
+									</view>
+									<view style="display: flex;" v-if="item.tues_times">
+										<view>周二：</view>
+										<view v-for="(ele,i) in item.tues_times" class="flex" style="margin-right: 15rpx;flex-wrap: wrap;">{{ele.start}}-{{ele.end}}</view>
+									</view>
+									<view style="display: flex;" v-if="item.wed_times">
+										<view>周三：</view>
+										<view v-for="(ele,i) in item.wed_times" class="flex" style="margin-right: 15rpx;flex-wrap: wrap;">{{ele.start}}-{{ele.end}}</view>
+									</view>
+									<view style="display: flex;" v-if="item.thur_times">
+										<view>周四：</view>
+										<view v-for="(ele,i) in item.thur_times" class="flex" style="margin-right: 15rpx;flex-wrap: wrap;">{{ele.start}}-{{ele.end}}</view>
+									</view>
+									<view style="display: flex;" v-if="item.fri_times">
+										<view>周一：</view>
+										<view v-for="(ele,i) in item.fri_times" class="flex" style="margin-right: 15rpx;flex-wrap: wrap;">{{ele.start}}-{{ele.end}}</view>
+									</view>
+									<view style="display: flex;" v-if="item.sat_times">
+										<view>周六：</view>
+										<view v-for="(ele,i) in item.sat_times" class="flex" style="margin-right: 15rpx;flex-wrap: wrap;">{{ele.start}}-{{ele.end}}</view>
+									</view>
+									<view style="display: flex;" v-if="item.sun_times">
+										<view>周日：</view>
+										<view v-for="(ele,i) in item.sun_times" class="flex" style="margin-right: 15rpx;flex-wrap: wrap;">{{ele.start}}-{{ele.end}}</view>
+									</view>
+								</view>
 							</view>
 							<view class="box-content-item-wrap-address">
 								<view class="box-content-item-wrap-address-left">
@@ -63,7 +92,7 @@
 									</view>
 								</view>
 								<view class="box-content-item-wrap-address-right">
-									<view class="box-content-item-wrap-address-right-text">距离6.1KM</view>
+									<view class="box-content-item-wrap-address-right-text">{{merchantData.kilometer}}KM</view>
 									<view class="box-content-item-wrap-right-address-icon">
 										<text class="iconfont icongengduo icon-font"
 											style="color: #26BF82;font-size: 40rpx;margin-top: 4rpx;"></text>
@@ -88,15 +117,15 @@
 						<view class="box-content-item-project box-content-item-common-styles"
 							:style="{display:isDataPro?'block':'none'}">
 							<view class="box-content-item-project-main">
-								<view class="box-content-item-project-wrap">
+								<!-- <view class="box-content-item-project-wrap">
 									<scroll-view scroll-y="true" class="scroll-Y">
 										<view class="box-content-item-project-list">
 											<view class="project-list-li flex-center"
 												v-for="(item,index) in classifyList" :key="index">{{item}}</view>
 										</view>
 									</scroll-view>
-								</view>
-								<view class="box-project-list">
+								</view> -->
+								<view class="box-project-list" style="margin-top: 40rpx;">
 									<z-paging ref="paging" @query="queryList" :list.sync="projectList"
 										loading-more-no-more-text="已经到底了"
 										:refresher-angle-enable-change-continued="false"
@@ -147,15 +176,15 @@
 						<view class="box-content-item-technician box-content-item-common-styles"
 							:style="{display:isDataTer?'block':'none'}">
 							<view class="box-content-item-technician-main">
-								<view class="box-content-item-project-wrap">
+								<!-- <view class="box-content-item-project-wrap">
 									<scroll-view scroll-y="true" class="scroll-Y">
 										<view class="box-content-item-project-list">
 											<view class="project-list-li flex-center"
 												v-for="(item,index) in classifyList" :key="index">{{item}}</view>
 										</view>
 									</scroll-view>
-								</view>
-								<view class="box-content-item-technician-wrap">
+								</view> -->
+								<view class="box-content-item-technician-wrap" style="margin-top: 40rpx;">
 									<z-paging ref="paging1" @query="terQueryList" :list.sync="technicianList"
 										loading-more-no-more-text="已经到底了"
 										:refresher-angle-enable-change-continued="false"
@@ -175,17 +204,19 @@
 														<view class="technician-info-top-title">
 															<text
 																class="technician-info-top-title-name">{{item.name}}</text>
-															<text class="technician-info-top-title-msg">【金牌技师】</text>
+															<text class="technician-info-top-title-msg">【{{item.level_name}}】</text>
 														</view>
 														<view class="technician-wrap-list-li-info-top-btn flex-center">
 															预约
 														</view>
 													</view>
 													<view class="technician-wrap-list-li-info-score">
-														<text class="iconfont iconwujiaoxing icon-font"
+														<score :comment='item.comment' />
+														<!-- <text class="iconfont iconwujiaoxing icon-font"
 															:style="{color:isComment(item.comment,storeIndex)?'#FFCD4D':'#eee',}"
-															style="font-size: 28rpx;" v-for="(store,storeIndex) in 5"></text>
-														<text>{{storeMsg(item.comment)}}分</text>
+															style="font-size: 28rpx;"
+															v-for="(store,storeIndex) in 5"></text>
+														<text>{{storeMsg(item.comment)}}分</text> -->
 													</view>
 													<view class="technician-wrap-list-li-info-introduce">
 														<view class="technician-list-li-info-introduce-text">
@@ -197,7 +228,8 @@
 													</view>
 													<view class="technician-wrap-list-li-info-category">
 														<view class="technician-list-li-info-category-item"
-															v-for="val in item.reserve_info" v-if="item.reserve_info.length!=0">
+															v-for="val in item.reserve_info"
+															v-if="item.reserve_info.length!=0">
 															{{val.name}}
 														</view>
 													</view>
@@ -290,7 +322,8 @@
 	import zPaging from '../../uni_modules/z-paging/components/z-paging/z-paging.vue'
 	import loading from '../../components/loading/loading.vue'
 	import noData from '../../components/no-data/no-data.vue'
-
+	import score from '../../components/score/score.vue'
+		
 	export default {
 		data() {
 			return {
@@ -348,7 +381,8 @@
 			navTitleAll,
 			zPaging,
 			loading,
-			noData
+			noData,
+			score
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -452,7 +486,7 @@
 			// 商家详情里的项目列表点击进入技师详情
 			technicianDetails(id) {
 				uni.navigateTo({
-					url: "../../pagesIndexThree/technicianDetails/technicianDetails?id="+id
+					url: "../../pagesIndexThree/technicianDetails/technicianDetails?id=" + id
 				})
 			},
 
@@ -473,7 +507,9 @@
 			// 获取商家信息
 			getMerchantInfo(id) {
 				var vuedata = {
-					id: id
+					id: id,
+					lng:uni.getStorageSync('longitude'),
+					lat:uni.getStorageSync('latitude'),
 				}
 				this.apiget('pc/store', vuedata).then(res => {
 					if (res.status == 200) {
@@ -591,45 +627,6 @@
 						this.getComment(page.num, page.size)
 						break;
 				}
-			},
-
-			// 评分
-			isComment(comment, index) {
-				var store = parseInt(comment)
-				var str = 0
-				if (store <= 20) {
-					str = 1
-				} else if (store > 20 && store <= 40) {
-					str = 2
-				} else if (store > 40 && store <= 60) {
-					str = 3
-				} else if (store > 60 && store <= 80) {
-					str = 4
-				} else if (store > 80) {
-					str = 5
-				}
-				if (str > index) {
-					return true
-				} else {
-					return false
-				}
-			},
-			// 评分提示
-			storeMsg(comment) {
-				var store = parseInt(comment)
-				var str = 0
-				if (store <= 20) {
-					str = 1
-				} else if (store > 20 && store <= 40) {
-					str = 2
-				} else if (store > 40 && store <= 60) {
-					str = 3
-				} else if (store > 60 && store <= 80) {
-					str = 4
-				} else if (store > 80) {
-					str = 5
-				}
-				return str
 			},
 		}
 	}

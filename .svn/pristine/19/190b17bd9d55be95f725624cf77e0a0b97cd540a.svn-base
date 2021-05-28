@@ -1,0 +1,306 @@
+<template>
+	<view class="box">
+		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
+			<view class="box-head-nav">
+				<view class="head-nav-back flex-center" @click="Gback">
+					<text class="iconfont iconfanhui" style="color: #fff;font-size: 36rpx;"></text>
+				</view>
+				<view class="head-nav-title">领券中心</view>
+			</view>
+		</view>
+		<view class="box-content">
+			<z-paging ref="paging" @query="queryList" :list.sync="dataList" loading-more-no-more-text="已经到底了"
+				:refresher-angle-enable-change-continued="false" :touchmove-propagation-enabled="true"
+				:use-custom-refresher="true">
+				<view class="box-content-list">
+					<view class="box-content-list-li" v-for="(item,index) in dataList" :key="item.id">
+						<view class="list-li-top">
+							<view class="list-li-top-left">
+								<text v-if="item.store!='-1'" class="iconfont iconshangjia"
+									style="font-size: 28rpx;color: #FF967D;"></text>
+								<text>{{item.store_name}}</text>
+							</view>
+							<view class="list-li-top-right" v-if="item.store!='-1'">
+								<text class="iconfont icondingwei1" style="font-size: 24rpx;color: #999;"></text>
+								<text>6.1km</text>
+							</view>
+						</view>
+						<view class="list-li-bottom">
+							<view class="list-li-bottom-left">
+								<view class="list-li-bottom-money">
+									{{item.quantity}}
+									<text>元</text>
+								</view>
+							</view>
+							<view class="list-li-bottom-center">
+								<view class="list-li-center-title">
+									{{item.name}}
+								</view>
+								<view class="list-li-center-text">
+									<!-- 满200减20 -->
+								</view>
+							</view>
+							<view class="list-li-bottom-right">
+								<view class="list-li-bottom-btn flex-center" v-if="item.store=='-1'">立即领取</view>
+								<view class="list-li-bottom-btn flex-center" v-if="item.store!='-1'"
+									style="background: none;color: #FF4040;">
+									去使用</view>
+							</view>
+						</view>
+					</view>
+				</view>
+			</z-paging>
+		</view>
+	</view>
+</template>
+
+<script>
+	import loading from '../../components/loading/loading.vue'
+	import zPaging from '../../uni_modules/z-paging/components/z-paging/z-paging.vue'
+	import noData from '../../components/no-data/no-data.vue'
+	import score from '../../components/score/score.vue'
+	export default {
+		data() {
+			return {
+				barHeight: 0, //顶部电量导航栏高度
+				isData: false,
+				isLoad: true,
+				dataList: [{
+						money: "20.00"
+					},
+
+					{
+						money: "20.00"
+					},
+					{
+						money: "20.00"
+					},
+					{
+						money: "20.00"
+					},
+					{
+						money: "20.00"
+					},
+
+				],
+			}
+		},
+		components: {
+			noData,
+			loading,
+			zPaging,
+			score
+		},
+		filters: {
+			integer(val) {
+				// console.log(val)
+				// var str = val.split('.')
+				// return str[0]
+			},
+		},
+		onShow() {
+
+		},
+		onReady() {
+			// 获取顶部电量状态栏高度
+			uni.getSystemInfo({
+				success: (res) => {
+					this.barHeight = res.statusBarHeight
+				}
+			});
+		},
+		methods: {
+			// 返回
+			Gback() {
+				uni.navigateBack({
+					delta: 1
+				})
+			},
+
+			// 上拉 下拉
+			queryList(pageNo, pageSize) {
+				this.getCoupon(pageNo, pageSize)
+			},
+
+			// 获取地址列表
+			getCoupon(num, size) {
+				var vuedata = {
+					page_index: num, // 请求页数，
+					each_page: size, // 请求条数
+				}
+				this.apiget('pc/coupon', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.couponList.length != 0) {
+							this.isData = true;
+							let list = res.data.couponList
+							this.$refs.paging.addData(list);
+
+						} else {
+							// 显示无数据背景
+							this.isData = false;
+							this.isLoad = false;
+						}
+
+					}
+				});
+			},
+
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.box {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		overflow-y: scroll;
+		background: #F7F7F7;
+
+		.box-head {
+
+			background: #FF4040;
+			padding: 0 20rpx;
+			box-sizing: border-box;
+
+			.box-head-nav {
+				display: flex;
+				align-items: center;
+				height: 88rpx;
+
+				.head-nav-back {
+					width: 50rpx;
+					height: 65rpx;
+					margin-left: 20rpx;
+
+					image {
+						width: 18rpx;
+						height: 34rpx;
+					}
+				}
+
+				.head-nav-title {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					margin-right: 50rpx;
+					flex: 1;
+					font-size: 34rpx;
+					font-family: Source Han Sans CN;
+					font-weight: 500;
+					color: #FFFFFF;
+				}
+			}
+		}
+
+		.box-content {
+			flex: 1;
+			padding: 20rpx 30rpx;
+			box-sizing: border-box;
+			overflow-y: scroll;
+
+			.box-content-list {
+
+				.box-content-list-li {
+					display: flex;
+					flex-direction: column;
+					height: 216rpx;
+					margin-bottom: 20rpx;
+					border-radius: 20rpx;
+					background: #fff;
+
+					.list-li-top {
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						padding: 0 20rpx;
+						height: 69rpx;
+						box-sizing: border-box;
+						border-bottom: 1rpx #e6e6e6 dashed;
+
+						.list-li-top-left {
+							display: flex;
+							align-items: center;
+
+
+							text {
+								margin-right: 8rpx;
+								font-size: 28rpx;
+								font-family: Source Han Sans CN;
+								font-weight: 500;
+								color: #000000;
+							}
+						}
+
+						.list-li-top-right {
+							display: flex;
+							align-items: center;
+
+							text {
+								margin-right: 8rpx;
+								font-size: 24rpx;
+								font-family: Source Han Sans CN;
+								font-weight: 400;
+								color: #999999;
+							}
+						}
+					}
+
+					.list-li-bottom {
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						flex: 1;
+						padding: 0 20rpx;
+						box-sizing: border-box;
+
+						.list-li-bottom-left {
+							margin-left: 40rpx;
+							font-family: Lato;
+							font-weight: 400;
+							color: #FF4040;
+
+							.list-li-bottom-money {
+								font-size: 72rpx;
+
+								text {
+									font-size: 22rpx;
+
+								}
+							}
+						}
+
+						.list-li-bottom-center {
+							margin-left: -56rpx;
+							font-family: Source Han Sans CN;
+							font-weight: 500;
+
+							.list-li-center-title {
+								font-size: 28rpx;
+								color: #000000;
+							}
+
+							.list-li-center-text {
+								font-size: 24rpx;
+								color: #666666;
+							}
+						}
+
+						.list-li-bottom-right {
+							.list-li-bottom-btn {
+								width: 163rpx;
+								height: 57rpx;
+								font-size: 26rpx;
+								border: 1rpx solid #FF4040;
+								background: #FF4040;
+								border-radius: 30rpx;
+								color: #fff;
+							}
+						}
+					}
+				}
+			}
+
+		}
+	}
+</style>

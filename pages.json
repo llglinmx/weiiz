@@ -87,6 +87,7 @@
                     "style" :                                                                                    
                 {
                     "navigationBarTitleText": "门店详情",
+					// "navigationBarTextStyle": "white", //状态栏字体颜色
                     "enablePullDownRefresh": false
                 }
                 
@@ -397,7 +398,8 @@
 			}, {
 				"path": "waitingForWriteOff/waitingForWriteOff",
 				"style": {
-					"navigationBarTitleText": "",
+					"navigationBarTitleText": "待核销",
+					"navigationBarTextStyle": "white", //状态栏字体颜色
 					"enablePullDownRefresh": false
 				}
 

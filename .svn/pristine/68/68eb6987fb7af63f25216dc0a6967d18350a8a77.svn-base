@@ -1,0 +1,211 @@
+<template>
+	<view class="box">
+		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
+			<nav-title navTitle="更改手机号"></nav-title>
+		</view>
+		<view class="box-content">
+			<view class="box-content-text">请输入你需要绑定的手机号码</view>
+			<view class="box-content-main-input">
+				<view class="box-content-main-input-box">
+					<input type="number" @input="passwordChange" :focus="isFocus" v-model.trim="phoneVal" />
+				</view>
+				<view class="box-content-main-input-box-ico flex-center" @click="empty" v-if="phoneVal.length!=0">
+					<text class="iconfont iconcuowu" style="font-size: 28rpx;color: #999;"></text>
+				</view>
+			</view>
+			<view class="box-content-btn flex-center" @click="preservation" :class="isAll?'btn-active':''">保存</view>
+		</view>
+		<uni-popup ref="popup" type="dialog">
+			<uni-popup-dialog type="warn" mode='base' title="警告" content="你确定要修改此手机号吗？" :duration="2000"
+				:before-close="true" @close="close" @confirm="confirm"></uni-popup-dialog>
+		</uni-popup>
+	</view>
+</template>
+
+<script>
+	import navTitle from "../../components/navTitle/navTitle.vue"
+	import UniPopup from "../../components/uni-popup/uni-popup.vue"
+	import UniPopupDialog from "../../components/uni-popup/uni-popup-dialog.vue"
+	export default {
+		data() {
+			return {
+				barHeight: 0, //顶部电量导航栏高度
+				phone: '',
+				phoneVal: '',
+				isFocus: true,
+				isAll: false,
+			};
+		},
+		components: {
+			navTitle,
+			UniPopup,
+			UniPopupDialog
+		},
+
+		onReady() {
+			// 获取顶部电量状态栏高度
+			uni.getSystemInfo({
+				success: (res) => {
+					this.barHeight = res.statusBarHeight
+				}
+			});
+		},
+		onLoad(options) {
+			var data = JSON.parse(options.data)
+			this.phone = data.phone
+			this.id = data.id
+
+			// this.phoneVal = this.mobileStr(data.phone)
+
+		},
+		methods: {
+			// 清空
+			empty() {
+				this.phoneVal = ''
+			},
+
+			//监听输入密码
+			passwordChange() {
+				if (this.phoneVal.length > 10 && this.phoneVal.length < 12) {
+					this.isAll = true
+					return false
+				}
+				this.isAll = false
+			},
+
+			// 确定按钮
+			preservation() {
+				var reg = /^1[3|4|5|7|8][0-9]{9}$/; //验证规则
+
+				if (this.isAll) {
+					if (reg.test(this.phoneVal)) { // 判断手机号是否正确
+						this.$refs.popup.open()
+						return false;
+					}
+					uni.showToast({
+						title: "请输入正确的手机号",
+						icon: "none"
+					})
+					return false;
+				}
+				uni.showToast({
+					title: "请输入手机号",
+					icon: "none"
+				})
+			},
+
+			// 弹窗点击取消
+			close(done) {
+				// TODO 做一些其他的事情，before-close 为true的情况下，手动执行 done 才会关闭对话框
+				// ...
+				done()
+			},
+			// 弹窗点击确认
+			confirm(done, value) {
+				var vuedata = {
+					mobile: this.phoneVal
+				}
+				this.apiput('api/v1/members/member_info/edit/' + this.id, vuedata).then(res => {
+					if (res.status == 200) {
+						console.log(res)
+						uni.showToast({
+							title: "手机号更新成功",
+							icon: "none"
+						})
+						setTimeout(function() {
+							uni.navigateBack({
+								delta: 1
+							})
+						}, 1000)
+					}
+					done()
+				});
+			},
+
+			mobileStr(str) {
+				if (str.length > 7) {
+					return str.substring(0, 3) + '****' + str.substring(7, str.length);
+				} else {
+					return str.substring(0, str.length - 1) + '****';
+				}
+			}
+		}
+	}
+</script>
+
+<style lang="scss">
+	.box {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		background: #f7f7f7;
+
+		.box-head {
+			background-color: #fff;
+		}
+
+		.box-content {
+			flex: 1;
+
+			.box-content-text {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				height: 120rpx;
+				background: #fff;
+				font-size: 36rpx;
+				color: #999;
+			}
+
+			.box-content-main-input {
+				display: flex;
+				align-items: center;
+				margin-top: 20rpx;
+				margin-bottom: 20rpx;
+				height: 100rpx;
+				padding: 0 40rpx;
+				box-sizing: border-box;
+				background: #fff;
+
+				.box-content-main-input-box {
+					flex: 1;
+					height: 100%;
+
+					input {
+						box-sizing: border-box;
+						height: 100%;
+						font-size: 28rpx;
+					}
+				}
+
+				.box-content-main-input-box-ico {
+					width: 32rpx;
+					height: 32rpx;
+					border-radius: 50%;
+					margin-left: 10rpx;
+					border: 1rpx solid #ededed;
+				}
+			}
+
+			.box-content-btn {
+				width: 660rpx;
+				height: 88rpx;
+				margin: auto;
+				margin-top: 118rpx;
+				background: #FFD6CC;
+				box-shadow: 0rpx 10rpx 20rpx rgba(255, 49, 0, 0.15);
+				border-radius: 15rpx;
+				color: #fff;
+				font-size: 32rpx;
+				transition: 0.3s;
+			}
+
+			.btn-active {
+				background: #FF967D;
+			}
+
+		}
+
+		.box-footer {}
+	}
+</style>

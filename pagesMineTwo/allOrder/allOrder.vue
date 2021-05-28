@@ -50,7 +50,6 @@
 			});
 		},
 		onLoad(options) {
-			console.log(options)
 			this.idx = options.listIndex * 1 // *1 是为了把字符串转为数字
 
 			// 从个人中心里面点击进来需要

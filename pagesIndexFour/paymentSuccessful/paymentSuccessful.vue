@@ -8,13 +8,14 @@
 		<view class="box-content">
 			<view class="box-content-wrap">
 				<view class="box-content-wrap-icon">
-					<text class="iconfont iconzhifuchenggong icon-font" style="color: #26BF82;font-size: 160rpx;"></text>
+					<text class="iconfont iconzhifuchenggong icon-font"
+						style="color: #26BF82;font-size: 160rpx;"></text>
 				</view>
 				<view class="box-content-wrap-title">
 					订单支付成功
 				</view>
 				<view class="box-content-wrap-text">
-					支付金额：￥800.00
+					支付金额：<text style="color: red;">￥{{price | toFixed}}</text>
 				</view>
 				<view class="box-content-wrap-list">
 					<view class="box-content-wrap-btn-order flex-center" @click="viewOrder">查看订单</view>
@@ -41,10 +42,13 @@
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
+				price: 0,
 			};
 		},
-		components: {
-
+		filters: {
+			toFixed(val) {
+				return val.toFixed(2)
+			},
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -53,6 +57,9 @@
 					this.barHeight = res.statusBarHeight
 				}
 			});
+		},
+		onLoad(options) {
+			this.price =Number( options.price)
 		},
 		methods: {
 			// 查看订单
@@ -160,7 +167,8 @@
 			.box-content-main {
 				padding-top: 50rpx;
 				flex: 1;
-				.box-content-main-text{
+
+				.box-content-main-text {
 					font-size: 24rpx;
 					color: #999;
 				}

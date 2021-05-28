@@ -10,7 +10,7 @@
 					<count-down :endTime="endTime" color='#999' />
 				</view>
 				<view class="box-content-wrap-price">
-					￥<text>{{dataInfo.payable}}</text>
+					￥<text>{{dataInfo.amount}}</text>
 				</view>
 				<view class="box-content-wrap-text">{{dataInfo.store_name}}</view>
 			</view>
@@ -85,7 +85,7 @@
 				],
 				password: '',
 				balance: 0,
-				endTime: '2021-04-15 14:53:01'
+				endTime: ''
 			};
 		},
 		filters: {
@@ -128,7 +128,7 @@
 					case -1:
 						title = "余额支付"
 						this.type = 2
-						if (this.balance >= Number(this.dataInfo.payable)) { //判断余额是否大于需要支付的金额
+						if (this.balance >= Number(this.dataInfo.amount)) { //判断余额是否大于需要支付的金额
 							this.$refs.jpPwds.toOpen() //打开支付密码键盘
 							return false;
 						}
@@ -192,7 +192,7 @@
 				this.apipost('api/v1/order/service/pay', vuedata).then(res => {
 					if (res.status == 200) {
 						uni.navigateTo({
-							url: "../paymentSuccessful/paymentSuccessful"
+							url: "../paymentSuccessful/paymentSuccessful?price="+this.dataInfo.amount
 						})
 					} else {
 						uni.showToast({
@@ -201,9 +201,6 @@
 						})
 					}
 				})
-
-
-
 			},
 
 
@@ -212,10 +209,42 @@
 				this.apiget('api/v1/members/member_order/' + id, {}).then(res => {
 					if (res.status == 200) {
 						this.dataInfo = res.data
-						// this.endTime = res.data.end_time
+						this.endTime = res.data.pay_end_time
 					}
 				})
 			},
+
+			myFunction() {
+				var nowDate = new Date();
+				var EndDate = new Date("2021-05-28 19:37:02")
+				var dateDiff = EndDate.getTime() - nowDate.getTime();
+				var days = Math.floor(dateDiff / (24 * 3600 * 1000)) //计算出天数 
+				//计算出小时数 
+				var leave1 = dateDiff % (24 * 3600 * 1000) //计算天数后剩余的毫秒数 
+				var hours = Math.floor(leave1 / (3600 * 1000))
+				//计算相差分钟数 
+				var leave2 = leave1 % (3600 * 1000) //计算小时数后剩余的毫秒数 
+				var minutes = Math.floor(leave2 / (60 * 1000))
+				//计算相差秒数 
+				var leave3 = leave2 % (60 * 1000) //计算分钟数后剩余的毫秒数 
+				var seconds = Math.round(leave3 / 1000)
+				//调用checkTime方法将数字小于10的在前面补0
+				days = this.checkTime(days);
+				hours = this.checkTime(hours);
+				minutes = this.checkTime(minutes);
+				seconds = this.checkTime(seconds);
+
+				// console.log( "剩余时间:" + days + "天" + hours + "小时" + minutes + "分钟" + seconds + "秒")
+				setTimeout(()=> {
+					this.myFunction()
+				},1000)
+			},
+			checkTime(i) {
+				if (i < 10 && i != 0) {
+					i = "0" + i;
+				}
+				return i;
+			}
 
 		}
 	}

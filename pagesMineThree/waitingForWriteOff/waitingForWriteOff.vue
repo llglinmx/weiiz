@@ -5,25 +5,25 @@
 		</view>
 		<view class="box-content">
 			<view class="box-content-wrap">
-				<view class="box-content-wrap-title">
-					<image src="../../static/images/tool.jpg" mode="aspectFill"></image>
-					<text>罗约蓝池·温泉SPA</text>
+				<view class="box-content-wrap-title" style="display: flex;align-items: center;">
+					<text class="iconfont iconshangjia" style="font-size: 32rpx;color: #FF967D;"></text>
+					<text>	{{infoData.store_address}}</text>
 				</view>
 				<view class="box-content-wrap-list">
-					<view class="box-content-wrap-list-li" v-for="(item,index) in 5" :key="index">
+					<view class="box-content-wrap-list-li" v-for="(item,index) in 1" :key="index">
 						<view class="box-content-wrap-list-li-image">
 							<image src="../../static/images/001.png" mode="aspectFill"></image>
 						</view>
 						<view class="box-content-wrap-list-li-info">
 							<view class="list-li-info-top">
 								<view class="list-li-info-top-title">
-									泰式古法按摩
+									{{infoData.reserve_name}}
 								</view>
 								<view class="list-li-info-top-price">
-									￥298.00
+									￥{{infoData.payable}}
 								</view>
 							</view>
-							<view class="list-li-info-center">
+							<!-- <view class="list-li-info-center">
 								<view class="list-li-info-center-wrap">
 									<view class="list-li-info-center-wrap-item flex-center">60分钟</view>
 									<view class="list-li-info-center-wrap-item flex-center">背部按摩</view>
@@ -31,7 +31,7 @@
 								<view class="list-li-info-center-number">
 									x1
 								</view>
-							</view>
+							</view> -->
 						</view>
 					</view>
 				</view>
@@ -42,15 +42,15 @@
 							项目总价
 						</view>
 						<view class="box-content-wrap-all-price">
-							￥280.00
+							￥{{infoData.payable}}
 						</view>
 					</view>
 					<view class="box-content-wrap-all-item">
 						<view class="box-content-wrap-all-title">
-							使用优惠券
+							技师服务费
 						</view>
 						<view class="box-content-wrap-all-price">
-							￥80.00
+							￥{{infoData.member_fee}}
 						</view>
 					</view>
 				</view>
@@ -58,7 +58,7 @@
 					<view class="box-content-wrap-payment-text">
 						实付款：
 						<text class="icon">￥</text>
-						<text class="price">332.70</text>
+						<text class="price">{{infoData.amount}}</text>
 					</view>
 				</view>
 			</view>
@@ -66,7 +66,7 @@
 				<view class="box-content-time-text">
 					<view class="box-content-time-text-title">预约时间</view>
 					<view class="box-content-time-text-date">
-						2021年1月4日 17:00-18:00
+						{{infoData.plan_date}} {{infoData.plan_start}}-{{infoData.plan_end}}
 					</view>
 				</view>
 				<view class="box-content-time-btn flex-center" @click="revisionTime">修改时间</view>
@@ -74,19 +74,19 @@
 			<view class="box-content-group-buying">
 				<view class="box-content-group-buying-top">
 					<view class="box-content-group-buying-top-left">
-						<view class="group-buying-top-left-title">团购券</view>
-						<view class="group-buying-top-left-text">有效期至2021-01-31</view>
+						<view class="group-buying-top-left-title">优惠券</view>
+						<view class="group-buying-top-left-text">有效期至{{infoData.plan_date}}</view>
 					</view>
 					<view class="box-content-group-buying-top-btn flex-center" @click="refund">申请退款</view>
 				</view>
 				<view class="box-content-group-buying-bottom">
 					<view class="group-buying-bottom-image-code">
-						<image src="../../static/images/qrcode.png" mode="aspectFill"></image>
+						<image :src="infoData.code" mode="aspectFill"></image>
 					</view>
-					<view class="group-buying-bottom-number">券码：8413 6020 49</view>
+					<!-- <view class="group-buying-bottom-number">券码：8413 6020 49</view>
 					<view class="group-buying-bottom-text">
 						为保障您的权益，未到店消费前请不要将券号提供给商家
-					</view>
+					</view> -->
 				</view>
 			</view>
 			<view class="box-content-service-info">
@@ -94,21 +94,21 @@
 				<view class="box-content-service-info-list">
 					<view class="box-content-service-info-list-li">
 						<view class="service-info-list-li-title">服务对象:</view>
-						<view class="service-info-list-li-text">张先生 13810071991</view>
+						<view class="service-info-list-li-text">{{infoData.name}} {{infoData.mobile}}</view>
 					</view>
 					<view class="box-content-service-info-list-li">
 						<view class="service-info-list-li-title">服务方式:</view>
-						<view class="service-info-list-li-text">到店服务91</view>
+						<view class="service-info-list-li-text">{{infoData.service_type==1?'到店服务':'上门服务'}}</view>
 					</view>
 					<view class="box-content-service-info-list-li">
 						<view class="service-info-list-li-title">门店名称:</view>
-						<view class="service-info-list-li-text">印象诗意·悠然SPA</view>
+						<view class="service-info-list-li-text">{{infoData.store_name}}</view>
 					</view>
 					<view class="box-content-service-info-list-li">
 						<view class="service-info-list-li-title">门店地址:</view>
 						<view class="service-info-list-li-text" style="color: #4EC494;">
 							<!-- <text class="iconfont icondingwei1 icon-font" style="color: #4EC494;font-size: 24rpx;margin-top: 4rpx;"></text> -->
-							中国 福建省 厦门市 集美区 杏滨路罗约酒店负一楼
+							{{infoData.store_address}}
 						</view>
 					</view>
 				</view>
@@ -119,11 +119,11 @@
 				</view>
 				<view class="box-content-order-all">
 					<text class="box-content-order-all-title">订单编号：</text>
-					<text class="box-content-order-all-number">400199110070101</text>
+					<text class="box-content-order-all-number">{{infoData.out_trade_no}}</text>
 				</view>
 				<view class="box-content-order-all">
 					<text class="box-content-order-all-title">下单时间：</text>
-					<text class="box-content-order-all-number">2021-01-13 10:35:11</text>
+					<text class="box-content-order-all-number">{{infoData.createtime}}</text>
 				</view>
 			</view>
 		</view>
@@ -139,6 +139,7 @@
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
+				infoData:{}
 			};
 		},
 		components: {
@@ -151,6 +152,9 @@
 					this.barHeight = res.statusBarHeight
 				}
 			});
+		},
+		onLoad(options) {
+			this.getDetails(options.id)
 		},
 		methods: {
 			// 修改时间
@@ -165,6 +169,19 @@
 				uni.showToast({
 					title: "申请退款",
 					icon: "none"
+				})
+			},
+			// 获取详情
+			getDetails(id){
+				this.apiget('api/v1/members/member_order/'+id, {}).then(res => {
+					if (res.status == 200) {
+						this.infoData = res.data
+					}else{
+						uni.showToast({
+							title:res.message,
+							icon:'none'
+						})
+					}
 				})
 			},
 		}

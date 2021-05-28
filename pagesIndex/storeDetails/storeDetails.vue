@@ -6,18 +6,26 @@
 					<text class="iconfont iconfanhui" style="font-size: 34rpx;"></text>
 				</view>
 				<view class="box-head-nav-ico-all">
-					<text class="iconfont iconguanzhu" style="font-size: 48rpx;margin-right: 20rpx;"></text>
+					<text class="iconfont iconguanzhu" style="font-size: 48rpx;margin-right: 20rpx;" v-if="!isStore"
+						@click="addCollection"></text>
+					<text class="iconfont iconguanzhu-xuanzhong"
+						style="font-size: 48rpx;margin-right: 20rpx;color: #FF967D;" v-if="isStore"
+						@click="cancelCollection"></text>
 					<text class="iconfont iconfenxiang" style="font-size: 48rpx;"></text>
 				</view>
 			</view>
 		</view>
 		<view class="box-head box-head-active" :style="{paddingTop:barHeight+'px'}" v-if="opacityNum<0.2">
 			<view class="box-head-nav">
-				<view class="box-head-nav-back"  @click="Gback">
+				<view class="box-head-nav-back" @click="Gback">
 					<text class="iconfont iconfanhui" style="font-size: 34rpx;"></text>
 				</view>
 				<view class="box-head-nav-ico-all">
-					<text class="iconfont iconguanzhu" style="font-size: 48rpx;margin-right: 20rpx;"></text>
+					<text class="iconfont iconguanzhu" style="font-size: 48rpx;margin-right: 20rpx;" v-if="!isStore"
+						@click="addCollection"></text>
+					<text class="iconfont iconguanzhu-xuanzhong"
+						style="font-size: 48rpx;margin-right: 20rpx;color: #FF967D;" v-if="isStore"
+						@click="cancelCollection"></text>
 					<text class="iconfont iconfenxiang" style="font-size: 48rpx;"></text>
 				</view>
 			</view>
@@ -28,7 +36,7 @@
 					<swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval"
 						:duration="duration" :circular="circular">
 						<swiper-item v-for="(item,index) in bannerList" class="swiper-item">
-							<image :src="item.bimg" mode="aspectFill" class="swiper-item-image"></image>
+							<image :src="item" mode="aspectFill" class="swiper-item-image"></image>
 							<view class="swiper-item-cover"></view>
 						</swiper-item>
 					</swiper>
@@ -36,16 +44,16 @@
 			</view>
 			<view class="box-content-main">
 				<view class="box-content-main-info">
-					<view class="box-content-main-info-title">水宜方SPA会所</view>
+					<view class="box-content-main-info-title">{{infoData.name}}</view>
 					<view class="box-content-main-info-address">
 						<text class="icon-font iconfont icondingwei" style="font-size: 30rpx;color:#999"></text>
-						<text class="address-text">鹭江道3号和平码头2号电梯4楼</text>
+						<text class="address-text">{{infoData.address}}</text>
 					</view>
 					<view class="box-content-main-info-wrap">
 						<view class="main-info-wrap-left">
-							<score-max comment='80' />
+							<score-max :comment='infoData.comment' />
 							<view class="main-info-wrap-left-comment">
-								评价(89)
+								评价({{infoData.evaluate_num}})
 							</view>
 						</view>
 						<view class="main-info-wrap-right">
@@ -57,45 +65,47 @@
 				</view>
 				<menu-title msgTitle="门店照片" style="padding: 0 30rpx;box-sizing: border-box;" />
 				<view class="box-content-main-image-all">
-					<view class="box-content-main-image-all-item" v-for="item in 10">
-						<image src="../../static/images/00002.png" mode="aspectFill"></image>
+					<view class="box-content-main-image-all-item" v-for="(item,index) in infoData.bimg">
+						<image :src="item" mode="aspectFill"></image>
 					</view>
 				</view>
 				<view class="box-content-main-tab">
 					<view class="box-content-main-tab-li flex-center" :class="tabIndex==index?'tab-active':''"
-						v-for="(item,index) in tabList" :key="index">{{item}}</view>
+						v-for="(item,index) in tabList" :key="index" @click="tabClick(item.id,index)">{{item.name}}
+					</view>
 				</view>
 				<view class="box-content-main-data-list">
-					<view class="box-content-main-data-list-li" v-for="itme in 5">
+					<view class="box-content-main-data-list-li" v-for="(item,index) in serviceList" :key='item.id'>
 						<view class="data-list-li-image">
-							<image src="../../static/images/00002.png" mode="aspectFill"></image>
+							<image :src="item.simg" mode="aspectFill"></image>
 						</view>
 						<view class="data-list-li-info">
-							<view class="data-list-li-info-title">芳香泰式全身SPA</view>
+							<view class="data-list-li-info-title">{{item.name}}</view>
 							<view class="data-list-li-info-all">
-								<view class="data-list-li-info-all-item">60分钟</view>
-								<view class="data-list-li-info-all-item">缓解疲劳</view>
+								<view class="data-list-li-info-all-item">{{item.service_time}}分钟</view>
+								<view class="data-list-li-info-all-item">{{item.rc_name}}</view>
 							</view>
 							<view class="data-list-li-info-footer">
 								<view class="data-list-li-info-footer-msg">
-									<view class="list-li-info-footer-msg-price">￥798</view>
-									<view class="list-li-info-footer-msg-text">已售28</view>
+									<view class="list-li-info-footer-msg-price">￥{{item.price}}</view>
+									<view class="list-li-info-footer-msg-text">已售{{item.sold}}</view>
 								</view>
-								<view class="data-list-li-info-footer-btn flex-center">立即预约</view>
+								<view class="data-list-li-info-footer-btn flex-center" @click="reservationService(item.id)">立即预约</view>
 							</view>
 						</view>
 					</view>
 				</view>
 				<menu-title msgTitle="其他门店" style="padding: 0 30rpx;box-sizing: border-box;" />
 				<view class="other-stores-list">
-					<view class="other-stores-list-li" v-for="item in 5">
+					<view class="other-stores-list-li" v-for="(item,index) in otherStoresList" :key='item.id'>
 						<view class="other-stores-list-li-image">
-							<image src="../../static/images/001.jpg" mode="aspectFill"></image>
+							<image :src="item.cover_img" mode="aspectFill"></image>
 						</view>
-						<view class="other-stores-list-li-title">赫柏Hebe</view>
+						<view class="other-stores-list-li-title">{{item.name}}</view>
 						<view class="other-stores-list-li-address">
-							<text class="icon-font iconfont icondingwei" style="font-size: 28rpx;color:#FF967D;margin-top: 4rpx;"></text>
-							<text class="address-text">金边路568号航空古地石广场</text>
+							<text class="icon-font iconfont icondingwei"
+								style="font-size: 28rpx;color:#FF967D;margin-top: 4rpx;"></text>
+							<text class="address-text">{{item.address}}</text>
 						</view>
 					</view>
 				</view>
@@ -118,14 +128,18 @@
 				circular: true,
 				bannerList: [],
 				barHeight: 0, //顶部电量导航栏高度
-				tabList: [
-					'全部', '泰式按摩', '中式按摩', '足底按摩'
-				],
+				tabList: [],
 				tabIndex: 0, //当前选中
 				scollHeight: 0,
 				scollTop: 0,
 				opacityNum: 1, //初始opacity值
 				positionTop: 0,
+				otherStoresList: [], //其他门店列表
+				serviceList: [], //服务列表
+				infoData: {},
+				isStore: false, //是否收藏
+				categoryId: '', //类别id
+				storeId: '', //门店id
 			};
 		},
 		components: {
@@ -144,21 +158,117 @@
 				this.positionTop = data.top
 			}).exec();
 		},
-		onLoad() {
-			this.getIndexInfo()
+		onLoad(options) {
+			this.getIndexInfo(options.id)
 		},
 		methods: {
 
 			// 获取首页信息
-			getIndexInfo() {
+			getIndexInfo(id) {
 				var vuedata = {
 
 				}
-				this.apiget('pc/index', vuedata).then(res => {
+				this.apiget('app/store/' + id, vuedata).then(res => {
 					if (res.status == 200) {
-						this.bannerList = res.data.bannerList
+						this.bannerList = []
+						this.bannerList.push(res.data.storeList.cover_img)
+						this.infoData = res.data.storeList
+						this.otherStoresList = res.data.storeList.otherStores
+						this.storeId = res.data.storeList.id
+						this.isStore = res.data.storeList.collection //是否收藏
+						this.getCategory(res.data.storeList.id)
 					}
 				});
+			},
+
+			// 添加收藏
+			addCollection() {
+				this.isStore = true
+				var vuedata = {
+					type: 2,
+					itemid: this.storeId
+				}
+				this.apipost('api/v1/members/collection/add', vuedata).then(res => {
+					if (res.status == 200) {
+						uni.showToast({
+							title: "添加收藏成功",
+							icon: "none"
+						})
+						return false;
+					}
+					this.isStore = false
+				})
+			},
+			// 取消收藏
+			cancelCollection() {
+				this.isStore = false
+				var vuedata = {
+					type: 2,
+					itemid: this.storeId
+				}
+				this.apipost('api/v1/members/collection/cancel', vuedata).then(res => {
+					if (res.status == 200) {
+						uni.showToast({
+							title: "取消收藏成功",
+							icon: "none"
+						})
+						return false;
+					}
+					this.isStore = true
+				})
+			},
+
+			// 分类类别点击
+			tabClick(id, index) {
+				this.tabIndex = index
+				this.categoryId = id
+				this.serviceItems(id)
+			},
+
+			// 获取类别
+			getCategory(sotreId) {
+				this.apiget('pc/category/category_type', {
+					store: sotreId,
+					type: 2
+				}).then(res => {
+					if (res.status == 200) {
+						this.tabList = []
+						var str = {
+							name: '全部',
+							id: ''
+						}
+						this.tabList = res.data
+						this.tabList.unshift(str)
+						this.serviceItems()
+					}
+				});
+			},
+
+			// 服务项目
+			serviceItems() {
+				this.apiget('pc/reserve', {
+					store: this.storeId,
+					id: this.categoryId,
+				}).then(res => {
+					if (res.status == 200) {
+						this.serviceList = res.data.reserveList
+					}
+				});
+			},
+
+
+			// 商家项目预约服务
+			reservationService(id) {
+				var str = {
+					id: id,
+					store: this.storeId
+				}
+				this.$store.commit("upCheckId", -1)
+
+				uni.navigateTo({
+					url: "../../pagesIndexThree/orderByAppointment/orderByAppointment?data=" + JSON.stringify(str)
+				})
+				// console.log(this.$store.state.checkId)
 			},
 
 			// 返回
@@ -349,8 +459,9 @@
 					box-sizing: border-box;
 
 					.box-content-main-image-all-item {
-						width: 180rpx;
-						height: 180rpx;
+						display: flex;
+						align-items: center;
+						justify-content: center;
 						margin-right: 20rpx;
 
 						image {
@@ -378,6 +489,7 @@
 						font-size: 28rpx;
 						font-weight: 500;
 						background: #F7F7F7;
+						transition: 0.3s;
 					}
 
 					.box-content-main-tab-li:last-child {
