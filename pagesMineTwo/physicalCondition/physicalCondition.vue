@@ -1,17 +1,17 @@
 <template>
 	<view class="box">
 		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
-			<navTitle navTitle="身体状态"></navTitle>
+			<navTitle :navTitle="lan.PhysicalConditionb"></navTitle>
 		</view>
 		<view class="box-content">
 			<view class="box-content">
 				<view class="content-list">
 					<view class="content-list-li" @click="openSex">
-						<view class="content-list-li-title">性别</view>
+						<view class="content-list-li-title">{{lan.Genderb}}</view>
 						<view class="content-list-li-wrap">
-							<view class="content-list-li-wrap-text" v-if='sex==1'>男</view>
-							<view class="content-list-li-wrap-text" v-if='sex==2'>女</view>
-							<view class="content-list-li-wrap-text" v-if='sex==3'>保密</view>
+							<view class="content-list-li-wrap-text" v-if='sex==1'>{{lan.maleb}}</view>
+							<view class="content-list-li-wrap-text" v-if='sex==2'>{{lan.femaleb}}</view>
+							<view class="content-list-li-wrap-text" v-if='sex==0'>{{lan.secrecyv}}</view>
 							<view class="content-list-li-more flex-center">
 								<text class="iconfont icongengduo icon-font"
 									style="color: #ccc;font-size: 28rpx;font-weight: 500;"></text>
@@ -19,7 +19,7 @@
 						</view>
 					</view>
 					<view class="content-list-li">
-						<view class="content-list-li-title">年龄</view>
+						<view class="content-list-li-title">{{lan.Agen}}</view>
 						<view class="content-list-li-wrap">
 							<view class="content-list-li-wrap-text">
 								<input type="text" v-model.trim="age" />
@@ -28,21 +28,21 @@
 						</view>
 					</view>
 					<view class="content-list-li" style="min-height: 186rpx;align-items: baseline;">
-						<view class="content-list-li-title">过往病例</view>
+						<view class="content-list-li-title">{{lan.PastCasesbv}}</view>
 						<view class="content-list-li-wrap">
-							<textarea class="textarea-text" v-model.trim="cottoms" placeholder="多个病例用“；”分隔" />
+							<textarea class="textarea-text" v-model.trim="cottoms" :placeholder="lan.separate" />
 						</view>
 					</view>
 					<view class="content-list-li" style="min-height: 186rpx;align-items: baseline;">
-						<view class="content-list-li-title">过敏病例</view>
+						<view class="content-list-li-title">{{lan.AllergicCasesb}}</view>
 						<view class="content-list-li-wrap">
-							<textarea class="textarea-text" v-model.trim="allergy" placeholder="多个病例用“；”分隔" />
+							<textarea class="textarea-text" v-model.trim="allergy" :placeholder="lan.separate" />
 						</view>
 					</view>
 					<view class="content-list-li" @click="operationCilck">
-						<view class="content-list-li-title">有无手术</view>
+						<view class="content-list-li-title">{{lan.surgery}}</view>
 						<view class="content-list-li-wrap">
-							<view class="content-list-li-wrap-text">{{operation==1?'无':'有'}}</view>
+							<view class="content-list-li-wrap-text">{{operation==1?lan.nom:lan.Haven}}</view>
 							<view class="content-list-li-more flex-center">
 								<text class="iconfont icongengduo icon-font"
 									style="color: #ccc;font-size: 28rpx;font-weight: 500;"></text>
@@ -50,9 +50,9 @@
 						</view>
 					</view>
 					<view class="content-list-li" @click="fetationClick">
-						<view class="content-list-li-title">是否怀孕</view>
+						<view class="content-list-li-title">{{lan.WhetherPregnantz}}</view>
 						<view class="content-list-li-wrap">
-							<view class="content-list-li-wrap-text">{{fetation==1?'否':'是'}}</view>
+							<view class="content-list-li-wrap-text">{{fetation==1?lan.nom:lan.Yesn}}</view>
 							<view class="content-list-li-more flex-center">
 								<text class="iconfont icongengduo icon-font"
 									style="color: #ccc;font-size: 28rpx;font-weight: 500;"></text>
@@ -60,7 +60,7 @@
 						</view>
 					</view>
 					<view class="content-list-li" style="min-height: 99rpx;align-items: baseline;">
-						<view class="content-list-li-title">注意事项</view>
+						<view class="content-list-li-title">{{lan.Precautionsb}}</view>
 						<view class="content-list-li-wrap">
 							<view class="content-list-li-text">
 								<input type="text" v-model.trim="announcements" />
@@ -71,12 +71,12 @@
 			</view>
 		</view>
 		<view class="box-footer">
-			<btnPink btnName="保存" @btnClick="preserve"></btnPink>
+			<btnPink :btnName="lan.preservationb" @btnClick="preserve"></btnPink>
 		</view>
 
-		<liudx-picker v-model="isShow" :dataList="sexList" @confirm="sexInput" />
-		<liudx-picker v-model="isFlag" :dataList="list" @confirm="listChange" />
-		<liudx-picker v-model="isFetation" :dataList="fetationList" @confirm="fetationChange" />
+		<liudx-picker :textArr='lan' v-model="isShow" :dataList="sexList" @confirm="sexInput" />
+		<liudx-picker :textArr='lan' v-model="isFlag" :dataList="list" @confirm="listChange" />
+		<liudx-picker :textArr='lan' v-model="isFetation" :dataList="fetationList" @confirm="fetationChange" />
 
 	</view>
 </template>
@@ -127,6 +127,7 @@
 					name: '是',
 					text: 2
 				}],
+				lan:{}
 			};
 		},
 		components: {
@@ -144,6 +145,7 @@
 		},
 		onLoad() {
 			this.getInfo()
+			this.getLanguage()
 		},
 		methods: {
 
@@ -210,7 +212,7 @@
 				this.apiput('api/v1/members/member_info/edit/' + this.id, vuedata).then(res => {
 					if (res.status == 200) {
 						uni.showToast({
-							title: "信息修改成功",
+							title: this.lan.InformationModified,
 							icon: "none"
 						})
 						setTimeout(function() {
@@ -220,7 +222,28 @@
 						}, 1000)
 					}
 				});
+			},
+			// 请求语言包
+			getLanguage() {
+				this.apiget('language/info', {
+					name: 'mypage'
+				}).then(res => {
+					if (res.status == 200) {
+					  let language=res.data.language
+					  this.lan=res.data.language
+					  
+					  this.sexList[0].name=language.maleb
+					  this.sexList[1].name=language.femaleb
+					  this.sexList[2].name=language.secrecyv
+					  
+					  this.list[0].name=language.nom
+					  this.list[1].name=language.Haven
+					  
+					  this.fetationList[0].name=language.nom
+					  this.fetationList[1].name=language.Yesn
 			}
+				});
+			},
 		}
 	}
 </script>

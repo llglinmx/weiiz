@@ -1,0 +1,1164 @@
+<template>
+	<view class="index-box">
+		<!-- 返回顶部 -->
+		<view class="back-to-top flex-center" @click="goTop" :class="isShowTop?'back-to-top-active':''">
+			<text class="iconfont iconUpward"></text>
+		</view>
+		<!-- 顶部 -->
+		<view class="index-head" :style="{paddingTop:barHeight+'px'}">
+			<view class="index-head-wrap">
+				<view class="index-head-address" @click="getLocationFn">
+					<text class="iconfont icondingwei icon-font" style="color: #FF967D;"></text>
+					<text style="margin-left: 10rpx;">{{ cityTop?cityTop:'获取位置' }}</text>
+				</view>
+
+				<view @click="scanCode" class="index-head-language flex-center">
+					<text class="iconfont iconsaoyisao icon-font" style="color: #999;font-size: 32rpx;"></text>
+				</view>
+				<!-- <view class="index-head-language flex-center" @click="clickLanguage">
+					<text class="iconfont iconyuyan icon-font" style="color: #fff;font-size: 32rpx;"></text>
+					<text>EN</text>
+				</view> -->
+			</view>
+
+		</view>
+		<scroll-view :scroll-top="scrollTop" :scroll-with-animation='true' scroll-y="true" class="index-content"
+			@scroll='scrollMain'>
+			<!-- 搜索框 -->
+			<view class="index-content-search">
+				<view class="content-search-box">
+					<view class="content-search-ico">
+						<text class="iconfont iconsousuo1 icon-font"
+							style="color: #999;font-size: 40rpx;font-weight: 500;"></text>
+						<!-- <image src="../../static/images/search.png" mode=""></image> -->
+					</view>
+					<view class="content-search-text">
+						<input @confirm="onSearch" type="text" placeholder="搜索SPA、商家" />
+					</view>
+					<!-- <view class="content-search-scan">
+						<text class="iconfont iconsaoyisao icon-font"
+							style="color: #999;font-size: 30rpx;font-weight: 500;"></text>
+					</view> -->
+				</view>
+			</view>
+			<!-- 轮播图 -->
+			<view class="index-content-banner">
+				<swiper class="swiper" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval"
+					:duration="duration" :circular="circular">
+					<swiper-item v-for="(item,index) in bannerList" :key="index">
+						<image :src="item.bimg" mode="aspectFill" class="swiper-item"></image>
+					</swiper-item>
+				</swiper>
+			</view>
+			<!-- 推荐商家 -->
+			<view class="recommend-business">
+				<menu-title msgTitle="推荐商家" :isShow="true" @more='moreClick' />
+				<view class="recommend-business-list" @scroll='recommendChange'>
+					<view class="recommend-business-list-li" v-for="(ele,i) in recommendList" :key='i'
+						@click="businessDetails(ele.id)">
+						<view class="recommend-business-list-li-image">
+							<image :src="ele.simg" mode="aspectFill"></image>
+						</view>
+						<view class="recommend-business-list-li-title">{{ele.name}}</view>
+						<view class="recommend-business-list-li-address">
+							<text class="iconfont icondingwei icon-font"
+								style="color: #FF967D;margin-top: 4rpx;"></text>
+							<text class="recommend-business-list-li-address-text">{{ele.address}}</text>
+						</view>
+					</view>
+
+				</view>
+				<view class="recommend-business-speed barWidth">
+					<view class="recommend-business-speed-bar" :style="{width:toolBarWidth+'px'}"></view>
+				</view>
+			</view>
+
+			<!-- 列表 -->
+			<view class="index-content-list-wrap">
+				<menu-title msgTitle="附近商家" style="padding: 0 30rpx;box-sizing: border-box;" />
+				<view class="index-content-list">
+					<view class="index-content-list-li" v-for="(item,index) in arrList" :key="index"
+						@click="lisClick(item.id,index)">
+						<view class="content-list-li-ico" :class="classIndex==index?'content-list-li-ico-active':''">
+							<image :src="item.icon" mode="aspectFill"></image>
+						</view>
+						<view class="content-list-li-text">{{item.name}}</view>
+					</view>
+				</view>
+				<view class="nearby-business-wrap">
+					<view class="nearby-business-screen" :class="isFixed?'nearby-business-screen-fixed':''"
+						:style="{top:barHeight+'px'}">
+						<view class="nearby-business-screen-li" v-for="(item,index) in filterList" :key='index'
+							@click="filterClick(index)">
+							<view class="nearby-business-screen-li-text flex-center"
+								:style="{color:screenIndex==index?'#FF967D':'#000'}">
+								<text>{{item}}</text>
+								<text :class="filetrIndex==index?'icon-font-active':''"
+									class="iconfont icon-font iconxiangxiajiantou"
+									style="font-size: 32rpx;margin-left: 5rpx;"></text>
+							</view>
+						</view>
+					</view>
+					<view class="nearby-business-list" v-if="nearbyList.length!=0">
+						<view class="nearby-business-list-li" v-for="item in nearbyList" :key='item.id'>
+							<view class="nearby-business-list-li-image" @click="storeDetails(item.id)">
+								<image :src="item.simg" mode="aspectFill"></image>
+							</view>
+							<view class="nearby-business-list-li-title">{{item.name}}</view>
+							<view class="nearby-business-list-li-info">
+								<view class="nearby-business-list-li-info-left">
+									<score-max :comment='item.comment' />
+									<view class="nearby-business-list-li-info-left-comment">
+										评价({{item.evaluate_num}})
+									</view>
+								</view>
+								<view class="nearby-business-list-li-info-right">距离{{item.kilometer}}KM</view>
+							</view>
+							<view class="nearby-business-list-li-label">
+								<view class="nearby-business-list-li-label-item item-recommend" v-if="item.comment>80">
+									推荐商家</view>
+								<!-- <view class="nearby-business-list-li-label-item">推荐12</view>
+								<view class="nearby-business-list-li-label-item">推荐32</view> -->
+							</view>
+						</view>
+					</view>
+					<view style="width: 100%;" :style="{height:(indexContentHeight/2)+'px'}"
+						v-if="nearbyList.length==0">
+						<no-data msg='暂无附近商家' />
+					</view>
+				</view>
+			</view>
+
+		</scroll-view>
+		<!-- tabbar导航栏 -->
+		<view class="index-footer">
+			<Tabbar @tabbarClick="tabbarClick" :activeIndex="activeIndex"></Tabbar>
+		</view>
+		<!-- 选择语言弹出层 -->
+		<uni-popup ref="popup" type="center" :maskClick="false">
+			<view class="popup-box-main">
+				<view class="popup-list-box">
+					<view class="popup-title">
+						选择语言
+					</view>
+					<view class="popup-list">
+						<view class="popup-list-li" v-for="(item,index) in textList"
+							@click="selectLanguage(item.id,index)" :key="index"
+							:class="item.default==1?'popup-list-li-active':''">
+							<text>{{item.name}}</text>
+							<text class="iconfont icondagou icon-font" style="color:#FF967D;font-size: 40rpx;"
+								v-if="item.default==1"></text>
+						</view>
+					</view>
+					<view class="popup-btn" @click="confirmBtn">确定</view>
+				</view>
+				<view class="popup-close flex-center" @click="closeLanguage">
+					<text class="iconfont iconcuowu icon-font" style="color:#fff;font-size: 48rpx;"></text>
+				</view>
+			</view>
+		</uni-popup>
+		<select-address :visible="visible" @cancel='regionCancel' @reset='resetChange' @confirm='regionConfirm' />
+		<comprehensive-list :visible="visibleComprehensive" @cancel='comprehensiveCancel'
+			@confirm='comprehensiveConfirm' />
+	</view>
+</template>
+
+<script>
+	import Tabbar from "../../components/tabbar/tabbar.vue"
+	import menuTitle from "../../components/menu-title/menu-title.vue"
+	import scoreMax from "../../components/score-max/score-max.vue"
+	import permision from "@/js_sdk/wa-permission/permission.js"
+
+
+	export default {
+		data() {
+			return {
+				indicatorDots: true,
+				autoplay: true,
+				interval: 2000,
+				duration: 500,
+				circular: true,
+				arrList: [],
+				textList: ['中文', "英语", "俄语", "法语", "德语"],
+				filterList: ['综合排序', '区域', '全部筛选'],
+				bannerList: [], //轮播图
+				noticeList: [], //公告
+				barHeight: 0, //顶部电量导航栏高度
+				isLangShow: false,
+				isPopup: false,
+				selectIndex: 0, //当前选择的语言
+				activeIndex: 0, //当前tabbar所在页面
+				toolBarWidth: 0, //进度条长度
+				parWidth: 0, // 进度条父级长度
+				longitude: '118.03734908465576', //经度
+				latitude: '24.614746736877', //纬度
+				recommendList: [], //推荐列表
+				nearbyList: [], //附近列表
+				scrollLeft: 0,
+				scrollTop: 0,
+				old: {
+					scrollTop: 0
+				},
+				indexContentHeight: 0, //中间部分盒子高度
+				isFixed: false, //是否固定定位
+				isShowTop: false, //是否显示返回顶部按钮
+				pid: '',
+				classIndex: 0,
+				cityTop: '',
+				visible: false,
+				visibleComprehensive: false,
+				filetrIndex: -1,
+				screenIndex: 0,
+				country: '', //国家id
+				province: '', //省份id
+				city: '', //城市id
+				district: '', //区域id
+				orderby: 'ASC',
+				ordertype: 'price',
+			}
+		},
+		components: {
+			Tabbar,
+			menuTitle,
+			scoreMax
+		},
+		onLoad() {
+			this.languageList();
+			this.getIndexInfo()
+			this.handleAuthorize()
+
+			var token = uni.getStorageSync('token');
+			if (token) {
+				this.getInfo()
+			}
+		},
+
+		onReady() {
+			// 获取顶部电量状态栏高度
+			uni.getSystemInfo({
+				success: (res) => {
+					this.barHeight = res.statusBarHeight
+				}
+			});
+			let info = uni.createSelectorQuery().select(".index-content");
+			info.boundingClientRect((data) => {
+				this.indexContentHeight = data.height
+			}).exec()
+
+
+			var isSelectLanguage = uni.getStorageSync('isSelectLanguage');
+			if (!isSelectLanguage) {
+				this.$refs.popup.open()
+			}
+		},
+		methods: {
+			// 扫一扫
+			scanCode() {
+				console.log('a')
+				// 允许从相机和相册扫码
+				uni.scanCode({
+					success: function(res) {
+						console.log('条码类型：' + res.scanType);
+						console.log('条码内容：' + res.result);
+					}
+				});
+			},
+
+
+			// 选择区域
+			selectRegion() {
+				this.visible = true
+			},
+			// 选择区域取消按钮
+			regionCancel(e) {
+				this.visible = e
+				this.filetrIndex = -1
+			},
+			// 区域确定按钮
+			regionConfirm(e) {
+				this.country = e.country_id
+				this.province = e.province_id
+				this.city = e.city_id
+				this.district = e.area_id
+
+				this.orderby = ''
+				this.ordertype = ''
+				this.getNearbyBusiness()
+
+				if (e.country_id != '') {
+					this.filterList[1] = e.country_name
+				}
+				if (e.province_id != '') {
+					this.filterList[1] = e.province_name
+				}
+				if (e.city_id != '') {
+					this.filterList[1] = e.city_name
+				}
+				if (e.area_id != '') {
+					this.filterList[1] = e.area_name
+				}
+				this.filterList[0] = '综合排序'
+				this.filterList[2] = '全部筛选'
+			},
+			// 区域重置按钮
+			resetChange(e) {
+				this.country = e.country_id
+				this.province = e.province_id
+				this.city = e.city_id
+				this.district = e.area_id
+				this.getNearbyBusiness()
+				this.screenIndex = -1
+				this.filterList[1] = '区域'
+			},
+
+
+			// 选择综合排序取消按钮
+			comprehensiveCancel(e) {
+				this.visibleComprehensive = e
+				this.filetrIndex = -1
+			},
+			// 综合排序确定按钮
+			comprehensiveConfirm(e) {
+
+				this.orderby = e.orderby
+				this.ordertype = e.ordertype
+				this.country = ''
+				this.province = ''
+				this.city = ''
+				this.district = ''
+				this.filterList[0] = e.name
+				this.filterList[1] = '区域'
+				this.filterList[2] = '全部筛选'
+				this.getNearbyBusiness()
+			},
+
+
+			// 筛选点击
+			filterClick(index) {
+				switch (index) {
+					case 0:
+						this.visibleComprehensive = true
+
+						break;
+					case 1:
+						this.selectRegion()
+
+						break;
+					case 2:
+						this.filterList[0] = '综合排序'
+						this.filterList[1] = '区域'
+						break;
+				}
+				this.filetrIndex = index
+				this.screenIndex = index
+			},
+
+			//搜索
+			onSearch(e) {
+				uni.navigateTo({
+					url: `/pages/map/map?search=${e.detail.value}&from=index`
+				})
+			},
+
+			// 获取位置信息
+			getLocationFn() {
+				this.cityTop = '定位中...';
+				uni.getLocation({
+					type: 'wgs84', // <map> 组件默认为国测局坐标gcj02
+					altitude: true,
+					geocode: true,
+					success: (res) => {
+						this.cityTop = res.address.city;
+						this.longitude = res.longitude // 经度
+						this.latitude = res.latitude // 纬度
+						console.log('当前位置的经度：' + res.longitude);
+						console.log('当前位置的纬度：' + res.latitude);
+
+						uni.setStorageSync('longitude', this.longitude); //经度
+						uni.setStorageSync('latitude', this.latitude); //纬度
+
+						// 获取到经纬度之后则执行 
+						this.getRecommendBusiness() //推荐商家
+					},
+					fail(err) {
+						console.log(err)
+					}
+				})
+			},
+			// 用户授权
+			handleAuthorize() {
+				// #ifdef H5
+				uni.setStorageSync('longitude', this.longitude); //经度
+				uni.setStorageSync('latitude', this.latitude); //纬度
+				this.getRecommendBusiness()
+				// #endif
+
+
+				// 判断机型
+				switch (uni.getSystemInfoSync().platform) {
+					case 'android':
+						// #ifdef APP-PLUS
+						// 安卓  是否授权
+						permision.requestAndroidPermission("android.permission.ACCESS_FINE_LOCATION").then(res => {
+							// 1	已获取授权   0	未获取授权    -1	被永久拒绝授权
+							if (res == 1) {
+								this.getLocationFn()
+							} else if (res == 0) {
+								uni.showModal({
+										title: '温馨提示',
+										content: '为享受更多功能，您必须授权!',
+										showCancel: false,
+										confirmText: '确认授权'
+									})
+									// 这里只设置了确认按钮，没有取消按钮
+									.then(res => {
+										//res ： [null, {cancel: false, confirm: true, errMsg: 'showModal: ok'}]
+										if (res[1]['confirm']) { // 点击了确认按钮时
+											// 调用下边方法时，会弹出 【使用我的地理位置】界面， 未设置直接返回，还是会走fail授权失败的函数，
+											// 还是会弹出上边的温馨提示！！！
+											// 如果设置, scope.userLocation: true
+											uni.openSetting({
+												success: (res) => {
+													// 如果不设置，res结果：
+													// {errMsg: "openSetting:ok", authSetting: {scope.userLocation: false}}
+													// 如果设置, res结果： 
+													// {errMsg: "openSetting:ok", authSetting: {scope.userLocation: true}}
+													// console.log('小程序设置界面：', res)
+												}
+											})
+										}
+									})
+							}
+						})
+						// #endif
+
+						break;
+					case 'ios':
+						// #ifdef APP-PLUS
+						//判断iOS上是否给予位置权限，有权限返回true，否则返回false
+						permision.judgeIosPermission("location").then(res => {
+							if (res) {
+								this.getLocationFn()
+							} else {
+								uni.showModal({
+										title: '温馨提示',
+										content: '为享受更多功能，您必须授权!',
+										showCancel: false,
+										confirmText: '确认授权'
+									})
+									// 这里只设置了确认按钮，没有取消按钮
+									.then(res => {
+										//res ： [null, {cancel: false, confirm: true, errMsg: 'showModal: ok'}]
+										if (res[1]['confirm']) { // 点击了确认按钮时
+											// 调用下边方法时，会弹出 【使用我的地理位置】界面， 未设置直接返回，还是会走fail授权失败的函数，
+											// 还是会弹出上边的温馨提示！！！
+											// 如果设置, scope.userLocation: true
+											uni.openSetting({
+												success: (res) => {
+													// 如果不设置，res结果：
+													// {errMsg: "openSetting:ok", authSetting: {scope.userLocation: false}}
+													// 如果设置, res结果： 
+													// {errMsg: "openSetting:ok", authSetting: {scope.userLocation: true}}
+													// console.log('小程序设置界面：', res)
+												}
+											})
+										}
+									})
+							}
+						})
+						// #endif
+						break;
+					case 'devtools':
+						console.log('客户端是在开发者工具上')
+						break;
+					default:
+						console.log('客户端是在其他工具上')
+						break;
+				}
+			},
+
+			// 获取首页信息
+			getIndexInfo() {
+				this.apiget('app/index', {}).then(res => {
+					if (res.status == 200) {
+						this.bannerList = res.data.bannerList
+						this.arrList = res.data.classList
+						this.pid = this.arrList[0].id
+						this.getNearbyBusiness()
+					}
+				});
+			},
+
+			// 获取推荐商家
+			getRecommendBusiness() {
+				var vuedata = {
+					push: 1,
+					each_page: 50
+				}
+				this.apiget('pc/store', vuedata).then(res => {
+					if (res.status == 200) {
+						this.recommendList = res.data.storeList
+
+						uni.createSelectorQuery().in(this).select(".barWidth").boundingClientRect(data => {
+							this.parWidth = data.width
+							this.toolBarWidth = data.width / this.recommendList.length
+						}).exec();
+					}
+				});
+			},
+			// 商家详情
+			businessDetails(id) {
+				// uni.navigateTo({
+				// 	url: '../../pagesIndexTwo/merchantDetails/merchantDetails?id=' + id
+				// })
+				uni.navigateTo({
+					url: "../../pagesIndex/storeDetails/storeDetails?id=" + id
+				})
+			},
+			// 附近商家列表点击
+			lisClick(id, index) {
+				this.pid = id
+				this.classIndex = index
+				this.getNearbyBusiness()
+			},
+			// 获取附近商家
+			getNearbyBusiness() {
+				var vuedata = {
+					ordertype: 'distance',
+					lat: this.latitude,
+					lng: this.longitude,
+					each_page: 50,
+					orderby: this.orderby,
+					ordertype: this.ordertype,
+					nearby_type: 1,
+					pid: this.pid,
+					country: this.country,
+					province: this.province, //省份id
+					city: this.city, //城市id
+					district: this.district, //区域id
+				}
+				this.apiget('pc/store', vuedata).then(res => {
+					if (res.status == 200) {
+						this.nearbyList = res.data.storeList
+					}
+				})
+			},
+
+			// 打开切换语言
+			clickLanguage() {
+				this.$refs.popup.open()
+				this.textList.forEach(item => {
+					item.default = '-1'
+				})
+				this.textList[this.selectIndex].default = 1
+			},
+			// 选择语言
+			selectLanguage(id, index) {
+				this.textList.forEach(item => {
+					item.default = '-1'
+				})
+				this.textList[index].default = 1
+			},
+			// 选择语言 关闭
+			closeLanguage() {
+				this.$refs.popup.close()
+			},
+			// 语言选择确定按钮
+			confirmBtn() {
+				uni.setStorageSync('isSelectLanguage', true);
+				this.$refs.popup.close()
+			},
+
+			// 请求语言列表
+			languageList() {
+				this.apiget('language', {}).then(res => {
+					if (res.status == 200) {
+						this.textList = res.data.lng.reverse()
+						this.textList.forEach((item, index) => {
+							if (item.default == 1) { //判断默认选中语言包
+								this.selectIndex = index
+							}
+						})
+					}
+				});
+			},
+
+			recommendChange(e) {
+
+			},
+
+			// 页面滚动
+			scrollMain(e) {
+				this.old.scrollTop = e.detail.scrollTop
+				// 判断是否固定定位
+				if (e.detail.scrollTop >= 574) {
+					this.isFixed = true
+				} else {
+					this.isFixed = false
+				}
+
+				if (e.detail.scrollTop > 1250) {
+					this.isShowTop = true
+					return false
+				}
+				this.isShowTop = false
+
+			},
+
+			// 返回顶部
+			goTop(e) {
+				this.scrollTop = this.old.scrollTop
+				this.$nextTick(function() {
+					this.scrollTop = 0
+				});
+			},
+			// 推荐商家滑动切换
+			swiperChange(e) {
+				this.toolBarWidth = (e.detail.current + 1) * (this.parWidth / this.recommendList.length)
+			},
+
+			// 门店详情
+			storeDetails(id) {
+				uni.navigateTo({
+					url: "../../pagesIndex/storeDetails/storeDetails?id=" + id
+				})
+			},
+			// 推荐商家更多
+			moreClick() {
+				uni.navigateTo({
+					url: '../../pagesIndex/massageBusiness/massageBusiness'
+				})
+			},
+
+
+			// tabbar点击
+			tabbarClick(index) {
+				this.activeIndex = index
+				switch (index) {
+					case 0: //首页
+						break;
+					case 1: //我的预约
+						uni.redirectTo({
+							url: "../subscribe/subscribe"
+						})
+						break;
+					case 2: //地图
+						uni.redirectTo({
+							url: "../map/map"
+						})
+						break;
+					case 3: //商城
+						uni.redirectTo({
+							url: "../mall/mall"
+						})
+						break;
+					case 4: //我的
+						uni.redirectTo({
+							url: "../mine/mine"
+						})
+						break;
+				}
+			},
+			// 获取个人信息
+			getInfo() {
+				this.apiget('api/v1/members/member_info', {}).then(res => {
+					if (res.status == 200) {
+						// 更新余额
+						this.$store.commit("upBalance", res.data.money)
+
+						// 保存用户信息
+						this.$store.commit('upUserInfo', res.data)
+
+					}
+				});
+			},
+
+		}
+	}
+</script>
+
+<style scoped lang="scss">
+	.index-box {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		overflow: hidden;
+		background: #fff;
+
+		.back-to-top {
+			position: fixed;
+			bottom: 200rpx;
+			right: -100rpx;
+			width: 100rpx;
+			height: 100rpx;
+			background: rgba(0, 0, 0, 0.5);
+			border-radius: 50%;
+			z-index: 9999;
+			transition: 0.3s;
+			color: #fff;
+		}
+
+		.back-to-top-active {
+			right: 30rpx !important;
+		}
+
+		.index-head {
+
+			.index-head-wrap {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 26rpx 30rpx;
+				box-sizing: border-box;
+				// background-color: #FF967D;
+				font-size: 28rpx;
+				font-family: Source Han Sans CN;
+				font-weight: 400;
+				color: #333;
+
+				.index-head-address {
+					height: 50rpx;
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+
+					image {
+						width: 20rpx;
+						height: 26rpx;
+					}
+
+					text {
+						// margin-left: 15rpx;
+					}
+
+					.icon-font {
+						font-size: 38rpx;
+					}
+				}
+
+				.index-head-logo {
+					width: 135rpx;
+					height: 44rpx;
+
+					image {
+						width: 100%;
+						height: 100%;
+					}
+				}
+
+				.index-head-language {
+					image {
+						width: 27rpx;
+						height: 27rpx;
+					}
+
+					text {
+						margin-left: 10rpx;
+					}
+				}
+
+			}
+		}
+
+		.index-content {
+			flex: 1;
+			overflow-y: scroll;
+
+			.index-content-search {
+				box-sizing: border-box;
+				margin: 10rpx 0 30rpx;
+				padding: 0 40rpx;
+
+				.content-search-box {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					height: 88rpx;
+					background: #F7F7F7;
+					border-radius: 40rpx;
+
+					.content-search-ico {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						width: 80rpx;
+						height: 80rpx;
+					}
+
+					.content-search-text {
+						padding-right: 40rpx;
+						box-sizing: border-box;
+						flex: 1;
+
+						input {
+							width: 100%;
+							font-size: 28rpx;
+							font-family: Source Han Sans CN;
+							font-weight: 400;
+						}
+					}
+
+					.content-search-scan {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						width: 80rpx;
+						height: 80rpx;
+
+						image {
+							width: 30rpx;
+							height: 30rpx;
+						}
+					}
+				}
+
+			}
+
+			.index-content-banner {
+				height: 300rpx;
+				padding: 0 30rpx;
+				box-sizing: border-box;
+				border-radius: 15rpx;
+				border-radius: 15rpx;
+				overflow: hidden;
+
+				swiper {
+					border-radius: 15rpx;
+					overflow: hidden;
+
+					swiper-item {
+
+						.swiper-item {
+							width: 100%;
+							height: 300rpx;
+							border-radius: 15rpx;
+							overflow: hidden;
+
+							image {}
+						}
+					}
+
+				}
+			}
+
+			.recommend-business {
+				padding: 0 30rpx;
+				box-sizing: border-box;
+
+				.recommend-business-list {
+					display: flex;
+					flex-direction: row;
+					width: 100%;
+					overflow-x: scroll;
+
+					.recommend-business-list-li:last-child {
+						margin-right: 0;
+					}
+
+					.recommend-business-list-li {
+						min-width: 330rpx;
+						margin-right: 30rpx;
+
+						.recommend-business-list-li-image {
+							width: 100%;
+							height: 200rpx;
+
+							image {
+								width: 100%;
+								height: 200rpx;
+								border-radius: 10rpx;
+							}
+						}
+
+						.recommend-business-list-li-title {
+							margin-top: 20rpx;
+							font-weight: 500;
+							font-size: 30rpx;
+							color: #000;
+						}
+
+						.recommend-business-list-li-address {
+							display: flex;
+							align-items: center;
+
+							.recommend-business-list-li-address-text {
+								font-size: 24rpx;
+								color: #999;
+								overflow: hidden;
+								text-overflow: ellipsis;
+								white-space: nowrap;
+							}
+						}
+					}
+
+				}
+
+				.recommend-business-speed {
+					position: relative;
+					width: 80rpx;
+					height: 4rpx;
+					margin: 20rpx auto 0;
+					background: #ededed;
+					border-radius: 2rpx;
+
+					.recommend-business-speed-bar {
+						position: absolute;
+						width: 0;
+						height: 100%;
+						background: #FF967D;
+						transition: 0.3s;
+					}
+				}
+			}
+
+			.index-content-list-wrap {
+				.index-content-list {
+					padding-left: 30rpx;
+					box-sizing: border-box;
+					display: flex;
+					overflow-x: scroll;
+					margin-bottom: 30rpx;
+
+					.index-content-list-li {
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						margin-right: 32rpx;
+
+						.content-list-li-ico {
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							width: 128rpx;
+							height: 128rpx;
+							background: #FFF3F0;
+							border-radius: 20rpx;
+							transition: 0.3s;
+
+							image {
+								width: 72rpx;
+								height: 72rpx;
+							}
+						}
+
+						.content-list-li-ico-active {
+							background: #d8a295 !important;
+						}
+
+						.content-list-li-text {
+							margin-top: 20rpx;
+							font-size: 26rpx;
+							font-family: Source Han Sans CN;
+							font-weight: 400;
+							color: #333333;
+						}
+					}
+
+					.index-content-list-li:last-child {
+						padding-right: 30rpx;
+					}
+				}
+
+				.nearby-business-wrap {
+					width: 100%;
+					background: #fff;
+
+					.nearby-business-screen-fixed {
+						position: fixed;
+						z-index: 9;
+						width: 100%
+					}
+
+					.nearby-business-screen {
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						height: 110rpx;
+						font-size: 28rpx;
+						padding: 0 30rpx;
+						box-sizing: border-box;
+						color: #000;
+						background: #fff;
+						transition: 0.3s;
+
+						.nearby-business-screen-li {
+							flex: 1;
+
+							.nearby-business-screen-li-text {
+								.icon-font {
+									transition: 0.3s;
+								}
+
+								.icon-font-active {
+									transform: rotate(180deg);
+								}
+							}
+						}
+					}
+
+					.nearby-business-list {
+						padding: 0 30rpx;
+						box-sizing: border-box;
+
+						.nearby-business-list-li {
+							margin-bottom: 30rpx;
+
+							.nearby-business-list-li-image {
+								width: 100%;
+								height: 280rpx;
+
+								image {
+									width: 100%;
+									height: 280rpx;
+									border-radius: 10rpx;
+								}
+							}
+
+							.nearby-business-list-li-title {
+								padding: 20rpx 0;
+								font-size: 30rpx;
+								font-weight: 500;
+								color: #000;
+							}
+
+							.nearby-business-list-li-info {
+								display: flex;
+								align-items: center;
+								justify-content: space-between;
+
+								.nearby-business-list-li-info-left {
+									height: 28rpx;
+									display: flex;
+									align-items: center;
+
+									.nearby-business-list-li-info-left-comment {
+										height: 28rpx;
+										margin-left: 15rpx;
+										padding: 0 20rpx;
+										box-sizing: border-box;
+										border-left: 1px solid #ededed;
+										font-size: 28rpx;
+										font-weight: 500;
+										color: #000;
+										line-height: 32rpx;
+									}
+								}
+
+								.nearby-business-list-li-info-right {
+									font-size: 24rpx;
+									color: #999;
+								}
+							}
+
+							.nearby-business-list-li-label {
+								display: flex;
+								flex-wrap: wrap;
+								margin-top: 20rpx;
+
+								.item-recommend {
+									background: #FFE9ED !important;
+									border-radius: 10rpx !important;
+									color: #FF2D56 !important;
+								}
+
+								.nearby-business-list-li-label-item {
+									padding: 8rpx 20rpx;
+									margin-right: 10rpx;
+									box-sizing: border-box;
+									font-size: 24rpx;
+									color: #000;
+									background: #F2F2F2;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		.popup-box-main {
+			position: relative;
+			width: 570rpx;
+			height: 704rpx;
+			padding: 0 60rpx;
+			box-sizing: border-box;
+			background: #fff;
+			border-radius: 20rpx;
+
+			.popup-list-box {
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+
+				.popup-title {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					height: 128rpx;
+					font-size: 36rpx;
+					font-family: Source Han Sans CN;
+					font-weight: 400;
+					color: #000000;
+					text-align: center;
+				}
+
+				.popup-list {
+					flex: 1;
+					overflow: auto;
+
+					.popup-list-li {
+						position: relative;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						height: 80rpx;
+						margin-bottom: 30rpx;
+						background: #F7F7F7;
+						transition: 0.2s;
+
+						text {}
+
+						.icon-font {
+							position: absolute;
+							right: 30rpx;
+							top: 0;
+							bottom: 0;
+							margin: auto;
+						}
+					}
+
+					.popup-list-li-active {
+						color: #FF6F4D !important;
+						background: #FFEBE6 !important;
+					}
+
+					.popup-list-li:last-child {
+						margin-bottom: 0;
+					}
+				}
+
+				.popup-btn {
+					margin: 20rpx 0 50rpx;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					height: 88rpx;
+					background: #FF967D;
+					border-radius: 15rpx;
+					color: #fff;
+				}
+			}
+
+			.popup-close {
+				position: absolute;
+				top: -28rpx;
+				right: -28rpx;
+				width: 56rpx;
+				height: 56rpx;
+				border-radius: 50%;
+				background: #FF967D;
+			}
+		}
+	}
+</style>

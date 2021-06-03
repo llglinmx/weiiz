@@ -1,7 +1,7 @@
 <template>
 	<view class="box">
 		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
-			<navTitle navTitle="合作授权"></navTitle>
+			<navTitle :navTitle="lan.Cooperationz"></navTitle>
 		</view>
 		<view class="box-content">
 			<view class="box-content-wrap">
@@ -26,11 +26,11 @@
 						</view>
 						<view class="content-list-li-info">
 							<view class="list-li-info-title">{{item.title}}</view>
-							<view class="list-li-info-text">{{item.isEmpower?item.EnpowerTime:'未授权'}}</view>
+							<view class="list-li-info-text">{{item.isEmpower?item.EnpowerTime:lan.unauthorized}}</view>
 						</view>
 					</view>
 					<view class="content-list-li-switch">
-						<switch @change="switchChange($event,item,index)" :checked="item.isEmpower" color="#07C160" />
+						<switch @change="switchChange($event,item,index)"  style="transform: scale(0.7);" :checked="item.isEmpower" color="#07C160" />
 					</view>
 				</view>
 			</view>
@@ -82,11 +82,15 @@
 						EnpowerTime: "2020-05-20",
 					},
 
-				]
+				],
+				lan:{}
 			};
 		},
 		components: {
 			navTitle
+		},
+		onLoad(){
+			this.getLanguage()
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -116,10 +120,22 @@
 				this.list[index].isEmpower = e.target.value // 状态赋值
 
 				uni.showToast({
-					title: '状态为：' + this.list[index].isEmpower,
+					title: this.lan.Statusm + this.list[index].isEmpower,
 					icon: "none"
 				})
 
+			},
+			// 请求语言包
+			getLanguage() {
+				this.apiget('language/info', {
+					name: 'MyPageTwo'
+				}).then(res => {
+					if (res.status == 200) {
+					  let language=res.data.language
+					  this.lan=res.data.language
+					  
+			}
+				});
 			},
 		}
 	}

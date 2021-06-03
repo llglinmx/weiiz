@@ -1,0 +1,157 @@
+<!-- 滑动切换选项卡演示(nvue) -->
+<!-- 注意：此tab-view仅为z-paging的demo演示之用，未作兼容与细节处理，不建议直接使用，建议使用第三方成熟的tab-view -->
+<template>
+	<view class="content">
+		<view @click="goBack" class="backbtn"><image class="leftarrow" src="/static/images/back.png"></image></view>
+		<view class="tabbox">
+			<tabs-view class="tabsview" @change="tabChange" :current="swiperCurrent" :items="['用户评价','商家信息']"></tabs-view>
+		</view>
+		<view v-if="swiperCurrent==0">
+			<view class="commentSelct">
+				<text @click="currStar(0)" :class="`item ${star==0?'active':''}`">全部({{dataList.all_comment}})</text>
+				<text @click="currStar(1)" :class="`item ${star==1?'active':''}`">好评({{dataList.Praise}})</text>
+				<text @click="currStar(2)" :class="`item ${star==2?'active':''}`">中评({{dataList.in_Review}})</text>
+				<text @click="currStar(3)" :class="`item ${star==3?'active':''}`">差评({{dataList.negative_comment}})</text>
+			</view>
+		</view>
+		<swiper class="swiper" :current="swiperCurrent" @change="onswiperchange" @transition="transition" @animationfinish="animationfinish" @onAnimationEnd="animationfinish">
+			<swiper-item class="swiper-item" v-for="(item, index) in list" :key="index">
+				<scroll-tab-swiper-item-n v-if="index==0" :tabIndex="index" @query="queryList" :dataList="dataList.comment" :currentIndex="swiperCurrent" v-slot="scope">
+					<comment :dataList="scope.data"></comment>
+				</scroll-tab-swiper-item-n>
+				<information v-else :storeid="storeid"></information>
+			</swiper-item>
+		</swiper>
+	</view>
+</template>
+
+<script>
+	import { get } from '../../store/index.js'
+	export default {
+		data() {
+			return {
+				list: [{
+					name: '用户评价'
+				}, {
+					name: '商家信息'
+				}],
+				// 因为内部的滑动机制限制，请将tabs组件和swiper组件的current用不同变量赋值
+				current: 0, // tabs组件的current值，表示当前活动的tab选项
+				swiperCurrent: 0, // swiper组件的current值，表示当前那个swiper-item是活动的
+				dataList:[],
+				star:0,
+				done:()=>{}
+			};
+		},
+		onLoad(e){
+			this.storeid = e.id;
+		},
+		methods: {
+			goBack(){
+				uni.navigateBack()
+			},
+			currStar(star){
+				this.star = star
+				this.getDataList(1,10,this.done)
+			},
+			queryList({pageNo, pageSize,done}) {
+				this.done = done
+				//组件加载时会自动触发此方法，因此默认页面加载时会自动触发，无需手动调用
+				//这里的pageNo和pageSize会自动计算好，直接传给服务器即可
+				//模拟请求服务器获取分页数据，请替换成自己的网络请求
+				this.getDataList(pageNo, pageSize,done)
+			},
+			// 获取数据
+			getDataList(num, size,done) {
+				var vuedata = {
+					id:this.storeid,
+					page_index: num, // 请求页数，
+					each_page: size, // 请求条数
+					star:this.star, //评星,
+					type: 4, //门店类型
+				}
+			
+				get('pc/comment', vuedata).then(res => {
+					done(res.data.comment)
+					this.dataList = res.data;
+				});
+			},
+			
+			// tabs通知swiper切换
+			tabChange(index) {
+				this.swiperCurrent = index;
+			},
+			// swiper-item左右移动，通知tabs的滑块跟随移动
+			transition(e) {
+				let dx = e.detail.dx;
+			},
+			onswiperchange(e) {
+			  // #ifndef APP-PLUS || H5 || MP-WEIXIN || MP-QQ
+			  let index = e.target.current || e.detail.current;
+			  this.tabChange(index);
+			  // #endif
+			},
+			animationfinish(e) {
+				let current = e.detail.current;
+				this.swiperCurrent = current;
+				this.current = current;
+			}
+		}
+	}
+</script>
+
+<style lang="scss">
+	.content {
+		background-color: white;
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		
+		.backbtn{
+			position: fixed;
+			top:78rpx;
+			z-index:9999999;
+			.leftarrow{
+				width:30rpx;
+				height: 30rpx;
+				margin-left:20rpx;
+			}
+		}
+		
+		.tabbox{
+			margin-top: 50rpx;
+			border-bottom: 2rpx solid #ededed;
+			.tabsview{
+				margin: 0 20%;
+			}
+		}
+		
+		.commentSelct{
+			flex-direction: row;
+			justify-content: flex-start;
+			font-size: 28rpx;
+			margin: 0 25rpx;
+			.item{
+				margin: 20rpx 10rpx;
+				padding: 12rpx 24rpx;
+				border-radius: 29rpx;
+				font-size: 28rpx;
+				background-color: #F7F7F7;
+				color:#000000;
+			}
+			.active{
+				background-color: #FFF2EF;
+				color:#FF8366;
+			}
+		}
+		
+		.swiper {
+			flex: 1;
+		}
+	}
+	.swiper {
+		flex: 1;
+	}
+</style>

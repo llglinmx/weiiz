@@ -1,52 +1,52 @@
 <template>
 	<view class="box">
 		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
-			<navTitle navTitle="推送设置"></navTitle>
+			<navTitle :navTitle="lan.PushSettingsz"></navTitle>
 		</view>
 		<view class="box-content">
 			<view class="content-list">
 				<view class="content-list-li">
 					<view class="content-list-li-wrap">
 						<view class="content-list-li-title">
-							活动推送
+							{{lan.ActivityPush}}
 						</view>
 						<view class="content-list-li-text">
-							点评促销优惠活动以及精选内容
+							{{lan.electedContent}}
 						</view>
 					</view>
 					<view class="content-list-li-switch">
-						<switch checked @change="switch1Change($event,'activity')" color="#07C160" />
+						<switch checked @change="switch1Change($event,'activity')"  style="transform: scale(0.7);" color="#07C160" />
 					</view>
 				</view>
 				<view class="content-list-li">
 					<view class="content-list-li-wrap">
 						<view class="content-list-li-title">
-							首页活动提醒
+							{{lan.HomeEventReminder}}
 						</view>
 						<view class="content-list-li-text">
-							关闭后不再收到首页弹窗活动提醒
+							{{lan.remindersClosing}}
 						</view>
 					</view>
 					<view class="content-list-li-switch">
-						<switch checked @change="switch1Change($event,'remind')" color="#07C160" />
+						<switch checked @change="switch1Change($event,'remind')" style="transform: scale(0.7);" color="#07C160" />
 					</view>
 				</view>
 				<view class="content-list-li">
 					<view class="content-list-li-wrap">
 						<view class="content-list-li-title">
-							附近推荐
+							{{lan.RecommendedNearby}}
 						</view>
 						<view class="content-list-li-text">
-							基于地理位置向您推荐附近优质商户
+							{{lan.geographicLocation}}
 						</view>
 					</view>
 					<view class="content-list-li-switch">
-						<switch checked @change="switch1Change($event,'recommend')"color="#07C160" />
+						<switch checked @change="switch1Change($event,'recommend')"  style="transform: scale(0.7);" color="#07C160" />
 					</view>
 				</view>
 			</view>
 			<view class="box-content-btn">
-				<btnPink btnName="保存" @btnClick="preserve"></btnPink>
+				<btnPink :btnName="lan.savem" @btnClick="preserve"></btnPink>
 
 			</view>
 		</view>
@@ -63,6 +63,7 @@
 		data() {
 			return {
 				barHeight: 0, //顶部电量导航栏高度
+				lan:{}
 			};
 		},
 		components: {
@@ -76,7 +77,10 @@
 					this.barHeight = res.statusBarHeight
 				}
 			});
-			
+			 
+		},
+		onLoad(){
+			this.getLanguage()
 		},
 
 		methods: {
@@ -94,10 +98,22 @@
 			// 保存按钮
 			preserve() {
 				uni.showToast({
-					title: "保存",
+					title: this.lan.savem,
 					icon: "none"
 				})
+			},
+			// 请求语言包
+			getLanguage() {
+				this.apiget('language/info', {
+					name: 'MyPageTwo'
+				}).then(res => {
+					if (res.status == 200) {
+					  let language=res.data.language
+					  this.lan=res.data.language
+					  
 			}
+				});
+			},
 		}
 	}
 </script>

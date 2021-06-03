@@ -1,12 +1,14 @@
 import baseconfig from "./baseconfig.js"
+import store from '../../store/index.js'
 
+var that = this
 const httpClient = {
 	request: function(method, url, data) {
 		var headers = {
 			// "content-Type": "application/x-www-form-urlencoded",
 			'content-type': 'application/x-www-form-urlencoded',
 			"Authorization": uni.getStorageSync("token"),
-			'Content-Language':95
+			'Content-Language': uni.getStorageSync('languageCode'),
 		};
 
 		return new Promise((resolve, reject) => {
@@ -24,31 +26,33 @@ const httpClient = {
 				success: function(res) {
 					uni.hideLoading()
 					// console.log("接口获取原始数据：-------------------",res.data)
-					// console.log(url)
-					// console.log(res)
+					// 	store.commit("upLogin",true)
+					// console.log(store.state.isLogin)
 					if (res.statusCode == 402) {
 						uni.showToast({
 							icon: 'none',
 							duration: 1000,
 							title: "登录超时，请重新登录"
 						});
+						store.commit("upLogin", true)
+
 						setTimeout(function() {
 							uni.reLaunch({
 								url: '/pagesIndex/login/login'
 							});
-						}, 1000);
+						}, 500);
 					} else if (res.statusCode == 400) {
-						uni.showToast({
-							icon: 'none',
-							duration: 1000,
-							title: "请求错误,请重新登录"
-						});
-						setTimeout(function() {
-							uni.reLaunch({
-								url: '/pagesIndex/login/login'
-							});
-						}, 1000);
-						
+						// uni.showToast({
+						// 	icon: 'none',
+						// 	duration: 1000,
+						// 	title: "请求错误,请重新登录"
+						// });
+						// setTimeout(function() {
+						// 	uni.reLaunch({
+						// 		url: '/pagesIndex/login/login'
+						// 	});
+						// }, 500);
+
 					} else {
 						if (res.data.error != null) {
 							uni.showToast({

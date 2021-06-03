@@ -1,0 +1,72 @@
+<template>
+	<view class="content">
+		<!-- 这里设置了z-paging加载时禁止自动调用reload方法，自行控制何时reload（懒加载）-->
+		<!--  :enable-back-to-top="currentIndex===tabIndex" 在nvue上可以多加这一句，因为默认是允许点击返回顶部的，但是这个页面有多个scroll-view，会全部返回顶部，所以需要控制是当前index才允许点击返回顶部 -->
+		<z-paging ref="paging" @query="queryList" :list="dataList" :mounted-auto-call-reload="false"
+			style="flex: 1;">
+			<!-- 请使用template，不要使用block！！！ -->
+			<template>
+				<cell>
+					<slot :data="dataList"></slot>
+				</cell>
+			</template>
+		</z-paging>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				firstLoaded: false
+			}
+		},
+		props: {
+			tabIndex: {
+				type: Number,
+				default: function() {
+					return 0
+				}
+			},
+			currentIndex: {
+				type: Number,
+				default: function() {
+					return 0
+				}
+			},
+			dataList:{
+				type:Array,
+				default:function() {
+					return []
+				}
+			}
+		},
+		watch: {
+			currentIndex: {
+				handler(newVal) {
+					if (newVal === this.tabIndex) {
+						//懒加载，当滑动到当前的item时，才去加载
+						if (!this.firstLoaded) {
+							this.$nextTick(() => {
+								this.$refs.paging.reload();
+							})
+						}
+					}
+				},
+				immediate: true
+			},
+		},
+		methods: {
+			queryList(pageNo,pageSize){
+				this.$emit('query',{pageNo,pageSize,done:this.done})
+			},
+			done(data){
+				this.$refs.paging.complete(data);
+				this.firstLoaded = true;
+			}
+		}
+	}
+</script>
+
+<style>
+</style>

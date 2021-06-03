@@ -1,0 +1,186 @@
+<template>
+	<view class="tabbar-box">
+		<view class="tabbar-li" v-for="(item,index) in tabbarList" :key="index">
+			<view v-if="item.isMap" class="tabbar-li-item" style="width: 100rpx;height: 100%;"
+				@click="tabbarClick(index)">
+				<view class="map-boxshow"></view>
+				<view class="map-cover">
+					<view class="cover-icon-box flex-center">
+						<text :class="item.style" class="iconfont icon-font"
+							:style="{'font-size':item.size+'rpx'}"></text>
+					</view>
+					<view class="cover-box-title" :style="{color:index==activeIndex?'#FF967D':'#626366'}">{{item.title}}
+					</view>
+				</view>
+			</view>
+			<view class="tabbar-li-item" v-else @click="tabbarClick(index)">
+				<text :class="item.style" class="iconfont icon-font"
+					:style="{'font-size':item.size+'rpx',color:index==activeIndex?'#FF967D':'#C4C7CC'}"></text>
+				<text class="tabbar-text" :style="{color:index==activeIndex?'#FF967D':'#626366'}">{{item.title}}</text>
+			</view>
+
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				tabbarList: [{
+						title: "首页",
+						style: 'iconshouye',
+						size: "58",
+						isMap: false
+					},
+					{
+						title: "我的预约",
+						style: 'icondingdan', //阿里图标库样式名
+						size: "56", //字体大小
+						isMap: false
+					},
+					{
+						title: "地图",
+						style: 'iconmap', //阿里图标库样式名
+						size: "48", //字体大小
+						isMap: true
+					},
+					{
+						title: "商城",
+						style: 'icongouwuche', //阿里图标库样式名
+						size: "52", //字体大小
+						isMap: false
+					},
+					{
+						title: "我的",
+						style: 'iconwode3',
+						size: "52",
+						isMap: false
+					}
+				],
+			}
+		},
+		onLoad() {
+
+		},
+		mounted(){
+			// 请求语言包
+			
+				this.getLang()
+			
+		},
+		props: {
+			activeIndex: {
+				type: Number,
+				default: 0
+			}
+		},
+		methods: {
+			// tabbar点击
+			tabbarClick(index) {
+				this.$emit("tabbarClick", index)
+			},
+			
+			getLang(){
+				this.apiget('language/info', {
+					name: 'appindex'
+				}).then(res => {
+					if (res.status == 200) {
+				      // console.log(res)
+					  let language=res.data.language
+					  this.tabbarList[0].title=language.homec
+					  this.tabbarList[1].title=language.MyAppointment
+					  this.tabbarList[2].title=language.Mapz
+					  this.tabbarList[3].title=language.Mallz
+					  this.tabbarList[4].title=language.Myz
+					}
+				})
+			},
+		}
+	}
+</script>
+
+<style scoped lang="scss">
+	.tabbar-box {
+		display: flex;
+		justify-content: space-evenly;
+		height: 102rpx;
+		box-shadow: 0px -1px 10px rgba(0, 0, 0, 0.1);
+		background: #fff;
+		flex-direction: row;
+
+		.tabbar-li {
+			display: flex;
+			flex: 1;
+			justify-content: center;
+			.tabbar-li-item {
+				position: relative;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+
+				.tabbar-ico {
+					width: 45rpx;
+					height: 40rpx;
+					margin-bottom: 10rpx;
+				}
+
+				.tabbar-text {
+					color: #626366;
+					font-size: 20rpx;
+				}
+
+				.map-boxshow {
+					position: absolute;
+					top: -30rpx;
+					width: 100rpx;
+					height: 100rpx;
+					border-radius: 50%;
+					box-shadow: 0px -1px 10px rgba(0, 0, 0, 0.1);
+					background: #fff;
+					z-index: 1;
+				}
+
+				.map-cover {
+					position: absolute;
+					top: 0;
+					width: 120rpx;
+					height: 100%;
+					background: #fff;
+					z-index: 2;
+
+					.cover-icon-box {
+						position: absolute;
+						top: -20rpx;
+						left: 0;
+						right: 0;
+						margin: auto;
+						width: 80rpx;
+						height: 80rpx;
+						background: #FF967D;
+						border-radius: 50%;
+
+						.icon-font {
+							color: #fff;
+						}
+
+					}
+
+					.cover-box-title {
+						padding-bottom: 4rpx;
+						height: 100%;
+						display: flex;
+						box-sizing: border-box;
+						align-items: center;
+						justify-content: end;
+						color: #626366;
+						font-size: 20rpx;
+						justify-content: flex-end;
+						flex-direction: column;
+					}
+				}
+			}
+		}
+	}
+</style>

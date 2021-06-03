@@ -1,0 +1,312 @@
+<template>
+	<view class="popup-box" :class="visible?'popup-box-open':''" @click="cancel">
+		<view class="popup-box-main" :class="visible?'popup-box-main-open':''" @click.stop="prevent">
+			<view class="popup-box-head">
+				<text class="cancel" @click="cancel">取消</text>
+				<text class="" @click="reset">重置</text>
+				<text class="confirm" @click="confirm">确定</text>
+			</view>
+			<view class="popup-box-content">
+				<picker-view :indicator-style="indicatorStyle" :value="countryValue" @change="countryChange"
+					class="picker-view">
+					<picker-view-column>
+						<view class="item" v-for="(item,index) in countryList" :key="item.id">{{item.name||item}}</view>
+					</picker-view-column>
+				</picker-view>
+				<picker-view :indicator-style="indicatorStyle" :value="provinceValue" @change="provinceChange"
+					class="picker-view" v-if="countryList.length!=0&&provinceList.length!=0">
+					<picker-view-column>
+						<view class="item">请选择</view>
+						<view class="item" v-for="(item,index) in provinceList" :key="item.id">{{item.name||item}}
+						</view>
+					</picker-view-column>
+				</picker-view>
+				<picker-view :indicator-style="indicatorStyle" :value="cityValue" @change="cityChange"
+					class="picker-view" v-if="provinceList.length!=0&&cityList.length!=0">
+					<picker-view-column>
+						<view class="item">请选择</view>
+						<view class="item" v-for="(item,index) in cityList" :key="item.id">{{item.name||item}}</view>
+					</picker-view-column>
+				</picker-view>
+				<picker-view :indicator-style="indicatorStyle" :value="areaValue" @change="areaChange"
+					class="picker-view" v-if="cityList.length!=0&&areaList.length!=0">
+					<picker-view-column>
+						<view class="item">请选择</view>
+						<view class="item" v-for="(item,index) in areaList" :key="item.id">{{item.name||item}}
+						</view>
+					</picker-view-column>
+				</picker-view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		name: "popup-list-select",
+		data() {
+			return {
+				indicatorStyle: `height: 80rpx;`,
+				countryValue: [0],
+				provinceValue: [0],
+				cityValue: [0],
+				areaValue: [0],
+
+				dataList: [],
+				countryList: [],
+				provinceList: [],
+				cityList: [],
+				areaList: [],
+				country_id: '',
+				province_id: '',
+				city_id: '',
+				area_id: '',
+				country_name: '',
+				province_name: '',
+				city_name: '',
+				area_name: ''
+			};
+		},
+		props: {
+			visible: {
+				type: Boolean,
+				default: false
+			},
+			// dataList: {
+			// 	type: Array,
+			// 	default: []
+			// }
+		},
+		mounted() {
+			this.getCountry()
+		},
+		methods: {
+			//国家
+			countryChange(e) {
+				let val = e.detail.value
+				var id = this.countryList[val[0]].id
+				this.getProvince(id)
+				this.country_id = this.countryList[val[0]].id
+				this.country_name = this.countryList[val[0]].name
+			},
+			//省份
+			provinceChange(e) {
+				let val = e.detail.value
+
+				if (this.provinceList[(val[0] - 1)]) {
+					var id = this.provinceList[(val[0] - 1)].id
+					this.getCity(id)
+					this.province_id = this.provinceList[(val[0] - 1)].id
+					this.province_name = this.provinceList[(val[0] - 1)].name
+				}else{
+					this.province_id=''
+					this.province_name=''
+				}
+
+			},
+			//市
+			cityChange(e) {
+				let val = e.detail.value
+				if (this.cityList[(val[0] - 1)]) {
+					var id = this.cityList[(val[0] - 1)].id
+					this.getArea(id)
+					this.city_id = this.cityList[(val[0] - 1)].id
+					this.city_name = this.cityList[(val[0] - 1)].name
+				}else{
+					this.city_id =''
+					this.city_name=''
+				}
+
+			},
+			//区县
+			areaChange(e) {
+				let val = e.detail.value
+				if (this.areaList[(val[0] - 1)]) {
+					this.area_id = this.areaList[(val[0] - 1)].id
+					this.area_name = this.areaList[(val[0] - 1)].name
+				}else{
+					this.area_id=''
+					this.area_name=''
+				}
+
+			},
+
+
+			// 取消
+			cancel() {
+				this.$emit("cancel", false)
+			},
+			// 重置
+			reset(){
+				this.cityList = []
+				this.city_id =''
+				this.city_name=''
+				this.areaList = []
+				this.area_id=''
+				this.area_name=''
+				
+				this.$emit("reset", {
+					country_id: '',
+					province_id: '',
+					city_id: '',
+					area_id: '',
+					country_name: '',
+					province_name: '',
+					city_name: '',
+					area_name: ''
+				})
+				this.$emit("cancel", false)
+				this.countryList = []
+				this.provinceList = []
+				this.getCountry()
+			},
+			
+			// 确定
+			confirm() {
+				var str = {
+					country_id: this.country_id,
+					province_id: this.province_id,
+					city_id: this.city_id,
+					area_id: this.area_id,
+					country_name: this.country_name,
+					province_name: this.province_name,
+					city_name: this.city_name,
+					area_name: this.area_name
+				}
+
+				this.$emit('confirm', str)
+				this.cancel()
+			},
+
+			prevent() {},
+			// 获取国家
+			getCountry() {
+				var vuedata = {}
+				this.apiget('region/regions', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.length != 0) {
+							this.countryList = res.data
+							this.country_id = res.data[0].id
+							this.country_name = res.data[0].name
+							this.getProvince(res.data[0].id)
+						} else {
+							this.countryList = []
+						}
+					}
+				});
+			},
+			// 获取省
+			getProvince(country_id) {
+				var vuedata = {
+					parent_id: country_id
+				}
+				this.apiget('region/regions', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.length != 0) {
+							this.provinceList = res.data
+						} else {
+							this.provinceList = []
+						}
+					}
+				});
+			},
+			// 获取市
+			getCity(province_id) {
+				var vuedata = {
+					parent_id: province_id
+				}
+				this.apiget('region/regions', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.length != 0) {
+							this.cityList = res.data
+						} else {
+							this.cityList = []
+						}
+					}
+				});
+			},
+			// 获取区县
+			getArea(city_id) {
+				var vuedata = {
+					parent_id: city_id
+				}
+				this.apiget('region/regions', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.length != 0) {
+							this.areaList = res.data
+						} else {
+							this.areaList = []
+						}
+					}
+				});
+			},
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	.popup-box-open {
+		background: rgba(0, 0, 0, 0.5) !important;
+		z-index: 999 !important;
+		// display: block !important;
+	}
+
+	.popup-box {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.1);
+		transition: 0.4s;
+		z-index: -999;
+		// display: none;
+
+		.popup-box-main-open {
+			height: 700rpx !important;
+		}
+
+		.popup-box-main {
+			display: flex;
+			flex-direction: column;
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			height: 0;
+			transition: 0.4s;
+			background: #fff;
+
+			.popup-box-head {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0 40rpx;
+				box-sizing: border-box;
+				height: 100rpx;
+				border-bottom: 1rpx solid #ededed;
+				font-size: 28rpx;
+
+				.cancel {
+					color: #999;
+				}
+
+				.confirm {
+					color: #1676ec;
+				}
+			}
+
+			.popup-box-content {
+				display: flex;
+				flex: 1;
+
+				.picker-view {
+					flex: 1;
+
+					.item {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+					}
+				}
+			}
+		}
+	}
+</style>

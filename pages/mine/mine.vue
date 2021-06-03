@@ -19,10 +19,11 @@
 				<view class="mine-head-info-left">
 					<view class="head-info-left-box">
 						<view class="head-info-box-image flex-center" @click="userInfoClick">
+							<text class="iconfont iconkehu" style="font-size: 88rpx;" v-if="!isLogin"></text>
 							<image :src="info.avatar!=''?info.avatar:'../../static/images/userImage.png'"
-								mode="aspectFill"></image>
+								mode="aspectFill" v-if="isLogin"></image>
 						</view>
-						<view class="head-info-right">
+						<view class="head-info-right" v-if="isLogin">
 							<!-- 昵称 -->
 							<view class="head-info-nickname">{{info.nickname}}</view>
 							<!-- 进度条 -->
@@ -37,6 +38,9 @@
 								<view class="head-info-member-text">{{info.level_name}}</view>
 							</view>
 						</view>
+						<view class="head-info-right-btn flex-center" v-if="!isLogin" @click="loginBtn">
+							{{lan.LoginRegistration}}
+						</view>
 					</view>
 				</view>
 				<view class="mine-head-info-right flex-center" @click="scanCode">
@@ -46,7 +50,7 @@
 						<!-- <image src="../../static/images/scan-code.png" mode="aspectFill"></image> -->
 					</view>
 					<view class="head-info-scan-text">
-						扫一扫
+						{{lan.scan}}
 					</view>
 				</view>
 			</view>
@@ -74,7 +78,7 @@
 							<text class="icon-font iconfont iconjifen1" style="font-size: 32rpx;color: #FF6F4D;"></text>
 						</view>
 						<view class="integral-title-list-text">
-							积分商城
+							{{lan.PointsMall}}
 						</view>
 					</view>
 					<view class="mine-integral-title-more">
@@ -93,7 +97,7 @@
 								{{item.name}}
 							</view>
 							<view class="content-goods-list-number">
-								{{item.score}}积分
+								{{item.score}}{{lan.integralz}}
 							</view>
 						</view>
 					</view>
@@ -103,10 +107,10 @@
 				<view class="mine-content-commonly-top">
 					<view class="mine-content-commonly-top-box">
 						<view class="content-commonly-top-icon flex-center">
-							<image src="../../static/images/tool.jpg" mode="aspectFill"></image>
+							<text class="iconfont iconshangjia" style="color: #FF967D;font-size: 38rpx;"></text>
 						</view>
 						<view class="content-commonly-title">
-							常用工具
+							{{lan.CommonTools}}
 						</view>
 					</view>
 				</view>
@@ -114,7 +118,7 @@
 					<swiper class="swiper" :current="idx" @change="swiperChange">
 						<swiper-item v-for="(item,index) in toolAllList" class="swiper-item">
 							<view class="content-commonly-list-li" v-for="(j,idx) in item.toolList"
-								@click="menuList(j)">
+								@click="menuList(j.id)">
 								<view class="content-commonly-list-li-ico">
 									<image :src="j.image" mode=""></image>
 								</view>
@@ -132,9 +136,32 @@
 				</view>
 			</view>
 		</view>
+		<!-- 选择语言弹出层 -->
+		<uni-popup ref="popup" type="center" :maskClick="false">
+			<view class="popup-box-main">
+				<view class="popup-list-box">
+					<view class="popup-title">
+						{{lan.ChooseLanguage}}
+					</view>
+					<view class="popup-list">
+						<view class="popup-list-li" v-for="(item,index) in textList"
+							@click="selectLanguage(item.id,index)" :key="index"
+							:class="item.default==1?'popup-list-li-active':''">
+							<text>{{item.name}}</text>
+							<text class="iconfont icondagou icon-font" style="color:#FF967D;font-size: 40rpx;"
+								v-if="item.default==1"></text>
+						</view>
+					</view>
+					<view class="popup-btn" @click="confirmBtn">{{lan.determinec}}</view>
+				</view>
+				<view class="popup-close flex-center" @click="closeLanguage">
+					<text class="iconfont iconcuowu icon-font" style="color:#fff;font-size: 48rpx;"></text>
+				</view>
+			</view>
+		</uni-popup>
 		<!-- tabbar导航栏 -->
 		<view class="mine-footer">
-			<Tabbar @tabbarClick="tabbarClick" :activeIndex="activeIndex"></Tabbar>
+			<Tabbar @tabbarClick="tabbarClick" ref="tabbarRef" :activeIndex="activeIndex"></Tabbar>
 		</view>
 	</view>
 </template>
@@ -150,6 +177,7 @@
 				toolBarWidth: 0, //进度条长度
 				parWidth: 0, // 进度条父级长度
 				activeIndex: 4, //当前tabbar所在页面
+				isLogin: false, // 是否登录
 				info: {
 					nickname: '',
 					avatar: '../../static/images/userImage.png',
@@ -199,172 +227,44 @@
 						num: 0
 					}
 				],
-				goodsList: [{
-						image: "../../static/images/1.png",
-						title: "燕麦奶茶",
-						integralNumber: 20
-					},
-					{
-						image: "../../static/images/3.png",
-						title: "燕麦奶茶",
-						integralNumber: 30
-					},
-					{
-						image: "../../static/images/1.png",
-						title: "燕麦奶茶",
-						integralNumber: 20
-					},
-					{
-						image: "../../static/images/2.png",
-						title: "燕麦奶茶",
-						integralNumber: 80
-					},
-					{
-						image: "../../static/images/1.png",
-						title: "燕麦奶茶",
-						integralNumber: 20
-					},
-					{
-						image: "../../static/images/2.png",
-						title: "燕麦奶茶",
-						integralNumber: 60
-					},
-					{
-						image: "../../static/images/3.png",
-						title: "燕麦奶茶",
-						integralNumber: 30
-					}
-				],
 				toolAllList: [{
-						toolList: [{
-							image: "../../static/images/money.jpg",
-							title: "收货地址"
-						}, {
-							image: "../../static/images/gift.jpg",
-							title: "关注列表"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "我的余额"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "优惠券"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}, {
-							image: "../../static/images/gift.jpg",
-							title: "礼物卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "浏览记录"
-						}, {
-							image: "../../static/images/gift.jpg",
-							title: "礼物卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}]
-					},
-					{
-						toolList: [{
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}, {
-							image: "../../static/images/gift.jpg",
-							title: "礼物卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}, {
-							image: "../../static/images/gift.jpg",
-							title: "礼物卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}, {
-							image: "../../static/images/gift.jpg",
-							title: "礼物卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}, {
-							image: "../../static/images/gift.jpg",
-							title: "礼物卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}]
-					},
-					{
-						toolList: [{
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}, {
-							image: "../../static/images/gift.jpg",
-							title: "礼物卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}, {
-							image: "../../static/images/gift.jpg",
-							title: "礼物卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}, {
-							image: "../../static/images/gift.jpg",
-							title: "礼物卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}, {
-							image: "../../static/images/gift.jpg",
-							title: "礼物卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}]
-					},
-					{
-						toolList: [{
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}, {
-							image: "../../static/images/gift.jpg",
-							title: "礼物卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}, {
-							image: "../../static/images/gift.jpg",
-							title: "礼物卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}, {
-							image: "../../static/images/gift.jpg",
-							title: "礼物卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}, {
-							image: "../../static/images/gift.jpg",
-							title: "礼物卡"
-						}, {
-							image: "../../static/images/money.jpg",
-							title: "套餐卡"
-						}]
-					}
-				]
+					toolList: [{
+						image: "../../static/images/money.jpg",
+						title: "收货地址",
+						id: 0
+					}, {
+						image: "../../static/images/gift.jpg",
+						title: "关注列表",
+						id: 1
+					}, {
+						image: "../../static/images/money.jpg",
+						title: "我的余额",
+						id: 2
+					}, {
+						image: "../../static/images/money.jpg",
+						title: "优惠券",
+						id: 3
+					}, {
+						image: "../../static/images/money.jpg",
+						title: "套餐卡",
+						id: 4
+					}, {
+						image: "../../static/images/gift.jpg",
+						title: "礼物卡",
+						id: 5
+					}, {
+						image: "../../static/images/money.jpg",
+						title: "浏览记录",
+						id: 6
+					}, {
+						image: "../../static/images/money.jpg",
+						title: "切换语言",
+						id: 7
+					}]
+				}, ],
+				textList: [],
+				LanguageID: 95,
+				lan: {}
 			}
 		},
 		components: {
@@ -372,10 +272,20 @@
 			StateList
 		},
 		onLoad() {
-			this.getPointsMall()
+			var token = uni.getStorageSync('token');
+			if (token) {
+				this.getPointsMall()
+			}
+			this.getLanguage()
+
 		},
 		onShow() {
-			this.getInfo()
+			var token = uni.getStorageSync('token');
+			if (token) {
+				this.getInfo()
+				this.isLogin = true
+			}
+
 		},
 		onReady() {
 			// 获取顶部电量状态栏高度
@@ -426,9 +336,19 @@
 			},
 			// 设置按钮点击
 			setClick() {
-				uni.navigateTo({
-					url: "../../pagesMine/set/set"
-				})
+				let token = uni.getStorageSync('token');
+				if (token) {
+					uni.navigateTo({
+						url: "../../pagesMine/set/set"
+					})
+				} else {
+					uni.showToast({
+						title: this.lan.Youpermission,
+						icon: "none"
+					})
+				}
+
+
 			},
 			// 系统消息
 			systemMsg() {
@@ -446,6 +366,14 @@
 
 			// 余额  积分  卡券  关注 
 			listMenu(index) {
+				let token = uni.getStorageSync('token');
+				if (!token) {
+					uni.showToast({
+						title: this.lan.Youpermission,
+						icon: "none"
+					})
+					return false
+				}
 				switch (index) {
 					case 0:
 						// 我的余额
@@ -532,53 +460,119 @@
 					}
 				});
 			},
+			// 去登录按钮
+			loginBtn() {
+				uni.navigateTo({
+					url: '../../pagesIndex/login/login'
+				})
+			},
+
+			// 选择语言
+			selectLanguage(id, index) {
+				this.textList.forEach(item => {
+					item.default = '-1'
+				})
+				this.textList[index].default = 1
+				this.LanguageID = this.textList[index].id
+			},
+			// 选择语言 关闭
+			closeLanguage() {
+				this.$refs.popup.close()
+			},
+			// 语言选择确定按钮
+			confirmBtn() {
+				uni.setStorageSync('isSelectLanguage', true);
+				uni.setStorageSync('languageCode', this.LanguageID);
+				this.$refs.popup.close()
+
+				this.getInfo()
+				this.getPointsMall()
+				this.getLanguage()
+				this.$refs.tabbarRef.getLang()
+			},
+			// 请求语言列表
+			languageList() {
+				this.apiget('language', {}).then(res => {
+					if (res.status == 200) {
+						this.textList = res.data.lng.reverse()
+						this.$refs.popup.open()
+
+						var langId = uni.getStorageSync('languageCode');
+						if (langId) {
+							this.textList.forEach((item, index) => {
+								if (item.id == langId) { //判断默认选中语言包
+									this.textList.forEach(item => {
+										item.default = '-1'
+									})
+									this.textList[index].default = 1
+								}
+							})
+						}
+					}
+				});
+			},
 
 
 			// 常用工具
-			menuList(type) {
-
-				switch (type.title) {
-					case "收货地址":
+			menuList(id) {
+				
+				let token = uni.getStorageSync('token');
+				if (!token) {
+					if (id == 7) {
+						this.languageList()
+						return false
+					}
+					uni.showToast({
+						title: this.lan.Youpermission,
+						icon: "none"
+					})
+					return false
+				}
+				switch (id) {
+					case 0:
 						// 收货地址
 						uni.navigateTo({
 							url: "../../pagesMine/receivingAddress/receivingAddress"
 						})
 						break;
-					case "关注列表":
+					case 1:
 						// 关注列表
 						uni.navigateTo({
 							url: "../../pagesMine/followList/followList"
 						})
 						break;
-					case "我的余额":
+					case 2:
 						// 我的余额
 						uni.navigateTo({
 							url: "../../pagesMine/myBalance/myBalance"
 						})
 						break;
-					case "优惠券":
+					case 3:
 						// 优惠券
 						uni.navigateTo({
 							url: "../../pagesCommon/allCoupon/allCoupon"
 						})
 						break;
-					case "套餐卡":
+					case 4:
 						// 套餐卡
 						uni.navigateTo({
 							url: "../../pagesMine/packageCard/packageCard"
 						})
 						break;
-					case "礼物卡":
+					case 5:
 						// 礼物卡
 						uni.navigateTo({
 							url: "../../pagesMine/giftCard/giftCard"
 						})
 						break;
-					case "浏览记录":
+					case 6:
 						// 浏览记录
 						uni.navigateTo({
 							url: "../../pagesMine/browsingHistory/browsingHistory"
 						})
+						break;
+					case 7:
+						this.languageList()
 						break;
 
 				}
@@ -612,6 +606,37 @@
 
 						break;
 				}
+			},
+			// 请求语言包
+			getLanguage() {
+				this.apiget('language/info', {
+					name: 'mypage'
+				}).then(res => {
+					if (res.status == 200) {
+						let language = res.data.language
+						this.lan = res.data.language
+
+						this.list[0].text = language.Balanceyuan
+						this.list[1].text = language.integralz
+						this.list[2].text = language.couponx
+						this.list[3].text = language.followx
+
+						this.stateList[0].title = language.Topaid
+						this.stateList[1].title = language.Towritten
+						this.stateList[2].title = language.Writtenoffzz
+						this.stateList[3].title = language.Refundafter
+						this.stateList[4].title = language.AllOrderszx
+
+						this.toolAllList[0].toolList[0].title = language.Receivingaddressz
+						this.toolAllList[0].toolList[1].title = language.Followxx
+						this.toolAllList[0].toolList[2].title = language.balanceb
+						this.toolAllList[0].toolList[3].title = language.couponz
+						this.toolAllList[0].toolList[4].title = language.Packageb
+						this.toolAllList[0].toolList[5].title = language.Giftcardv
+						this.toolAllList[0].toolList[6].title = language.Browsing
+						this.toolAllList[0].toolList[7].title = language.languagez
+					}
+				});
 			},
 
 		}
@@ -744,6 +769,15 @@
 									color: #FF967D;
 								}
 							}
+						}
+
+						.head-info-right-btn {
+							margin-left: 20rpx;
+							width: 160rpx;
+							height: 60rpx;
+							border: 1rpx solid #fff;
+							border-radius: 32rpx;
+							font-size: 28rpx;
 						}
 					}
 				}
@@ -994,5 +1028,88 @@
 			}
 		}
 
+		.popup-box-main {
+			position: relative;
+			width: 570rpx;
+			// height: 704rpx;
+			padding: 0 60rpx;
+			box-sizing: border-box;
+			background: #fff;
+			border-radius: 20rpx;
+
+			.popup-list-box {
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+
+				.popup-title {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					height: 128rpx;
+					font-size: 36rpx;
+					font-family: Source Han Sans CN;
+					font-weight: 400;
+					color: #000000;
+					text-align: center;
+				}
+
+				.popup-list {
+					flex: 1;
+					overflow: auto;
+
+					.popup-list-li {
+						position: relative;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						height: 80rpx;
+						margin-bottom: 20rpx;
+						background: #F7F7F7;
+						transition: 0.2s;
+
+						text {}
+
+						.icon-font {
+							position: absolute;
+							right: 30rpx;
+							top: 0;
+							bottom: 0;
+							margin: auto;
+						}
+					}
+
+					.popup-list-li-active {
+						color: #FF6F4D !important;
+						background: #FFEBE6 !important;
+					}
+
+					.popup-list-li:last-child {
+						margin-bottom: 0;
+					}
+				}
+
+				.popup-btn {
+					margin: 20rpx 0 50rpx;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					height: 88rpx;
+					background: #FF967D;
+					border-radius: 15rpx;
+					color: #fff;
+				}
+			}
+
+			.popup-close {
+				position: absolute;
+				top: -28rpx;
+				right: -28rpx;
+				width: 56rpx;
+				height: 56rpx;
+				border-radius: 50%;
+				background: #FF967D;
+			}
+		}
 	}
 </style>

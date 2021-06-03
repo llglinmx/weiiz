@@ -1,0 +1,525 @@
+<template>
+	<view class="map-box">
+		<view class="headerbox" :style="{paddingTop:barHeight+'px'}">
+			<view class="headerbar" @click="open">
+				<text class="text-center titlehd">{{ name }}</text>
+				<text class="iconfont text-center">&#xe656;</text>
+			</view>
+			<view v-if="formindex" class="backbar"><text @click="goBack()" class="iconfont">&#xe609;</text></view>
+		</view>
+		<uni-popup ref="popup" type="bottom">
+		  <view class="list">
+		      <view v-for="(item, index) in classLists" :key="index">
+				  <view @click="onClick(item)" class="between">
+					  <view class="item"><text>{{ item.name }}</text></view>
+					  <view class="item"><uni-icons v-if="query.pid == item.id" type="checkmarkempty" color="#ff967d" size="20"></uni-icons></view>
+				  </view>
+			  </view>
+		  </view>
+		</uni-popup>
+		<view class="map-head">
+			<view class="map-head-box">
+				<view class="map-head-nav">
+					<view class="map-head-nav-li" v-for="(item,index) in tabsList" :key='index'
+						@click="navChange(index)">
+						<view class="map-head-nav-li-title">
+							<text class="head-text">{{item.title}}</text>
+							<!-- #ifdef APP-NVUE -->
+							<text class="iconfont downicon">&#xe656;</text>
+							<!-- #endif -->
+							<!-- #ifndef APP-NVUE -->
+							<text class="iconfont iconxiangxiajiantou"
+								style="color: #ccc;font-size: 32rpx;margin-top:4rpx;margin-left: 10rpx;"></text>
+							<!-- #endif -->
+						</view>
+					</view>
+				</view>
+				<view class="map-head-main" :class="idx!=-1?'map-head-main-active':''">
+
+				</view>
+			</view>
+		</view>
+		<view class="map-content">
+			<!-- <map class="map-content-main" style="width: 100%;" :latitude="latitude" :longitude="longitude"
+				:markers="marker"></map> -->
+			<map class="map-content-main" enable-zoom="true" @callouttap="calloutHandle" :latitude="latitude" :longitude="longitude"  :scale="10" :markers="marker"></map>
+		   <!-- <AK-GoogleMap ref="mycomponent"></AK-GoogleMap> -->
+		</view>
+		<!-- tabbar导航栏 -->
+		<view class="map-footer">
+			<view class="map-footer-tabbar">
+				<view class="map-footer-tabbar-li" v-for="(item,index) in tabbarList" @click="tabbarClick(index)" :key="index">
+					<view class="map-footer-tabbar-li-wrap" v-if="!item.isMap">
+						<view class="map-footer-tabbar-li-icon">
+							<text v-if="index==0" class="iconfont icon-font" :style="{'font-size':item.size+'rpx'}">&#xe61b;</text>
+							<text v-if="index==1" class="iconfont icon-font" :style="{'font-size':item.size+'rpx'}">&#xe631;</text>
+							<text v-if="index==2" class="iconfont icon-font" :style="{'font-size':item.size+'rpx'}">&#xe616;</text>
+							<text v-if="index==3" class="iconfont icon-font" :style="{'font-size':item.size+'rpx'}">&#xe657;</text>
+							<text v-if="index==4" class="iconfont icon-font" :style="{'font-size':item.size+'rpx'}">&#xe6f0;</text>
+						</view>
+						<view class="map-footer-tabbar-li-title">
+							<text class="tabbar-li-title-text">{{item.title}}</text>
+						</view>
+					</view>
+					<view class="map-footer-tabbar-li-main" v-if="item.isMap">
+						<view style="flex: 1;">
+							<view class="map-boxshow"></view>
+							<view>
+								<view class="map-footer-tabbar-li-main-box">
+									<text class="iconfont">&#xe616;</text>
+								</view>
+							</view>
+						</view>
+						<view class="map-footer-tabbar-li-title">
+							<text class="tabbar-li-title-text">{{item.title}}</text>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	import {
+		get
+	} from '../../store/index.js'
+	// import iconCart from '../../static/images/address-icon.png'
+	export default {
+		data() {
+			return {
+				classLists:[],
+				barHeight: 0, //顶部电量导航栏高度
+				idx: -1, //顶部状态栏下标
+				activeIndex: 2, //当前tabbar所在页面
+				mapHeight: 0,
+				latitude: 24.613838,
+				longitude: 118.037733,
+				marker: [],
+				query:{
+					pid:'',
+					page_index:1
+				},
+				name:'全部分类',
+				tabsList: [{
+						title: "区域",
+						type: "all",
+					},
+					{
+						title: "脸部按摩",
+						type: "business"
+					},
+					{
+						title: "价格",
+						type: "price"
+					},
+				],
+				tabbarList: [{
+						title: "首页",
+						style: 'iconshouye',
+						size: "58",
+						isMap: false
+					},
+					{
+						title: "我的预约",
+						style: 'icondingdan', //阿里图标库样式名
+						size: "56", //字体大小
+						isMap: false
+					},
+					{
+						title: "地图",
+						style: 'iconmap', //阿里图标库样式名
+						size: "48", //字体大小
+						isMap: true
+					},
+					{
+						title: "商城",
+						style: 'icongouwuche', //阿里图标库样式名
+						size: "52", //字体大小
+						isMap: false
+					},
+					{
+						title: "我的",
+						style: 'iconwode3',
+						size: "52",
+						isMap: false
+					}
+				],
+			}
+		},
+		// mounted(){
+		// 	this.$refs.mycomponent.initGoogleMap({
+		// 		'GOOGLE_MAP_KEY': 'AIzaSyAwjMreTOci1VWPK8GY5Qo3i4Nny4va6hY'
+		// 	},
+		// 	(ret) => {
+		// 		uni.showToast({
+		// 			title:'调用异步方法 ' + ret,
+		// 			icon: "none"
+		// 		})
+		// 	})
+		// },
+		created(){
+			// #ifdef APP-NVUE
+			let domModule = weex.requireModule('dom');
+			domModule.addRule('fontFace', {
+				fontFamily: 'iconfont',
+				src: "url('/static/css/iconfont/iconfont.ttf')"
+			});
+			// #endif
+			
+		},
+		onReady() {
+
+			// 获取顶部电量状态栏高度
+			uni.getSystemInfo({
+				success: (res) => {
+					this.barHeight = res.statusBarHeight
+				}
+			});
+
+		},
+		onLoad(e) {
+			this.query.keyword = e.search;
+			this.formindex = e.from == 'index'
+			this.query.pid = e.pid
+			this.categoryType(e.pid);
+			this.getList()
+		},
+
+		methods: {
+			onClick(item){
+				this.query.pid = item.id == this.query.pid ? '': item.id;
+				this.name = item.id == this.query.pid ?item.name : '全部';
+				this.getList();
+				this.$refs.popup.close()
+			},
+			categoryType(id) {
+			  let data = { type: 11 };
+			  if (id) {
+				data.id = id;
+			  } else {
+				data.level = 1;
+			  }
+			  get('/pc/category/category_type', data).then((res) => {
+				this.classLists = res.data;
+			  });
+			},
+			
+			open() {
+				this.$refs.popup.open()
+			},
+	
+			//返回
+			goBack(){
+				uni.navigateBack()
+			},
+			//点击气泡到商家详情
+			calloutHandle(e){
+				uni.navigateTo({
+					url:'/pagesIndexTwo/merchantDetails/merchantDetails?id='+e.detail.markerId
+				})
+			},
+			// 导航栏点击
+			navChange(index) {
+				// this.idx = this.idx == index ? -1 : index
+			},
+			
+			//百度转换高德坐标
+			bd_decrypt(bd_lng, bd_lat) {
+			    var X_PI = Math.PI * 3000.0 / 180.0;
+			    var x = bd_lng - 0.0065;
+			    var y = bd_lat - 0.006;
+			    var z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * X_PI);
+			    var theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * X_PI);
+			    var gg_lng = z * Math.cos(theta);
+			    var gg_lat = z * Math.sin(theta);
+			    return {lng: gg_lng, lat: gg_lat}
+			},
+			
+			// 获取门店列表
+			getList() {
+				get('pc/store', this.query).then(res => {
+					if (res.status == 200) {
+						if (res.data.storeList.length != 0) {
+							let marker = []
+							res.data.storeList.forEach(item => {
+								let coords = this.bd_decrypt(item.longitude_baidu,item.latitude_baidu)
+								var str = {
+									id: item.id,
+									latitude: coords.lat,
+									longitude: coords.lng,
+									iconPath: '/static/images/address-icon.png',
+									width: 35,
+									height: 35,
+									title: item.name,
+									callout: {
+										content: item.name,
+										bgColor: "#26BF82",
+										padding:8,
+										borderRadius:3,
+										display:"ALWAYS",
+										color:'#fff'
+									}
+								}
+								marker.push(str)
+							})
+							this.marker = marker
+							console.log(this.marker)
+						}
+					}
+				});
+			},
+
+
+
+
+			// tabbar点击
+			tabbarClick(index) {
+				this.activeIndex = index
+				switch (index) {
+					case 0: //首页
+						uni.reLaunch({
+							url: '../index/index'
+						})
+						break;
+					case 1: //我的预约
+						uni.reLaunch({
+							url: "../subscribe/subscribe"
+						})
+						break;
+					case 2: //地图
+
+						break;
+					case 3: //商城
+						uni.reLaunch({
+							url: "../mall/mall"
+						})
+						break;
+					case 4: //我的
+						uni.reLaunch({
+							url: "../mine/mine"
+						})
+						break;
+				}
+			},
+		}
+	}
+</script>
+<style scoped lang="scss">
+	/* #ifdef APP-NVUE */
+	.iconfont {
+		font-family: iconfont;
+		font-size: 60rpx;
+		color: #00AAFF;
+	}
+
+	/* #endif */
+
+.list{
+	padding:30rpx;
+	background-color: #fff;
+	border-radius: 30rpx 30rpx 0 0;
+	.between{
+		justify-content: space-between;
+		align-items: center;
+		flex-direction: row;
+		.item{
+			padding:10rpx 0;
+			line-height: 40rpx;
+		}
+	}
+}
+
+	.map-box {
+		
+		.headerbox{
+		position: relative;
+		.backbar{
+			position: absolute;
+			padding: 20rpx;
+			left:20rpx;
+			.iconfont{
+				font-size: 36rpx;color: #000;
+			}
+		}
+		
+		.headerbar{
+			padding:20rpx 0;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			.titlehd{
+				font-size: 34rpx;
+			}
+			.text-center{
+				text-align: center;
+			}
+			.iconfont{
+				color: #999;
+				font-size: 36rpx;
+			}
+		}
+		
+		}
+		
+		/* #ifndef APP-NVUE */
+		height: 100%;
+		/* #endif */
+		flex: 1;
+		flex-direction: column;
+        
+		.downicon{
+			color: #ccc;
+			font-size: 32rpx;
+		}
+
+		.map-head {
+			/* #ifndef APP-NVUE */
+			position: relative;
+			/* #endif */
+			// height: 88rpx;
+			// box-sizing: border-box;.map-head-nav {
+
+
+			.map-head-box {
+				.map-head-nav {
+					height: 88rpx;
+					flex-direction: row;
+
+					.map-head-nav-li {
+						flex: 1;
+						align-items: center;
+						justify-content: center;
+
+						.map-head-nav-li-title {
+							justify-content: center;
+							align-items: center;
+							flex-direction: row;
+
+							.head-text {
+								font-size: 28rpx;
+								color: #666;
+							}
+						}
+					}
+				}
+			}
+
+			.map-head-main {
+				/* #ifndef APP-NVUE */
+				// position: absolute;
+				// bottom: 88rpx;
+				// left: 0;
+				/* #endif */
+				height: 0;
+				overflow: hidden;
+				background: #fff;
+			}
+
+			.map-head-main-active {
+				height: 400rpx !important;
+			}
+
+		}
+
+		.map-content {
+			flex: 1;
+
+			// background: red;
+			.map-content-main {
+				/* #ifndef APP-NVUE */
+				width: 100%;
+				/* #endif */
+				flex: 1;
+			}
+		}
+
+
+
+		.map-footer {
+			height: 102rpx;
+
+			.map-footer-tabbar {
+
+				height: 102rpx;
+				flex-direction: row;
+
+				.map-footer-tabbar-li {
+					flex: 1;
+					align-items: center;
+					justify-content: center;
+					.map-footer-tabbar-li-wrap {
+						align-items: center;
+						justify-content: center;
+						.map-footer-tabbar-li-icon {
+							.icon-font {
+								color: #C4C7CC;
+							}
+						}
+
+						.map-footer-tabbar-li-title {
+							.tabbar-li-title-text {
+								font-size: 20rpx;
+								color: #626366;
+							}
+
+						}
+					}
+
+					.map-footer-tabbar-li-main {
+						width: 100%;
+						height: 100%;
+						flex-direction: column;
+						.map-boxshow {
+							position: fixed;
+							bottom:32rpx;
+							left:326rpx;
+							width: 100rpx;
+							height: 100rpx;
+							border-radius: 50%;
+							background: #fff;
+							z-index: 1;
+						}
+						
+
+						.map-footer-tabbar-li-main-box {
+							position: fixed;
+							width: 80rpx;
+							height: 80rpx;
+							border-radius: 50%;
+							background-color: #FF967D;
+							justify-content: center;
+							align-items: center;
+							z-index: 1;
+							left:336rpx;
+							bottom: 42rpx;
+							.iconfont{
+								color: #fff;
+								font-size: 48rpx;
+							}
+						}
+						
+						.map-footer-tabbar-li-title {
+							.tabbar-li-title-text {
+								/* #ifdef APP-NVUE */
+								position: fixed;
+								bottom: 14rpx;
+								z-index:9;
+								left:356rpx;
+								/* #endif */
+								font-size: 20rpx;
+								text-align: center;
+								color: #ff967d;
+							}
+						
+						}
+						
+					}
+
+				}
+			}
+		}
+
+
+	}
+</style>

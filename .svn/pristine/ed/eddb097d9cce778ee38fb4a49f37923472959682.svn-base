@@ -1,0 +1,402 @@
+<template>
+	<view class="box">
+		<view class="box-head" :style="{paddingTop:barHeight+'px'}">
+			<view class="box-head-back" @click="Gback">
+				<view class="box-head-back-image">
+					<text class="iconfont iconfanhui" style="color: #fff;font-size: 34rpx;"></text>
+				</view>
+			</view>
+			<view class="box-head-number">{{points}}</view>
+			<view class="box-head-text">
+				<image src="../../static/images/integral-icon.png" mode="aspectFill"></image>
+				<text>当前积分数量</text>
+			</view>
+			<view class="box-head-list">
+				<view :class="index==0?'box-head-list-li-affter':''" class="box-head-list-li flex-center"
+					v-for="(item,index) in textList" :key="index" @click="listTabClick(index)">{{item}}</view>
+			</view>
+		</view>
+		<view class="box-content">
+			<view class="box-content-wrap">
+				<view class="box-content-wrap-title">积分商城</view>
+				<view class="box-content-wrap-list">
+					<view class="box-content-wrap-list-li flex-center"
+						:class="typeIndex==index?'box-content-wrap-list-li-active':''" v-for="(item,index) in typeList"
+						:key="index" @click="typeListClick(index)">{{item}}</view>
+				</view>
+			</view>
+			<view class="box-content-goods">
+				<mescroll-uni ref="mescrollRef" @down="downCallback" @up="upCallback" :down="downOption" :up="upOption"
+					:height="mesHeight">
+					<view class="box-content-goods-list" :style="{display:isData?'block':'none'}">
+						<view class="box-content-goods-list-li" v-for="(item,index) in goodsList">
+							<view class="box-content-goods-list-li-image">
+								<image :src="item.simg" mode="aspectFill"></image>
+							</view>
+							<view class="box-content-goods-list-li-title">{{item.name}}</view>
+							<view class="box-content-goods-list-li-number"><text>{{item.score}}</text> 积分</view>
+							<view class="box-content-goods-list-li-btn flex-center">立即兑换</view>
+						</view>
+					</view>
+					<view class="box-content-goods-load"
+						:style="{display:!isData?'block':'none',height:mesHeight+'rpx'}">
+						<loading v-if="isLoad" />
+						<no-data v-if="!isLoad" />
+					</view>
+				</mescroll-uni>
+			</view>
+		</view>
+
+	</view>
+</template>
+
+<script>
+	import navTitle from "../../components/navTitle/navTitle.vue"
+	import MescrollMixin from "../../components/mescroll-uni/mescroll-mixins.js";
+	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue"
+	import loading from '../../components/loading/loading.vue'
+	import noData from '../../components/no-data/no-data.vue'
+	export default {
+		mixins: [MescrollMixin], // 使用mixin
+		data() {
+			return {
+				barHeight: 0, //顶部电量导航栏高度
+				textList: ["积分明细", "兑换记录"],
+				typeList: ["综合", "降序", "升序"],
+				points: 0, //积分数量
+				typeIndex: 0, //当前所在排序
+				mesHeight: 0,
+				downOption: { // 下拉刷新配置
+					auto: false,
+				},
+				upOption: { // 上拉加载配置
+					use: true,
+					noMoreSize: 5,
+					textLoading: "正在加载更多数据",
+					textNoMore: "——  已经到底了  ——",
+					isBounce: true,
+					auto: true,
+				},
+				goodsList: [],
+				isData: false, //是否有数据
+				isLoad: true, //加载状态   true 为加载中 false 为无数据
+			};
+		},
+		components: {
+			navTitle,
+			MescrollUni,
+			loading,
+			noData
+		},
+		onReady() {
+			// 获取顶部电量状态栏高度
+			uni.getSystemInfo({
+				success: (res) => {
+					this.barHeight = res.statusBarHeight
+				}
+			});
+		},
+		onShow() {
+			const sys = uni.getSystemInfoSync();
+			var Heigh = sys.windowHeight
+			this.mesHeight = (Heigh - 300) * 2
+		},
+		onLoad() {
+			// this.getPoints()
+			// this.getPointsList(1, this.page)
+		},
+		methods: {
+			// 返回
+			Gback() {
+				uni.navigateBack({
+					delta: 1
+				})
+			},
+
+			// 获取积分
+			getPoints() {
+				var vuedata = {}
+				this.apiget('api/v1/members/score/info', vuedata).then(res => {
+					if (res.status == 200) {
+						this.points = res.data.data.score
+					}
+				});
+			},
+			// 获取积分商城列表
+			getPointsList(type, page) {
+				var vuedata = {
+					page_index: page.num, // 请求页数，
+					each_page: page.size, // 请求条数
+					select_sort: type
+				}
+				this.apiget('api/v1/members/points_mall/score_service', vuedata).then(res => {
+					if (res.status == 200) {
+						if (res.data.member.length != 0) {
+							this.isData = true;
+							let list = res.data.member
+							let totalSize = res.data.total_rows
+							//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
+						this.mescroll.endBySize(list.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+							//设置列表数据
+							if (page.num == 1) this.goods = []; //如果是第一页需手动制空列表
+							this.goodsList = this.goodsList.concat(list); //追加新数据
+						} else {
+							// 显示无数据背景
+							this.isData = false;
+							this.isLoad = false;
+							this.mescroll.endErr()
+						}
+
+					}
+				});
+			},
+
+
+
+			// 排序点击
+			typeListClick(index) {
+				this.typeIndex = index
+
+				// this.getPointsList(this.typeIndex + 1)
+				var page = {
+					num: 1
+				}
+				this.downCallback(page)
+				this.goodsList = []
+			},
+
+
+			/*下拉刷新的回调*/
+			downCallback(page) {
+				this.mescroll.resetUpScroll()
+				this.goodsList = []
+			},
+
+
+			/*上拉加载的回调*/
+			upCallback(page) {
+				this.getPointsList(this.typeIndex + 1, page)
+			},
+
+
+
+			// 积分明细 兑换记录
+			listTabClick(index) {
+				switch (index) {
+					case 0:
+						uni.navigateTo({
+							url: "../../pagesMineTwo/pointsDetails/pointsDetails"
+						})
+						break;
+					case 1:
+						uni.navigateTo({
+							url: "../../pagesMineTwo/exchangeRecord/exchangeRecord"
+						})
+						break;
+				}
+			},
+		}
+	}
+</script>
+
+<style lang="scss">
+	.box {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		background: #F7F7F7;
+		font-family: Source Han Sans CN;
+		font-weight: 400;
+
+		.box-head {
+			background: linear-gradient(180deg, #FFCD4D 0%, #FFB437 100%);
+
+
+			.box-head-back {
+				width: 100%;
+				height: 88rpx;
+				padding-left: 36rpx;
+				box-sizing: border-box;
+
+				.box-head-back-image {
+					height: 100%;
+					display: flex;
+					align-items: center;
+
+					image {
+						width: 34rpx;
+						height: 34rpx;
+					}
+				}
+			}
+
+			.box-head-number {
+				margin-bottom: 20rpx;
+				font-size: 80rpx;
+				font-family: Lato;
+				font-weight: bold;
+				text-align: center;
+				color: #fff;
+			}
+
+			.box-head-text {
+				margin-bottom: 60rpx;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				image {
+					width: 28rpx;
+					height: 28rpx;
+				}
+
+				text {
+					margin-left: 10rpx;
+					font-size: 28rpx;
+					color: #fff;
+				}
+			}
+
+			.box-head-list {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 88rpx;
+				background: #fff;
+				font-size: 28rpx;
+				color: #333;
+
+				.box-head-list-li {
+					flex: 1;
+					height: 28rpx;
+				}
+
+				.box-head-list-li-affter {
+					position: relative;
+				}
+
+				.box-head-list-li-affter::after {
+					position: absolute;
+					right: 0;
+					top: 0;
+					bottom: 0;
+					margin: auto;
+					content: "";
+					width: 1rpx;
+					height: 100%;
+					background: #ccc;
+				}
+			}
+
+		}
+
+		.box-content {
+			flex: 1;
+			overflow-y: scroll;
+			display: flex;
+			flex-direction: column;
+			margin-top: 20rpx;
+			background: linear-gradient(180deg, #FFFFFF 0%, #F7F7F7 100%);
+
+			.box-content-wrap {
+				padding: 30rpx 40rpx;
+				box-sizing: border-box;
+				background: #fff;
+
+				.box-content-wrap-title {
+					color: #333;
+					font-size: 36rpx;
+					font-family: Source Han Sans CN;
+					font-weight: 500;
+				}
+
+				.box-content-wrap-list {
+					display: flex;
+					margin-top: 30rpx;
+
+					.box-content-wrap-list-li {
+						width: 136rpx;
+						height: 48rpx;
+						border: 1rpx solid #ccc;
+						border-radius: 29rpx;
+						margin-right: 20rpx;
+						transition: 0.3s;
+						color: #999;
+						font-size: 28rpx;
+					}
+
+					.box-content-wrap-list-li:last-child {
+						margin-right: 0;
+					}
+
+					.box-content-wrap-list-li-active {
+						border: 1rpx solid #FF8366;
+						color: #FF8366 !important;
+					}
+				}
+			}
+
+			.box-content-goods {
+				flex: 1;
+				overflow-y: scroll;
+
+				.box-content-goods-list {
+					display: flex;
+					flex-wrap: wrap;
+					padding: 0 20rpx;
+					box-sizing: border-box;
+
+					.box-content-goods-list-li {
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						margin-bottom: 10rpx;
+						width: 350rpx;
+						height: 540rpx;
+						background: #fff;
+						float: left;
+
+						.box-content-goods-list-li-image {
+							image {
+								width: 350rpx;
+								height: 350rpx;
+							}
+						}
+
+						.box-content-goods-list-li-title {
+
+							font-size: 30rpx;
+							color: #333;
+							text-align: center;
+						}
+
+						.box-content-goods-list-li-number {
+							font-size: 28rpx;
+							color: #999;
+
+							text {
+								color: #FF8366;
+							}
+						}
+
+						.box-content-goods-list-li-btn {
+							width: 176rpx;
+							height: 52rpx;
+							margin-top: 10rpx;
+							border: 1rpx solid #FF6F4D;
+							border-radius: 32rpx;
+							font-size: 28rpx;
+							color: #FF6F4D;
+						}
+					}
+
+					.box-content-goods-list-li:nth-child(2n+1) {
+						margin-right: 10rpx;
+					}
+				}
+			}
+
+		}
+
+	}
+</style>
